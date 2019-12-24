@@ -8,4 +8,6 @@ class Login {
   Login({@required this.username, @required this.password})
       : assert(username != null),
         assert(password != null);
+
+  dynamic toJson() => {'username': username, "password": password};
 }

@@ -45,7 +45,7 @@ class _LoginFormState extends State<LoginForm> {
 
     BlocProvider.of<LoginBloc>(context).add(
       LoginButtonPressed(
-        Login(username: _usernameController.text, password: _passwordController.text),
+        Login(username: _usernameController.text.trim(), password: _passwordController.text),
       ),
     );
   }
@@ -74,8 +74,6 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        String message;
-
         if (state is LoginFailure) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
@@ -90,9 +88,8 @@ class _LoginFormState extends State<LoginForm> {
             ),
           );
         }
-
       },
-      child: BlocBuilder<LoginBloc, LoginState>(builder: (context, form) {
+      child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
         return Form(
           key: _formKey,
           child: Column(
@@ -105,7 +102,7 @@ class _LoginFormState extends State<LoginForm> {
                   border: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
                 ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 12),
               TextFormField(
                 controller: _passwordController,
                 validator: _validatePassword,
@@ -119,7 +116,11 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 obscureText: !_passwordVisible,
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 12),
+              Container(
+                height: 24,
+                child: (state is LoginInProgress) ? LinearProgressIndicator() : null,
+              ),
               BlocBuilder<LoginBloc, LoginState>(
                 builder: (context, state) => Center(
                   child: RaisedButton(

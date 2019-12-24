@@ -4,7 +4,8 @@ class AuthToken {
 
   AuthToken(this.token, this.accessExpiry);
 
-  AuthToken.fromJson(Map<String, dynamic> json)
-      : token = json["access_token"],
-        accessExpiry = json["access_expiry"];
+  factory AuthToken.fromJson(Map<String, dynamic> json) {
+    print("auth token json: $json");
+    return AuthToken(json["access_token"], json["access_expiry"]);
+  }
 }
