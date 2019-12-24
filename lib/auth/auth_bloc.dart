@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
-import 'package:mentorship_client/user_repository.dart';
+import 'package:mentorship_client/auth_repository.dart';
 
 import 'bloc.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final UserRepository userRepository;
+  final AuthRepository userRepository;
 
   AuthBloc(this.userRepository);
 
