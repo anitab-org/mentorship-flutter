@@ -1,14 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/auth_repository.dart';
+import 'package:mentorship_client/login/bloc/bloc.dart';
 import 'package:mentorship_client/register/register_screen.dart';
+import 'package:mentorship_client/remote/requests/login.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Login"),
+      ),
+      body: BlocProvider<LoginBloc>(
+        create: (context) => LoginBloc(AuthRepository.instance),
+        child: ListView(
+          children: [
+            Image.asset("assets/images/mentorship_system_logo.png"),
+            SizedBox(height: 24),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: LoginForm(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   bool _passwordVisible = false;
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  void _onLoginButtonPressed() {
+    if (!_formKey.currentState.validate()) return;
+
+    BlocProvider.of<LoginBloc>(context).add(
+      LoginButtonPressed(
+        Login(username: _usernameController.text, password: _passwordController.text),
+      ),
+    );
+  }
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -16,57 +56,86 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  String _validateUsername(String username) {
+    if (username.isEmpty) {
+      return "Username is empty";
+    }
+    return null;
+  }
+
+  String _validatePassword(String password) {
+    if (password.isEmpty) {
+      return "Password is empty";
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Login"),
-      ),
-      body: ListView(
-        children: [
-          Image.asset("assets/images/mentorship_system_logo.png"),
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 24),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Enter username or email",
-                      border: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-                    ),
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        String message;
+
+        if (state is LoginFailure) {
+          message = state.message;
+        }
+        if (state is LoginSuccess) {
+          message = "Welcome!";
+        }
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+          ),
+        );
+      },
+      child: BlocBuilder<LoginBloc, LoginState>(builder: (context, form) {
+        return Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _usernameController,
+                validator: _validateUsername,
+                decoration: InputDecoration(
+                  labelText: "Enter username or email",
+                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                ),
+              ),
+              SizedBox(height: 24),
+              TextFormField(
+                controller: _passwordController,
+                validator: _validatePassword,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                    onPressed: _togglePasswordVisibility,
                   ),
-                  SizedBox(height: 24),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
-                        onPressed: _togglePasswordVisibility,
-                      ),
-                      labelText: "Enter password",
-                      border: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-                    ),
-                    obscureText: !_passwordVisible,
-                  ),
-                  SizedBox(height: 32),
-                  RaisedButton(
+                  labelText: "Enter password",
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: !_passwordVisible,
+              ),
+              SizedBox(height: 24),
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) => Center(
+                  child: RaisedButton(
                     color: Theme.of(context).accentColor,
                     child: Text("Login".toUpperCase()),
-                    onPressed: () => null,
+                    onPressed: state is! LoginInProgress ? _onLoginButtonPressed : null,
                   ),
-                  OutlineButton(
-                    child: Text("Sign up".toUpperCase()),
-                    onPressed: () => Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => RegisterScreen())),
-                  )
-                ],
+                ),
               ),
-            ),
-          )
-        ],
-      ),
+              Center(
+                child: OutlineButton(
+                  child: Text("Sign up".toUpperCase()),
+                  onPressed: () => Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => RegisterScreen())),
+                ),
+              )
+            ],
+          ),
+        );
+      }),
     );
   }
 }

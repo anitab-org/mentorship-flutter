@@ -23,5 +23,3 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield LoginInProgress();
   }
 }
-
-class AuthenticationRepository {}
