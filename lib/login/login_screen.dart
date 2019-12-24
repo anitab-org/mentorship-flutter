@@ -77,16 +77,20 @@ class _LoginFormState extends State<LoginForm> {
         String message;
 
         if (state is LoginFailure) {
-          message = state.message;
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+            ),
+          );
         }
         if (state is LoginSuccess) {
-          message = "Welcome!";
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Login successful"),
+            ),
+          );
         }
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-          ),
-        );
+
       },
       child: BlocBuilder<LoginBloc, LoginState>(builder: (context, form) {
         return Form(

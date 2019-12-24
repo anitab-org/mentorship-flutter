@@ -1,7 +1,13 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:mentorship_client/bloc_delegate.dart';
 import 'package:mentorship_client/login/login_screen.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  BlocSupervisor.delegate = SimpleBlocDelegate();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
