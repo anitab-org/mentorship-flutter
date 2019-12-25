@@ -100,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
                 validator: _validateUsername,
                 decoration: InputDecoration(
                   labelText: "Enter username or email",
-                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+                  border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 12),
