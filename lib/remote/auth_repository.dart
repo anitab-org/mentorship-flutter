@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
-import 'package:mentorship_client/remote/auth_token.dart';
+import 'package:mentorship_client/remote/responses/auth_token.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
 

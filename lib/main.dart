@@ -1,14 +1,22 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:mentorship_client/auth/auth_bloc.dart';
+import 'package:mentorship_client/auth/bloc.dart';
 import 'package:mentorship_client/bloc_delegate.dart';
+import 'package:mentorship_client/home/home_screen.dart';
 import 'package:mentorship_client/login/login_screen.dart';
+import 'package:mentorship_client/remote/auth_repository.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
-
   _setupLogging();
-  runApp(MyApp());
+
+  runApp(BlocProvider<AuthBloc>(
+    create: (context) => AuthBloc(AuthRepository.instance)..add(AppStarted()),
+    child: MentorshipApp(),
+  ));
 }
 
 void _setupLogging() {
@@ -18,7 +26,7 @@ void _setupLogging() {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MentorshipApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +35,19 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.purple,
         accentColor: Colors.lightBlueAccent,
       ),
-      home: LoginScreen(),
+      home: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is AuthUninitialized || state is AuthUnauthenticated) {
+            return LoginScreen();
+          }
+          if (state is AuthAuthenticated) {
+            return HomeScreen();
+          } else
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+        },
+      ),
     );
   }
 }

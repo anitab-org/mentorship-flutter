@@ -16,7 +16,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
-    // TODO Implement full authentication system
 
     if (event is JustLoggedIn) {
       yield AuthAuthenticated();
