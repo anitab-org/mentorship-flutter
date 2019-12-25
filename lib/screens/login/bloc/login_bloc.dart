@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
 import 'package:mentorship_client/failure.dart';
-import 'package:mentorship_client/login/bloc/login_event.dart';
-import 'package:mentorship_client/login/bloc/login_state.dart';
 import 'package:mentorship_client/remote/auth_repository.dart';
+import 'package:mentorship_client/screens/login/bloc/login_event.dart';
+import 'package:mentorship_client/screens/login/bloc/login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository authRepository;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
-import 'package:mentorship_client/login/bloc/bloc.dart';
-import 'package:mentorship_client/register/register_screen.dart';
 import 'package:mentorship_client/remote/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
+import 'package:mentorship_client/screens/login/bloc/bloc.dart';
+import 'package:mentorship_client/screens/register/register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
