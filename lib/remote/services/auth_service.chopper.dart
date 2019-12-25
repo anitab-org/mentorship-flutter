@@ -16,11 +16,11 @@ class _$AuthService extends AuthService {
   final definitionType = AuthService;
 
   @override
-  Future<Response<AuthToken>> login(Login login) {
+  Future<Response<Map<String, dynamic>>> login(Login login) {
     final $url = 'login';
     final $body = login;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
-    return client.send<AuthToken, AuthToken>($request);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 
   @override

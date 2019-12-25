@@ -9,7 +9,7 @@ part 'auth_service.chopper.dart';
 @ChopperApi(baseUrl: "")
 abstract class AuthService extends ChopperService {
   @Post(path: "login")
-  Future<Response<AuthToken>> login(@Body() Login login);
+  Future<Response<Map<String, dynamic>>> login(@Body() Login login);
 
   @Post(path: "register")
   Future<Response<Object>> register(@Body() Register register);

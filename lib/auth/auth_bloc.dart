@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
-import 'package:mentorship_client/auth_repository.dart';
+import 'package:mentorship_client/remote/auth_repository.dart';
 
 import 'bloc.dart';
 

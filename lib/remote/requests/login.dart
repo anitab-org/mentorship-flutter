@@ -9,5 +9,5 @@ class Login {
       : assert(username != null),
         assert(password != null);
 
-  dynamic toJson() => {'username': username, "password": password};
+  Map<String, String> toJson() => {'username': username, "password": password};
 }

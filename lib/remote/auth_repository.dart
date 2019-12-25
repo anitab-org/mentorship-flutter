@@ -15,12 +15,12 @@ class AuthRepository {
     try {
       final response = await ApiManager.instance.authService.login(login);
 
-      print(response.statusCode);
       if (!response.isSuccessful) {
+        print("Error: ${response.error}");
         throw Failure.fromJson(response.error);
       }
-      
-      return response.body;
+
+      return AuthToken.fromJson(response.body);
     } on SocketException {
       throw Failure("No internet connection");
     } on HttpException {
@@ -29,7 +29,7 @@ class AuthRepository {
   }
 
   Future<Object> register(Register register) async {
-    var response = await ApiManager.instance.authService.register(register);
+    final response = await ApiManager.instance.authService.register(register);
 
     return response.body;
   }

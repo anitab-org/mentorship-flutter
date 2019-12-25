@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mentorship_client/auth_repository.dart';
+import 'package:mentorship_client/remote/auth_repository.dart';
 import 'package:mentorship_client/login/bloc/bloc.dart';
 import 'package:mentorship_client/register/register_screen.dart';
 import 'package:mentorship_client/remote/requests/login.dart';

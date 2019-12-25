@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:mentorship_client/auth_repository.dart';
+import 'package:mentorship_client/remote/auth_repository.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/login/bloc/login_event.dart';
 import 'package:mentorship_client/login/bloc/login_state.dart';
