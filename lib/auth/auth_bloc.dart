@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:logging/logging.dart';
 import 'package:mentorship_client/auth/bloc.dart';
 import 'package:mentorship_client/remote/auth_repository.dart';
 
@@ -34,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
     if (event is JustLoggedOut) {
-      yield AuthUnauthenticated();
+      yield AuthInProgress();
       await userRepository.deleteToken();
       yield AuthUnauthenticated();
     }

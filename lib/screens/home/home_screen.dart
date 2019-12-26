@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/auth_event.dart';
+import 'package:toast/toast.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -13,7 +14,10 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           child: Text("Log out"),
-          onPressed: () => BlocProvider.of<AuthBloc>(context).add(JustLoggedOut()),
+          onPressed: () {
+            Toast.show("Logged out!", context);
+            BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+          },
         ),
       ),
     );

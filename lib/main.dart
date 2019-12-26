@@ -10,15 +10,19 @@ import 'package:mentorship_client/screens/home/home_screen.dart';
 import 'package:mentorship_client/screens/login/login_screen.dart';
 
 void main() {
+  // Logs all BLoC transitions
   BlocSupervisor.delegate = SimpleBlocDelegate();
   _setupLogging();
 
-  runApp(BlocProvider<AuthBloc>(
-    create: (context) => AuthBloc(AuthRepository.instance)..add(AppStarted()),
-    child: MentorshipApp(),
-  ));
+  runApp(
+    BlocProvider<AuthBloc>(
+      create: (context) => AuthBloc(AuthRepository.instance)..add(AppStarted()),
+      child: MentorshipApp(),
+    ),
+  );
 }
 
+/// Include log level and time when printing logs using [Logger.root]
 void _setupLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {
@@ -27,7 +31,6 @@ void _setupLogging() {
 }
 
 class MentorshipApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
