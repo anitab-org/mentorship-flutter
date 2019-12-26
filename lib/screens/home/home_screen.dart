@@ -4,8 +4,36 @@ import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/auth_event.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:toast/toast.dart';
+import 'package:logging/logging.dart';
 
 class HomeScreen extends StatelessWidget {
+  void _onTapNavbar(int index, BuildContext context) {
+    HomeEvent event;
+
+    switch (index) {
+      case 0:
+        event = StatsPageSelected();
+        break;
+      case 1:
+        event = ProfilePageSelected();
+        break;
+      case 2:
+        event = RelationPageSelected();
+        break;
+      case 3:
+        event = MembersPageSelected();
+        break;
+      case 4:
+        event = RequestsPageSelected();
+        break;
+      default:
+        event = StatsPageSelected();
+        Logger.root.warning("BottomNavBar: Index $index is not valid!");
+    }
+
+    BlocProvider.of<HomeBloc>(context).add(event);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HomeBloc>(
@@ -13,6 +41,10 @@ class HomeScreen extends StatelessWidget {
       child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            actions: [
+              IconButton(
+                  icon: Icon(Icons.settings), onPressed: () => Toast.show("settings", context))
+            ],
             title: Text(state.title),
           ),
           body: Center(
@@ -25,7 +57,9 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
+            onTap: (index) => _onTapNavbar(index, context),
             type: BottomNavigationBarType.fixed,
+            currentIndex: state.index,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("Home")),
               BottomNavigationBarItem(icon: Icon(Icons.person), title: Text("Profile")),
