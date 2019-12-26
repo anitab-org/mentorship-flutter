@@ -21,12 +21,13 @@ void main() {
 
 void _setupLogging() {
   Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((rec) {
+  Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 }
 
 class MentorshipApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
