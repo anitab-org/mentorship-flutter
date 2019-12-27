@@ -21,7 +21,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
     if (event is ProfilePageShowed) {
       yield ProfilePageLoading();
       try {
-        final User user = await userRepository.getUser();
+        final User user = await userRepository.getCurrentUser();
         yield ProfilePageSuccess(user);
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);

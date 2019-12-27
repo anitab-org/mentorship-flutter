@@ -51,9 +51,9 @@ class UserRepository {
   }
 
   /// Returns current user profile
-  Future<User> getUser() async {
+  Future<User> getCurrentUser() async {
     try {
-      final response = await ApiManager.instance.userService.getUser();
+      final response = await ApiManager.instance.userService.getCurrentUser();
 
       if (!response.isSuccessful) {
         print("Error: ${response.error}");

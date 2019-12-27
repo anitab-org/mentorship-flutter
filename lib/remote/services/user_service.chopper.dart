@@ -30,8 +30,15 @@ class _$UserService extends UserService {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> getUser() {
+  Future<Response<Map<String, dynamic>>> getCurrentUser() {
     final $url = 'user';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> getUser(String userId) {
+    final $url = 'user/$userId';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
