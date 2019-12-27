@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/remote/user_repository.dart';
+import 'package:mentorship_client/screens/home/pages/stats/bloc/bloc.dart';
 
 class StatsPage extends StatefulWidget {
   @override
@@ -8,42 +11,55 @@ class StatsPage extends StatefulWidget {
 class _StatsPageState extends State<StatsPage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Text("Welcome, User Name!", textScaleFactor: 3),
-        Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Pending Requests"),
-                Text("Count 1"),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Accepted Requests"),
-                Text("Count 2"),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Rejected Requests"),
-                Text("Count 3"),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Completed Relations"),
-                Text("Count 4"),
-              ],
-            ),
-          ],
-        )
-      ],
+    return BlocProvider<StatsPageBloc>(
+      create: (context) => StatsPageBloc(userRepository: UserRepository.instance)..add(StatsPageShowed()),
+      child: BlocBuilder<StatsPageBloc, StatsPageState>(builder: (context, state) {
+        if (state is StatsPageSuccess) {
+          return ListView(
+            children: [
+              Text("Welcome, ${state.homeStats.name}", textScaleFactor: 3),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Pending Requests"),
+                      Text(state.homeStats.pendingRequests.toString()),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Accepted Requests"),
+                      Text(state.homeStats.acceptedRequests.toString()),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Rejected Requests"),
+                      Text(state.homeStats.rejectedRequests.toString()),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Completed Relations"),
+                      Text(state.homeStats.completedRelations.toString()),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          );
+        }
+        if (state is StatsPageFailure) {
+          return Text(state.message);
+        }
+
+        else
+          return Text("an error occurred");
+      }),
     );
   }
 }

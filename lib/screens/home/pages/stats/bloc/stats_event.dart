@@ -7,4 +7,4 @@ abstract class StatsPageEvent extends Equatable {
   List<Object> get props => null;
 }
 
-class StatsScreenShowed extends StatsPageEvent {}
+class StatsPageShowed extends StatsPageEvent {}

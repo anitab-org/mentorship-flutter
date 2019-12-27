@@ -9,7 +9,7 @@ class AuthInterceptor extends RequestInterceptor {
   FutureOr<Request> onRequest(Request request) async {
     String token = await AuthRepository.instance.getToken();
 
-    Map<String, String> headers = {"Authorization": "Bearer $token"};
+    Map<String, String> headers = {"Authorization": token};
     print("AuthInterceptor token: $token");
 
     Request authenticatedRequest = applyHeaders(request, headers);

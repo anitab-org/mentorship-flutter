@@ -17,8 +17,8 @@ class _$UserService extends UserService {
 
   @override
   Future<Response<Map<String, dynamic>>> getHomeStats() {
-    final $url = 'login';
-    final $request = Request('POST', $url, client.baseUrl);
+    final $url = 'home';
+    final $request = Request('GET', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 }

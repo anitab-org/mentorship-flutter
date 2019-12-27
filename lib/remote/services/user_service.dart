@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:mentorship_client/constants.dart';
+import 'package:mentorship_client/remote/auth_interceptor.dart';
 
 part 'user_service.chopper.dart';
 
@@ -17,6 +18,7 @@ abstract class UserService extends ChopperService {
         converter: JsonConverter(),
         interceptors: [
           HttpLoggingInterceptor(),
+          AuthInterceptor(),
         ]);
 
     return _$UserService(client);
