@@ -34,31 +34,36 @@ void _setupLogging() {
 class MentorshipApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Systers Mentorship',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-        accentColor: Colors.lightBlueAccent,
-      ),
-      home: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          if (state is AuthUninitialized) {
-            return LoginScreen();
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUnauthenticated) {
+          if (state.justLoggedOut) {
+            Toast.show("Logged out", context, duration: 1);
           }
-          if (state is AuthUnauthenticated) {
-            if (state.justLoggedOut) {
-              Toast.show("Logged out", context, duration: 1);
+        }
+      },
+      child: MaterialApp(
+        title: 'Systers Mentorship',
+        theme: ThemeData(
+          primarySwatch: Colors.purple,
+          accentColor: Colors.lightBlueAccent,
+        ),
+        home: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is AuthUninitialized) {
+              return LoginScreen();
             }
-
-            return LoginScreen();
-          }
-          if (state is AuthAuthenticated) {
-            return HomeScreen();
-          } else
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-        },
+            if (state is AuthUnauthenticated) {
+              return LoginScreen();
+            }
+            if (state is AuthAuthenticated) {
+              return HomeScreen();
+            } else
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+          },
+        ),
       ),
     );
   }
