@@ -23,16 +23,18 @@ class Task {
         assert(description != null),
         assert(isDone != null);
 
+  factory Task.fromJson(Map<String, dynamic> json) => Task(
+        id: json["id"],
+        description: json["description"],
+        isDone: json["is_done"],
+        createdAt: json["created_at"],
+        completedAt: json["completed_at"],
+      );
+
   static List<Task> fromAchievements(List<dynamic> taskList) {
     List<Task> achievements = [];
-    for (dynamic task in taskList) {
-      achievements.add(Task(
-        id: task["id"],
-        description: task["description"],
-        isDone: task["is_done"],
-        createdAt: task["created_at"],
-        completedAt: task["completed_at"],
-      ));
+    for (dynamic taskJson in taskList) {
+      achievements.add(Task.fromJson(taskJson));
     }
     return achievements;
   }

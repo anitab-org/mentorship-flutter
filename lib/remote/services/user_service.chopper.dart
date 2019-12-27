@@ -23,9 +23,9 @@ class _$UserService extends UserService {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> getVerifiedUsers() {
+  Future<Response<List>> getVerifiedUsers() {
     final $url = 'users/verified';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+    return client.send<List, List>($request);
   }
 }

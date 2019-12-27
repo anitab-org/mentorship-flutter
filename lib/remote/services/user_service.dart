@@ -10,7 +10,7 @@ abstract class UserService extends ChopperService {
   Future<Response<Map<String, dynamic>>> getHomeStats();
 
   @Get(path: "users/verified")
-  Future<Response<Map<String, dynamic>>> getVerifiedUsers();
+  Future<Response<List<dynamic>>> getVerifiedUsers();
 
   static UserService create() {
     final client = ChopperClient(
