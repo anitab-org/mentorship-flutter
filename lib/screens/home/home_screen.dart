@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/auth_event.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
+import 'package:mentorship_client/screens/home/pages/members/members_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
 
@@ -62,6 +63,10 @@ class HomeScreen extends StatelessWidget {
                     padding: EdgeInsets.all(8),
                     child: StatsPage(),
                   );
+                }
+
+                if (state is HomePageMembers) {
+                  return MembersPage();
                 }
 
                 return Center(

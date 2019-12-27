@@ -26,6 +26,17 @@ class User {
       this.needsMentoring,
       this.availableToMentor});
 
+  String requestStatus() {
+    if (needsMentoring && availableToMentor) {
+      return "Available to mentor and to be a mentee.";
+    } else if (needsMentoring) {
+      return "Needs mentoring";
+    } else if (availableToMentor) {
+      return "Available to mentor";
+    } else
+      return "";
+  }
+
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json['id'],
         username: json['username'],
