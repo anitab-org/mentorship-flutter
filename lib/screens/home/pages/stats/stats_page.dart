@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/task.dart';
 import 'package:mentorship_client/remote/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/stats/bloc/bloc.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 /// First page from the left on the HomeScreen. Displays welcome message to the user
 /// and provides some information on latest achievements.
@@ -43,7 +44,7 @@ class _StatsPageState extends State<StatsPage> {
         }
 
         if (state is StatsPageLoading) {
-          return CircularProgressIndicator();
+          return LoadingIndicator();
         } else
           return Text("an error occurred");
       }),
