@@ -1,3 +1,4 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
@@ -89,16 +90,36 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              onTap: (index) => _onTapNavbar(index, context),
-              type: BottomNavigationBarType.fixed,
-              currentIndex: state.index,
+            bottomNavigationBar: BottomNavyBar(
+              showElevation: false,
+              onItemSelected: (index) => _onTapNavbar(index, context),
+              selectedIndex: state.index,
               items: [
-                BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("Home")),
-                BottomNavigationBarItem(icon: Icon(Icons.person), title: Text("Profile")),
-                BottomNavigationBarItem(icon: Icon(Icons.people), title: Text("Relation")),
-                BottomNavigationBarItem(icon: Icon(Icons.people_outline), title: Text("Members")),
-                BottomNavigationBarItem(icon: Icon(Icons.comment), title: Text("Requests"))
+                BottomNavyBarItem(
+                    icon: Icon(Icons.home),
+                    title: Text("Home"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor),
+                BottomNavyBarItem(
+                    icon: Icon(Icons.person),
+                    title: Text("Profile"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor),
+                BottomNavyBarItem(
+                    icon: Icon(Icons.people),
+                    title: Text("Relation"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor),
+                BottomNavyBarItem(
+                    icon: Icon(Icons.people_outline),
+                    title: Text("Members"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor),
+                BottomNavyBarItem(
+                    icon: Icon(Icons.comment),
+                    title: Text("Requests"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor)
               ],
             ),
           );
