@@ -11,6 +11,7 @@ import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
+import 'package:toast/toast.dart';
 
 class HomeScreen extends StatelessWidget {
   void _onTapNavbar(int index, BuildContext context) {
@@ -56,7 +57,11 @@ class HomeScreen extends StatelessWidget {
                       builder: (context) => SettingsScreen(),
                     ),
                   ),
-                )
+                ),
+                if (state is HomePageProfile)
+                  IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () => Toast.show("Editing not implemented", context)),
               ],
               title: Text(state.title),
             ),

@@ -2,6 +2,7 @@ class User {
   final int id;
   final String username;
   final String name;
+  final String email;
   final String slackUsername;
   final String bio;
   final String location;
@@ -16,6 +17,7 @@ class User {
       {this.id,
       this.username,
       this.name,
+      this.email,
       this.slackUsername,
       this.bio,
       this.location,
@@ -41,6 +43,7 @@ class User {
         id: json['id'],
         username: json['username'],
         name: json['name'],
+        email: json['email'],
         slackUsername: json['slack_username'],
         bio: json['bio'],
         location: json['location'],
@@ -57,6 +60,7 @@ class User {
     data['id'] = this.id;
     data['username'] = this.username;
     data['name'] = this.name;
+    data['email'] = this.email;
     data['slack_username'] = this.slackUsername;
     data['bio'] = this.bio;
     data['location'] = this.location;
