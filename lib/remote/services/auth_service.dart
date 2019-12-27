@@ -1,6 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:mentorship_client/constants.dart';
-import 'package:mentorship_client/remote/responses/auth_token.dart';
+import 'package:mentorship_client/remote/models/auth_token.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
 
