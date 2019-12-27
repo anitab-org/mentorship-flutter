@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                 if (state is HomePageProfile)
                   IconButton(
                       icon: Icon(Icons.edit),
-                      onPressed: () => Toast.show("Editing not implemented", context)),
+                      onPressed: () => Toast.show("Not implemented yet", context)),
               ],
               title: Text(state.title),
             ),

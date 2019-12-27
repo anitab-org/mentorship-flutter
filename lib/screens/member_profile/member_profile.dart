@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/screens/member_profile/user_data_list.dart';
+import 'package:toast/toast.dart';
 
 class MemberProfileScreen extends StatelessWidget {
   final User user;
@@ -33,7 +34,7 @@ class MemberProfileScreen extends StatelessWidget {
               child: RaisedButton(
                 color: Theme.of(context).accentColor,
                 child: Text("Send request"),
-                onPressed: () => null,
+                onPressed: () => Toast.show("Not implemented yet", context),
               ),
             )
           ],

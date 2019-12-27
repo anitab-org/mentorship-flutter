@@ -33,10 +33,19 @@ class AuthRepository {
     }
   }
 
-  Future<Object> register(Register register) async {
-    final response = await ApiManager.instance.authService.register(register);
+  Future<void> register(Register register) async {
+    try {
+      final response = await ApiManager.instance.authService.register(register);
 
-    return response.body;
+      if (!response.isSuccessful) {
+        print("Error: ${response.error}");
+        throw Failure.fromJson(response.error);
+      }
+    } on SocketException {
+      throw Failure("No internet connection");
+    } on HttpException {
+      throw Failure("HttpException");
+    }
   }
 
   Future<void> deleteToken() async {

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mentorship_client/remote/repositories/auth_repository.dart';
+import 'package:mentorship_client/remote/requests/register.dart';
 
+/// This screen will let the user to sign up into the system using name, username,
+/// email and password.
+/// It doesn't use BLoC pattern,
 class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -42,6 +47,7 @@ class _RegisterFormState extends State<RegisterForm> {
   bool _passwordVisible = false;
   bool _availableToMentor = false;
   bool _needsMentoring = false;
+  bool _acceptedTermsAndConditions = false;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -79,6 +85,12 @@ class _RegisterFormState extends State<RegisterForm> {
   void _toggleNeedsMentoring(bool value) {
     setState(() {
       _needsMentoring = !_needsMentoring;
+    });
+  }
+
+  void _toggleTermsAndConditions(bool value) {
+    setState(() {
+      _acceptedTermsAndConditions = !_acceptedTermsAndConditions;
     });
   }
 
@@ -144,7 +156,10 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
             obscureText: !_passwordVisible,
           ),
-          Text("Available to be a:"),
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Text("Available to be a:"),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -168,8 +183,51 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
             ],
           ),
+          Row(
+            children: [
+              Checkbox(
+                value: _acceptedTermsAndConditions,
+                onChanged: _toggleTermsAndConditions,
+              ),
+              Flexible(
+                child: Text("I affirm that I have read and accept to be bound by the "
+                    "AnitaB.org Code of Conduct, Terms and Privacy Policy. Further, "
+                    "I consent to use of my information for the stated purpose."),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: RaisedButton(
+              color: Theme.of(context).accentColor,
+              child: Text("Sign up"),
+              onPressed: () => _register(context),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: FlatButton(
+              splashColor: Theme.of(context).accentColor,
+              child: Text("Login"),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          )
         ],
       ),
     );
+  }
+
+  void _register(BuildContext context) async {
+    final Register register = Register(
+      name: _nameController.text,
+      username: _usernameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+      acceptedTermsAndConditions: _acceptedTermsAndConditions,
+      needsMentoring: _needsMentoring,
+      availableToMentor: _availableToMentor,
+    );
+
+    await AuthRepository.instance.register(register);
   }
 }

@@ -132,7 +132,8 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
               Center(
-                child: OutlineButton(
+                child: FlatButton(
+                  splashColor: Theme.of(context).accentColor,
                   child: Text("Sign up".toUpperCase()),
                   onPressed: () => Navigator.push(
                       context, MaterialPageRoute(builder: (context) => RegisterScreen())),
