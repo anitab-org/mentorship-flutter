@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/task.dart';
-import 'package:mentorship_client/remote/user_repository.dart';
+import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/stats/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 

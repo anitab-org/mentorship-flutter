@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
 import 'package:mentorship_client/bloc_delegate.dart';
-import 'package:mentorship_client/remote/auth_repository.dart';
+import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/screens/home/home_screen.dart';
 import 'package:mentorship_client/screens/login/login_screen.dart';
 import 'package:toast/toast.dart';

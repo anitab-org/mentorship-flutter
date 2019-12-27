@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
-import 'package:mentorship_client/remote/auth_repository.dart';
+import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 
 /// Adds JWT token to every request
 class AuthInterceptor extends RequestInterceptor {
