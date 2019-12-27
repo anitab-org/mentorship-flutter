@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/remote/models/task.dart';
 import 'package:mentorship_client/remote/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/stats/bloc/bloc.dart';
 
@@ -12,7 +13,8 @@ class _StatsPageState extends State<StatsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<StatsPageBloc>(
-      create: (context) => StatsPageBloc(userRepository: UserRepository.instance)..add(StatsPageShowed()),
+      create: (context) =>
+          StatsPageBloc(userRepository: UserRepository.instance)..add(StatsPageShowed()),
       child: BlocBuilder<StatsPageBloc, StatsPageState>(builder: (context, state) {
         if (state is StatsPageSuccess) {
           return ListView(
@@ -48,6 +50,8 @@ class _StatsPageState extends State<StatsPage> {
                       Text(state.homeStats.completedRelations.toString()),
                     ],
                   ),
+                  for (Task achievement in state.homeStats.achievements)
+                    Text(achievement.description),
                 ],
               )
             ],
@@ -55,9 +59,7 @@ class _StatsPageState extends State<StatsPage> {
         }
         if (state is StatsPageFailure) {
           return Text(state.message);
-        }
-
-        else
+        } else
           return Text("an error occurred");
       }),
     );
