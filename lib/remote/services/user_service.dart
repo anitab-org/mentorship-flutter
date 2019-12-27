@@ -5,9 +5,8 @@ part 'user_service.chopper.dart';
 
 @ChopperApi(baseUrl: "")
 abstract class UserService extends ChopperService {
-  @Post(path: "login")
-  Future <Response<Map<String, dynamic>>> getHomeStats();
-
+  @Get(path: "home")
+  Future<Response<Map<String, dynamic>>> getHomeStats();
 
   static UserService create() {
     final client = ChopperClient(
