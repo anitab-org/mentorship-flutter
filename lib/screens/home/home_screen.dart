@@ -7,6 +7,8 @@ import 'package:mentorship_client/auth/auth_event.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/members/members_page.dart';
 import 'package:mentorship_client/screens/home/pages/profile/profile_page.dart';
+import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart';
+import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
 
@@ -58,37 +60,48 @@ class HomeScreen extends StatelessWidget {
               ],
               title: Text(state.title),
             ),
-            body: Padding(
-              padding: EdgeInsets.all(8),
-              child: BlocBuilder<HomeBloc, HomeState>(
-                builder: (context, state) {
-                  if (state is HomePageStats) {
-                    return StatsPage();
-                  }
-
-                  if (state is HomePageMembers) {
-                    return MembersPage();
-                  }
-
-                  if (state is HomePageProfile) {
-                    return ProfilePage();
-                  }
-
-                  return Center(
-                    child: Column(
-                      children: [
-                        Text("PAGE TITLE: ${state.title}"),
-                        RaisedButton(
-                          child: Text("Log out"),
-                          onPressed: () {
-                            BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
-                          },
-                        )
-                      ],
-                    ),
+            body: BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                if (state is HomePageStats) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: StatsPage(),
                   );
-                },
-              ),
+                }
+
+                if (state is HomePageProfile) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfilePage(),
+                  );
+                }
+
+                if (state is HomePageRelation) {
+                  return RelationPage();
+                }
+
+                if (state is HomePageMembers) {
+                  return MembersPage();
+                }
+
+                if (state is HomePageRequests) {
+                  return RequestsPage();
+                }
+
+                return Center(
+                  child: Column(
+                    children: [
+                      Text("PAGE TITLE: ${state.title}"),
+                      RaisedButton(
+                        child: const Text("Log out"),
+                        onPressed: () {
+                          BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+                        },
+                      )
+                    ],
+                  ),
+                );
+              },
             ),
             bottomNavigationBar: BottomNavyBar(
               showElevation: false,
@@ -96,30 +109,35 @@ class HomeScreen extends StatelessWidget {
               selectedIndex: state.index,
               items: [
                 BottomNavyBarItem(
-                    icon: Icon(Icons.home),
-                    title: Text("Home"),
-                    inactiveColor: Theme.of(context).accentColor,
-                    activeColor: Theme.of(context).primaryColor),
+                  icon: Icon(Icons.home),
+                  title: Text("Home"),
+                  activeColor: Theme.of(context).primaryColor,
+                  inactiveColor: Theme.of(context).accentColor,
+                ),
                 BottomNavyBarItem(
-                    icon: Icon(Icons.person),
-                    title: Text("Profile"),
-                    inactiveColor: Theme.of(context).accentColor,
-                    activeColor: Theme.of(context).primaryColor),
+                  icon: Icon(Icons.person),
+                  title: Text("Profile"),
+                  inactiveColor: Theme.of(context).accentColor,
+                  activeColor: Theme.of(context).primaryColor,
+                ),
                 BottomNavyBarItem(
-                    icon: Icon(Icons.people),
-                    title: Text("Relation"),
-                    inactiveColor: Theme.of(context).accentColor,
-                    activeColor: Theme.of(context).primaryColor),
+                  icon: Icon(Icons.people),
+                  title: Text("Relation"),
+                  inactiveColor: Theme.of(context).accentColor,
+                  activeColor: Theme.of(context).primaryColor,
+                ),
                 BottomNavyBarItem(
-                    icon: Icon(Icons.people_outline),
-                    title: Text("Members"),
-                    inactiveColor: Theme.of(context).accentColor,
-                    activeColor: Theme.of(context).primaryColor),
+                  icon: Icon(Icons.people_outline),
+                  title: Text("Members"),
+                  inactiveColor: Theme.of(context).accentColor,
+                  activeColor: Theme.of(context).primaryColor,
+                ),
                 BottomNavyBarItem(
-                    icon: Icon(Icons.comment),
-                    title: Text("Requests"),
-                    inactiveColor: Theme.of(context).accentColor,
-                    activeColor: Theme.of(context).primaryColor)
+                  icon: Icon(Icons.comment),
+                  title: Text("Requests"),
+                  inactiveColor: Theme.of(context).accentColor,
+                  activeColor: Theme.of(context).primaryColor,
+                )
               ],
             ),
           );
