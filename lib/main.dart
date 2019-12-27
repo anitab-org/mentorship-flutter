@@ -8,6 +8,7 @@ import 'package:mentorship_client/bloc_delegate.dart';
 import 'package:mentorship_client/remote/auth_repository.dart';
 import 'package:mentorship_client/screens/home/home_screen.dart';
 import 'package:mentorship_client/screens/login/login_screen.dart';
+import 'package:toast/toast.dart';
 
 void main() {
   // Logs all BLoC transitions
@@ -41,7 +42,14 @@ class MentorshipApp extends StatelessWidget {
       ),
       home: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          if (state is AuthUninitialized || state is AuthUnauthenticated) {
+          if (state is AuthUninitialized) {
+            return LoginScreen();
+          }
+          if (state is AuthUnauthenticated) {
+            if (state.justLoggedOut) {
+              Toast.show("Logged out", context, duration: 1);
+            }
+
             return LoginScreen();
           }
           if (state is AuthAuthenticated) {

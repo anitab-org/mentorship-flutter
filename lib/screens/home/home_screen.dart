@@ -5,7 +5,7 @@ import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/auth_event.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
-import 'package:toast/toast.dart';
+import 'package:mentorship_client/screens/settings/settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   void _onTapNavbar(int index, BuildContext context) {
@@ -45,7 +45,13 @@ class HomeScreen extends StatelessWidget {
             appBar: AppBar(
               actions: [
                 IconButton(
-                    icon: Icon(Icons.settings), onPressed: () => Toast.show("settings", context))
+                  icon: Icon(Icons.settings),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SettingsScreen(),
+                    ),
+                  ),
+                )
               ],
               title: Text(state.title),
             ),
@@ -65,7 +71,6 @@ class HomeScreen extends StatelessWidget {
                       RaisedButton(
                         child: Text("Log out"),
                         onPressed: () {
-                          Toast.show("Logged out!", context);
                           BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
                         },
                       )

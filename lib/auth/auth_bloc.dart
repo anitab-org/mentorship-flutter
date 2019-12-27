@@ -35,7 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is JustLoggedOut) {
       yield AuthInProgress();
       await userRepository.deleteToken();
-      yield AuthUnauthenticated();
+      yield AuthUnauthenticated(justLoggedOut: true);
     }
   }
 }
