@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/members/bloc/bloc.dart';
+import 'package:mentorship_client/screens/member_profile/member_profile.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class MembersPage extends StatefulWidget {
@@ -37,7 +38,7 @@ class _MembersPageState extends State<MembersPage> {
                       Text("Interests: ${user.interests ?? "---"}"),
                     ],
                   ),
-                  onTap: () => null,
+                  onTap: () => _openMemberProfileScreen(context, user),
                 );
               },
             );
@@ -62,6 +63,14 @@ class _MembersPageState extends State<MembersPage> {
           } else
             return Text("an error occurred");
         },
+      ),
+    );
+  }
+
+  void _openMemberProfileScreen(BuildContext context, User user) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MemberProfileScreen(user: user),
       ),
     );
   }
