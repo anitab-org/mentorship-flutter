@@ -49,15 +49,15 @@ class AuthRepository {
     Logger.root.info("Persisted token.");
   }
 
-  Future<bool> hasToken() async {
+  Future<String> getToken() async {
     final String token = await _storage.read(key: AUTH_TOKEN);
 
     if (token != null) {
       Logger.root.info("Has token!");
-      return true;
     } else {
       Logger.root.info("Does not have token!");
-      return false;
     }
+
+    return token;
   }
 }
