@@ -49,4 +49,23 @@ class UserRepository {
       throw Failure("HttpException");
     }
   }
+
+  /// Returns current user profile
+  Future<User> getUser() async {
+    try {
+      final response = await ApiManager.instance.userService.getUser();
+
+      if (!response.isSuccessful) {
+        print("Error: ${response.error}");
+        throw Failure.fromJson(response.error);
+      }
+      User user = User.fromJson(response.body);
+
+      return user;
+    } on SocketException {
+      throw Failure("No internet connection");
+    } on HttpException {
+      throw Failure("HttpException");
+    }
+  }
 }

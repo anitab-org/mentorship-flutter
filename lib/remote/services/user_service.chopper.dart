@@ -28,4 +28,11 @@ class _$UserService extends UserService {
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<List, List>($request);
   }
+
+  @override
+  Future<Response<Map<String, dynamic>>> getUser() {
+    final $url = 'user';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
 }

@@ -5,6 +5,7 @@ import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/auth_event.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/members/members_page.dart';
+import 'package:mentorship_client/screens/home/pages/profile/profile_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
 
@@ -56,33 +57,37 @@ class HomeScreen extends StatelessWidget {
               ],
               title: Text(state.title),
             ),
-            body: BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
-                if (state is HomePageStats) {
-                  return Padding(
-                    padding: EdgeInsets.all(8),
-                    child: StatsPage(),
+            body: Padding(
+              padding: EdgeInsets.all(8),
+              child: BlocBuilder<HomeBloc, HomeState>(
+                builder: (context, state) {
+                  if (state is HomePageStats) {
+                    return StatsPage();
+                  }
+
+                  if (state is HomePageMembers) {
+                    return MembersPage();
+                  }
+
+                  if (state is HomePageProfile) {
+                    return ProfilePage();
+                  }
+
+                  return Center(
+                    child: Column(
+                      children: [
+                        Text("PAGE TITLE: ${state.title}"),
+                        RaisedButton(
+                          child: Text("Log out"),
+                          onPressed: () {
+                            BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+                          },
+                        )
+                      ],
+                    ),
                   );
-                }
-
-                if (state is HomePageMembers) {
-                  return MembersPage();
-                }
-
-                return Center(
-                  child: Column(
-                    children: [
-                      Text("PAGE TITLE: ${state.title}"),
-                      RaisedButton(
-                        child: Text("Log out"),
-                        onPressed: () {
-                          BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
-                        },
-                      )
-                    ],
-                  ),
-                );
-              },
+                },
+              ),
             ),
             bottomNavigationBar: BottomNavigationBar(
               onTap: (index) => _onTapNavbar(index, context),
