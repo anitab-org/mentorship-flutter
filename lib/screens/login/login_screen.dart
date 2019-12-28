@@ -5,6 +5,7 @@ import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/screens/login/bloc/bloc.dart';
 import 'package:mentorship_client/screens/register/register_screen.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -119,8 +120,8 @@ class _LoginFormState extends State<LoginForm> {
               ),
               SizedBox(height: 12),
               Container(
-                height: 24,
-                child: (state is LoginInProgress) ? LinearProgressIndicator() : null,
+                height: 48,
+                child: (state is LoginInProgress) ? LoadingIndicator() : null,
               ),
               BlocBuilder<LoginBloc, LoginState>(
                 builder: (context, state) => Center(
