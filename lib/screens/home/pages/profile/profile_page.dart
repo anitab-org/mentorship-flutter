@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
           _emailController.text = state.user.email;
           _bioController.text = state.user.bio;
           _slackController.text = state.user.slackUsername;
-          _locationController.text = state.user.slackUsername;
+          _locationController.text = state.user.location;
           _occupationController.text = state.user.occupation;
           _organizationController.text = state.user.organization;
           _skillsController.text = state.user.skills;

@@ -27,7 +27,6 @@ be very useful and remove boilerplate from repositories.
 - Error handling mechanism. Currently, there's a lot of duplicated boilerplate code in `remote/repositories`
 catching errors. I haven't been able to find a good solution currently.
 - State management in `screens/register/register_screen.dart` - use BLoC
-
 ### Overview
 - App *tries* to follow Clean Architecure guidelines. Logic is separated into 4 layers:
     - `UI`
