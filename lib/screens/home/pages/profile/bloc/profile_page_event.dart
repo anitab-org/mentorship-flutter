@@ -8,3 +8,5 @@ abstract class ProfilePageEvent extends Equatable {
 }
 
 class ProfilePageShowed extends ProfilePageEvent {}
+
+class ProfilePageEditClicked extends ProfilePageEvent {}

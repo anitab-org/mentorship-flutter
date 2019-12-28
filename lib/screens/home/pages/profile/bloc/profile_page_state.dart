@@ -14,8 +14,9 @@ class ProfilePageLoading extends ProfilePageState {}
 
 class ProfilePageSuccess extends ProfilePageState {
   final User user;
+  final bool editing;
 
-  ProfilePageSuccess(this.user);
+  ProfilePageSuccess(this.user, this.editing);
 
   @override
   List<Object> get props => [user];

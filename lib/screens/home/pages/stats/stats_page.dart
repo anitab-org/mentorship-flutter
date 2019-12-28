@@ -26,7 +26,11 @@ class _StatsPageState extends State<StatsPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24),
-                  child: Text("Welcome, ${state.homeStats.name}", textScaleFactor: 2),
+                  child: Text(
+                    "Welcome, ${state.homeStats.name}!",
+                    textScaleFactor: 2,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Column(
                   children: [

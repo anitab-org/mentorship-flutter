@@ -22,13 +22,20 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
       yield ProfilePageLoading();
       try {
         final User user = await userRepository.getCurrentUser();
-        yield ProfilePageSuccess(user);
+        yield ProfilePageSuccess(user, false);
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield ProfilePageFailure(failure.message);
       } on Exception catch (exception) {
         Logger.root.severe(exception.toString());
         yield ProfilePageFailure(exception.toString());
+      }
+    }
+    if (event is ProfilePageEditClicked) {
+      final ProfilePageState last = await this.last;
+
+      if (last is ProfilePageSuccess) {
+        yield ProfilePageSuccess(last.user, false);
       }
     }
   }

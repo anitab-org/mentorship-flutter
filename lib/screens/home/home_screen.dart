@@ -75,10 +75,7 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 if (state is HomePageProfile) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ProfilePage(),
-                  );
+                  return ProfilePage();
                 }
 
                 if (state is HomePageRelation) {
