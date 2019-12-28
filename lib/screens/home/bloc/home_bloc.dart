@@ -18,6 +18,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       yield HomePageProfile();
     }
 
+    if (event is ProfilePageEditStarted) {
+      yield HomePageProfileEditing();
+    }
+
+    if (event is ProfilePageEditSubmitted) {
+      yield HomePageProfile();
+    }
+
     if (event is RelationPageSelected) {
       yield HomePageRelation();
     }

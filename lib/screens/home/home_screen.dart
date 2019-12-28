@@ -58,10 +58,6 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (state is HomePageProfile)
-                  IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () => Toast.show("Not implemented yet", context)),
               ],
               title: Text(state.title),
             ),
@@ -141,6 +137,37 @@ class HomeScreen extends StatelessWidget {
                   activeColor: Theme.of(context).primaryColor,
                 )
               ],
+            ),
+            floatingActionButton: BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                bool visible = false;
+                bool editing = false;
+                if (state is HomePageProfile) {
+                  visible = true;
+                }
+                if (state is HomePageProfileEditing) {
+                  visible = true;
+                  editing = true;
+                } else
+                  visible = false;
+
+                return AnimatedOpacity(
+                  opacity: visible ? 1 : 0,
+                  curve: Curves.ease,
+                  duration: Duration(milliseconds: 500),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Toast.show("Not implemented yet", context);
+
+                      BlocProvider.of<HomeBloc>(context).add(ProfilePageEditStarted());
+                    },
+                    child: Icon(
+                      editing ? Icons.save : Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              },
             ),
           );
         },
