@@ -4,6 +4,7 @@ import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/models/home_stats.dart';
 import 'package:mentorship_client/remote/models/user.dart';
+import 'package:mentorship_client/remote/responses/custom_response.dart';
 
 class UserRepository {
   static final UserRepository instance = UserRepository._internal();
@@ -81,6 +82,22 @@ class UserRepository {
       User user = User.fromJson(response.body);
 
       return user;
+    } on SocketException {
+      throw Failure("No internet connection");
+    } on HttpException {
+      throw Failure("HttpException");
+    }
+  }
+
+  /// Updates current user's profile
+  Future<CustomResponse> updateUser(User user) async {
+    try {
+      final response = await ApiManager.instance.userService.updateUser(user);
+      if (!response.isSuccessful) {
+        print("Error: ${response.error}");
+        throw Failure.fromJson(response.error);
+      }
+      return CustomResponse.fromJson(response.body);
     } on SocketException {
       throw Failure("No internet connection");
     } on HttpException {

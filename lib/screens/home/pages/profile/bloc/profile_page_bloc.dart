@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
+import 'package:mentorship_client/remote/responses/custom_response.dart';
 
 import './bloc.dart';
 
@@ -22,7 +23,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
       yield ProfilePageLoading();
       try {
         final User user = await userRepository.getCurrentUser();
-        yield ProfilePageSuccess(user, false);
+        yield ProfilePageSuccess(user, true); // TODO Change to false!
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield ProfilePageFailure(failure.message);
@@ -31,12 +32,16 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         yield ProfilePageFailure(exception.toString());
       }
     }
-    if (event is ProfilePageEditClicked) {
+    if (event is ProfilePageEditStarted) {
       final ProfilePageState last = await this.last;
 
       if (last is ProfilePageSuccess) {
         yield ProfilePageSuccess(last.user, false);
       }
+    }
+
+    if (event is ProfilePageEditSubmitted) {
+      CustomResponse response = await userRepository.updateUser(event.user);
     }
   }
 }

@@ -13,13 +13,13 @@ advanced functionality coming soon.
 **What works?**
 - Login and Registration
 - Home page
-- Profile page (without edit)
+- Profile page
 - Members page
 
 **What is missing?**
-- Edit profile functionality
 - Relation page
 - Requests page
+- Changing password
 
 **What requires improvements**?
 - Part responsible for communicating with API. Auto-serialization and deserialization would
@@ -34,6 +34,6 @@ catching errors. I haven't been able to find a good solution currently.
     - `BLoC`
     - `Repository`
     - `Service`
-- App uses [BLoC pattern](https://bloclibrary.dev/#/coreconcepts) extensively.
+- App uses [BLoC pattern](https://bloclibrary.dev/#/coreconcepts) extensively
 - To communicate with API, [Chopper](https://pub.dev/packages/chopper) is used
 - To save JWT token, [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) is used

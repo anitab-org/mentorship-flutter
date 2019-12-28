@@ -19,7 +19,7 @@ class ProfilePageSuccess extends ProfilePageState {
   ProfilePageSuccess(this.user, this.editing);
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user, editing];
 }
 
 class ProfilePageFailure extends ProfilePageState {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
-import 'package:toast/toast.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -22,6 +22,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final _organizationController = TextEditingController();
   final _skillsController = TextEditingController();
   final _interestsController = TextEditingController();
+  bool _availableToMentor;
+  bool _needsMentoring;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,8 @@ class _ProfilePageState extends State<ProfilePage> {
           _organizationController.text = state.user.organization;
           _skillsController.text = state.user.skills;
           _interestsController.text = state.user.interests;
+          _availableToMentor = state.user.availableToMentor;
+          _needsMentoring = state.user.needsMentoring;
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -55,6 +59,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
+                if (state.editing)
+                  RaisedButton(
+                    child: Text("Update"),
+                    onPressed: () => BlocProvider.of<ProfilePageBloc>(context).add(
+                      ProfilePageEditSubmitted(
+                        User(
+                            name: _nameController.text,
+                            slackUsername: _slackController.text,
+                            bio: _bioController.text,
+                            location: _locationController.text,
+                            occupation: _occupationController.text,
+                            organization: _organizationController.text,
+                            interests: _interestsController.text,
+                            skills: _skillsController.text,
+                            needsMentoring: _needsMentoring,
+                            availableToMentor: _availableToMentor),
+                      ),
+                    ),
+                  ),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -91,10 +114,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           Text("Available to mentor"),
                           Checkbox(
-                            value: state.user.availableToMentor,
+                            tristate: true,
+                            value: _availableToMentor,
                             onChanged: state.editing
-                                ? (value) =>
-                                    Toast.show("Edit mode is enabled; changing value...", context)
+                                ? (value) => _availableToMentor = !_availableToMentor
                                 : (value) => null,
                           ),
                         ],
@@ -104,10 +127,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           Text("Needs mentoring"),
                           Checkbox(
-                            value: state.user.needsMentoring,
+                            tristate: true,
+                            value: _needsMentoring,
                             onChanged: state.editing
-                                ? (value) =>
-                                    Toast.show("Edit mode is enabled; changing value...", context)
+                                ? (value) => _needsMentoring = !_needsMentoring
                                 : (value) => null,
                           ),
                         ],

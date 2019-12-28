@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mentorship_client/remote/models/user.dart';
 
 abstract class ProfilePageEvent extends Equatable {
   const ProfilePageEvent();
@@ -9,4 +10,13 @@ abstract class ProfilePageEvent extends Equatable {
 
 class ProfilePageShowed extends ProfilePageEvent {}
 
-class ProfilePageEditClicked extends ProfilePageEvent {}
+class ProfilePageEditStarted extends ProfilePageEvent {}
+
+class ProfilePageEditSubmitted extends ProfilePageEvent {
+  final User user;
+
+  ProfilePageEditSubmitted(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
