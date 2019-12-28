@@ -2,8 +2,6 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:mentorship_client/auth/auth_bloc.dart';
-import 'package:mentorship_client/auth/auth_event.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/members/members_page.dart';
 import 'package:mentorship_client/screens/home/pages/profile/profile_page.dart';
@@ -87,17 +85,7 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 return Center(
-                  child: Column(
-                    children: [
-                      Text("PAGE TITLE: ${state.title}"),
-                      RaisedButton(
-                        child: const Text("Log out"),
-                        onPressed: () {
-                          BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
-                        },
-                      )
-                    ],
-                  ),
+                  child: Text("Error: Unknown HomePageState"),
                 );
               },
             ),
@@ -144,8 +132,7 @@ class HomeScreen extends StatelessWidget {
                 bool editing = false;
                 if (state is HomePageProfile) {
                   visible = true;
-                }
-                if (state is HomePageProfileEditing) {
+                } else if (state is HomePageProfileEditing) {
                   visible = true;
                   editing = true;
                 } else
