@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/members/bloc/bloc.dart';
+import 'package:mentorship_client/screens/home/pages/members/widgets/animated_member_list_tile.dart';
 import 'package:mentorship_client/screens/member_profile/member_profile.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
@@ -25,20 +26,9 @@ class _MembersPageState extends State<MembersPage> {
               itemBuilder: (context, index) {
                 User user = state.users[index];
 
-                return ListTile(
-                  isThreeLine: true,
-                  leading: Icon(Icons.person, size: 36),
-                  title: Text(user.name),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user.requestStatus(),
-                      ),
-                      Text("Interests: ${user.interests ?? "---"}"),
-                    ],
-                  ),
+                return InkWell(
                   onTap: () => _openMemberProfileScreen(context, user),
+                  child: AnimatedMemberListTile(user: user),
                 );
               },
             );
