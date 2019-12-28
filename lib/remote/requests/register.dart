@@ -33,6 +33,13 @@ class Register {
         assert(needsMentoring != null),
         assert(availableToMentor != null);
 
-
-  // TODO Add toJson()
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "username": username,
+        "email": email,
+        "password": password,
+        "terms_and_conditions_checked": acceptedTermsAndConditions,
+        "need_mentoring": needsMentoring,
+        "available_to_mentor": availableToMentor,
+      };
 }

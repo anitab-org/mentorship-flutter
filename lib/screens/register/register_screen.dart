@@ -229,5 +229,10 @@ class _RegisterFormState extends State<RegisterForm> {
     );
 
     await AuthRepository.instance.register(register);
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Now confirm you email address"),
+      ),
+    );
   }
 }
