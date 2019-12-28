@@ -1,16 +1,39 @@
 # mentorship_client
 
-Cross-platform client for Systers&#x27; mentorship system.
+Cross-platform client for [Systers&#x27; mentorship system](https://github.com/systers/mentorship-backend).
+Created during Christmas.
 
-## Getting Started
+### Purpose
+I really liked Mentorship
 
-This project is a starting point for a Flutter application.
+### Work status
+Basic application flow works, like changing screens and logging in/off. More
+advanced functionality coming soon.
 
-A few resources to get you started if this is your first Flutter project:
+**What works?**
+- Login and Registration
+- Home page
+- Profile page (without edit)
+- Members page
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+**What is missing?**
+- Edit profile functionality
+- Relation page
+- Requests page
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**What requires improvements**?
+- Part responsible for communicating with API. Auto-serialization and deserialization would
+be very useful and remove boilerplate from repositories.
+- Error handling mechanism. Currently, there's a lot of duplicated boilerplate code in `remote/repositories`
+catching errors. I haven't been able to find a good solution currently.
+- State management in `screens/register/register_screen.dart` - use BLoC
+
+### Overview
+- App *tries* to follow Clean Architecure guidelines. Logic is separated into 4 layers:
+    - `UI`
+    - `BLoC`
+    - `Repository`
+    - `Service`
+- App uses [BLoC pattern](https://bloclibrary.dev/#/coreconcepts) extensively.
+- To communicate with API, [Chopper](https://pub.dev/packages/chopper) is used
+- To save JWT token, [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) is used
