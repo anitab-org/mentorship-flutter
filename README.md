@@ -3,8 +3,16 @@
 Cross-platform client for [Systers&#x27; mentorship system](https://github.com/systers/mentorship-backend).
 Created during Christmas.
 
+### How was it created?
+I really liked Mentorship System, wanted to try Flutter and had some free time...that's the whole story.
+
 ### Purpose
-I really liked Mentorship
+Mentorship System aims to be as inclusive as possible for everyone. It should apply
+to user's mobile operating system, too.
+
+I'd love Systers to accept this project as one of theirs. I'll be incredibly
+happy, for example, if students in next year's Google Code-in will continue its development,
+improve it and polish the codebase.
 
 ### Work status
 Basic application flow works, like changing screens and logging in/off. More
