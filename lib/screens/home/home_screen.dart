@@ -69,7 +69,11 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 if (state is HomePageProfile) {
-                  return ProfilePage();
+                  bool editing = false;
+                  if (state is HomePageProfileEditing) {
+                    editing = true;
+                  }
+                  return ProfilePage(editing: editing);
                 }
 
                 if (state is HomePageRelation) {
@@ -130,13 +134,20 @@ class HomeScreen extends StatelessWidget {
               builder: (context, state) {
                 bool visible = false;
                 bool editing = false;
-                if (state is HomePageProfile) {
-                  visible = true;
-                } else if (state is HomePageProfileEditing) {
-                  visible = true;
-                  editing = true;
-                } else
-                  visible = false;
+
+                switch (state.runtimeType) {
+                  case HomePageProfile:
+                    visible = true;
+                    editing = false;
+                    break;
+                  case HomePageProfileEditing:
+                    visible = true;
+                    editing = true;
+                    break;
+                  default:
+                    visible = false;
+                    editing = false;
+                }
 
                 return AnimatedOpacity(
                   opacity: visible ? 1 : 0,
@@ -146,7 +157,7 @@ class HomeScreen extends StatelessWidget {
                     onPressed: () {
                       Toast.show("Not implemented yet", context);
 
-                      BlocProvider.of<HomeBloc>(context).add(ProfilePageEditStarted());
+                      BlocProvider.of<HomeBloc>(context).add(ProfilePageEditClicked());
                     },
                     child: Icon(
                       editing ? Icons.save : Icons.edit,

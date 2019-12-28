@@ -6,6 +6,10 @@ import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class ProfilePage extends StatefulWidget {
+  final bool editing;
+
+  const ProfilePage({Key key, this.editing}) : super(key: key);
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -59,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                if (state.editing)
+                if (widget.editing)
                   RaisedButton(
                     child: Text("Update"),
                     onPressed: () => BlocProvider.of<ProfilePageBloc>(context).add(
@@ -86,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         width: 100,
                         child: TextFormField(
                           controller: _nameController,
-                          enabled: state.editing,
+                          enabled: widget.editing,
                           decoration: InputDecoration(
                             labelText: "Name",
                             border: UnderlineInputBorder(),
@@ -116,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Checkbox(
                             tristate: true,
                             value: _availableToMentor,
-                            onChanged: state.editing
+                            onChanged: widget.editing
                                 ? (value) => _availableToMentor = !_availableToMentor
                                 : (value) => null,
                           ),
@@ -129,19 +133,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           Checkbox(
                             tristate: true,
                             value: _needsMentoring,
-                            onChanged: state.editing
+                            onChanged: widget.editing
                                 ? (value) => _needsMentoring = !_needsMentoring
                                 : (value) => null,
                           ),
                         ],
                       ),
-                      _buildTextFormField("Bio", state.editing, _bioController),
-                      _buildTextFormField("Slack username", state.editing, _slackController),
-                      _buildTextFormField("Location", state.editing, _locationController),
-                      _buildTextFormField("Occupation", state.editing, _occupationController),
-                      _buildTextFormField("Organization", state.editing, _organizationController),
-                      _buildTextFormField("Skills", state.editing, _skillsController),
-                      _buildTextFormField("Interests", state.editing, _interestsController),
+                      _buildTextFormField("Bio", widget.editing, _bioController),
+                      _buildTextFormField("Slack username", widget.editing, _slackController),
+                      _buildTextFormField("Location", widget.editing, _locationController),
+                      _buildTextFormField("Occupation", widget.editing, _occupationController),
+                      _buildTextFormField("Organization", widget.editing, _organizationController),
+                      _buildTextFormField("Skills", widget.editing, _skillsController),
+                      _buildTextFormField("Interests", widget.editing, _interestsController),
                     ],
                   ),
                 )

@@ -18,7 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       yield HomePageProfile();
     }
 
-    if (event is ProfilePageEditStarted) {
+    if (event is ProfilePageEditClicked) {
       yield HomePageProfileEditing();
     }
 

@@ -28,7 +28,7 @@ class HomePageProfile extends HomeState {
   int get index => 1;
 }
 
-class HomePageProfileEditing extends HomeState {
+class HomePageProfileEditing extends HomePageProfile {
 
   @override
   String get title => PROFILE_PAGE_TITLE;
