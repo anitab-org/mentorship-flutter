@@ -30,12 +30,13 @@ class UserDataList extends StatelessWidget {
     }
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "$label: ",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
-        Text("$value", style: TextStyle(fontSize: 16)),
+        Expanded(child: Text("$value", style: TextStyle(fontSize: 16))),
       ],
     );
   }
