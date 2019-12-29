@@ -4,9 +4,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
-import 'package:mentorship_client/remote/responses/auth_token.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
+import 'package:mentorship_client/remote/responses/auth_token.dart';
 
 class AuthRepository {
   static final AuthRepository instance = AuthRepository._internal();
@@ -60,7 +60,7 @@ class AuthRepository {
 
   Future<String> getToken() async {
     final String token = await _storage.read(key: AUTH_TOKEN);
-    Logger.root.severe("TOKEN: ${token}");
+    Logger.root.severe("TOKEN: $token");
 
     if (token != null) {
       Logger.root.info("Has token!");

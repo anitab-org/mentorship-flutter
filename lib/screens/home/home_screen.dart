@@ -2,8 +2,10 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/members/members_page.dart';
+import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/profile/profile_page.dart';
 import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart';
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
@@ -41,8 +43,16 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeBloc>(
-      create: (context) => HomeBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProfilePageBloc>(
+          // I think its too high in the widget tree, but I couldn't find a better solution
+          create: (context) => ProfilePageBloc(userRepository: UserRepository.instance),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(),
+        ),
+      ],
       child: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           return Scaffold(
@@ -69,11 +79,15 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 if (state is HomePageProfile) {
+                  print("type" + BlocProvider.of<HomeBloc>(context).toString());
+                  print("type" + BlocProvider.of<ProfilePageBloc>(context).toString());
+                  final ProfilePageBloc bloc = BlocProvider.of<ProfilePageBloc>(context);
+
                   bool editing = false;
                   if (state is HomePageProfileEditing) {
                     editing = true;
                   }
-                  return ProfilePage(editing: editing);
+                  return ProfilePage(bloc: bloc, editing: editing);
                 }
 
                 if (state is HomePageRelation) {
@@ -157,7 +171,11 @@ class HomeScreen extends StatelessWidget {
                     onPressed: () {
                       Toast.show("Not implemented yet", context);
 
-                      BlocProvider.of<HomeBloc>(context).add(ProfilePageEditClicked());
+                      if (state is HomePageProfile) {
+                        BlocProvider.of<HomeBloc>(context).add(HomeProfilePageEditClicked());
+                      } else {
+                        BlocProvider.of<HomeBloc>(context).add(HomeProfilePageEditSubmitted());
+                      }
                     },
                     child: Icon(
                       editing ? Icons.save : Icons.edit,

@@ -12,10 +12,10 @@ class StatsPageSelected extends HomeEvent {}
 class ProfilePageSelected extends HomeEvent {}
 
 // Dirty but I don't have other idea
-class ProfilePageEditClicked extends HomeEvent {}
+class HomeProfilePageEditClicked extends HomeEvent {}
 
 // Dirty too
-class ProfilePageEditSubmitted extends HomeEvent {}
+class HomeProfilePageEditSubmitted extends HomeEvent {}
 
 class RelationPageSelected extends HomeEvent {}
 
