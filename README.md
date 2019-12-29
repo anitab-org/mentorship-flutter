@@ -28,6 +28,7 @@ advanced functionality coming soon.
 - Relation page
 - Requests page
 - Changing password
+- Input validation in RegisterScreen
 
 **What requires improvements**?
 - Part responsible for communicating with API. Auto-serialization and deserialization would
