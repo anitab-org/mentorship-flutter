@@ -176,3 +176,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
+Widget someMeth() {
+  return BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
+    return ProfilePage(
+      bloc: BlocProvider.of<ProfilePageBloc>(context),
+      editing: true,
+    );
+  });
+}

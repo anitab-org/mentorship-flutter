@@ -28,15 +28,6 @@ class HomePageProfile extends HomeState {
   int get index => 1;
 }
 
-class HomePageProfileEditing extends HomePageProfile {
-
-  @override
-  String get title => PROFILE_PAGE_TITLE;
-
-  @override
-  int get index => 1;
-}
-
 class HomePageRelation extends HomeState {
   @override
   String get title => RELATION_PAGE_TITLE;

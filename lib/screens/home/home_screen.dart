@@ -11,7 +11,6 @@ import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
-import 'package:toast/toast.dart';
 
 class HomeScreen extends StatelessWidget {
   void _onTapNavbar(int index, BuildContext context) {
@@ -45,8 +44,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // I think its too high in the widget tree, but I couldn't find a better solution
         BlocProvider<ProfilePageBloc>(
-          // I think its too high in the widget tree, but I couldn't find a better solution
           create: (context) => ProfilePageBloc(userRepository: UserRepository.instance),
         ),
         BlocProvider<HomeBloc>(
@@ -79,15 +78,23 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 if (state is HomePageProfile) {
-                  print("type" + BlocProvider.of<HomeBloc>(context).toString());
-                  print("type" + BlocProvider.of<ProfilePageBloc>(context).toString());
-                  final ProfilePageBloc bloc = BlocProvider.of<ProfilePageBloc>(context);
-
-                  bool editing = false;
-                  if (state is HomePageProfileEditing) {
-                    editing = true;
-                  }
-                  return ProfilePage(bloc: bloc, editing: editing);
+                  final HomeBloc homeBloc = BlocProvider.of<HomeBloc>(context);
+                  final ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
+                  Logger.root.warning("homeBloc: ${homeBloc.toString()}");
+                  Logger.root.warning("profileBloc: ${profileBloc.toString()}");
+//
+//                  bool editing = false;
+//                  if (profileBloc.state is ProfilePageEditing) {
+//                    editing = true;
+//                  }
+                  return BlocBuilder<ProfilePageBloc, ProfilePageState>(
+                    builder: (context, state) {
+                      return ProfilePage(
+                        bloc: BlocProvider.of<ProfilePageBloc>(context),
+                        editing: true,
+                      );
+                    },
+                  );
                 }
 
                 if (state is HomePageRelation) {
@@ -149,40 +156,45 @@ class HomeScreen extends StatelessWidget {
                 bool visible = false;
                 bool editing = false;
 
-                switch (state.runtimeType) {
-                  case HomePageProfile:
-                    visible = true;
-                    editing = false;
-                    break;
-                  case HomePageProfileEditing:
-                    visible = true;
-                    editing = true;
-                    break;
-                  default:
-                    visible = false;
-                    editing = false;
+                if (state is HomePageProfile) {
+                  visible = true;
                 }
 
-                return AnimatedOpacity(
-                  opacity: visible ? 1 : 0,
-                  curve: Curves.ease,
-                  duration: Duration(milliseconds: 500),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      Toast.show("Not implemented yet", context);
-
-                      if (state is HomePageProfile) {
-                        BlocProvider.of<HomeBloc>(context).add(HomeProfilePageEditClicked());
-                      } else {
-                        BlocProvider.of<HomeBloc>(context).add(HomeProfilePageEditSubmitted());
-                      }
-                    },
-                    child: Icon(
-                      editing ? Icons.save : Icons.edit,
-                      color: Colors.white,
-                    ),
-                  ),
-                );
+                return Text("ok");
+//                ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
+//
+//                ProfilePageState profileState;
+//                if (profileBloc != null) {
+//                  profileState = profileBloc.state;
+//                } else {
+//                  profileState = ProfilePageFailure("LOL");
+//                }
+//
+//                if (profileState is ProfilePageEditing) {
+//                  editing = true;
+//                }
+//
+//                return AnimatedOpacity(
+//                  opacity: visible ? 1 : 0,
+//                  curve: Curves.ease,
+//                  duration: Duration(milliseconds: 500),
+//                  child: FloatingActionButton(
+//                    onPressed: () {
+//                      Toast.show("Not implemented yet", context);
+//
+//                      if (state is HomePageProfile) {
+//                        profileBloc.add(ProfilePageEditStarted());
+//                        if (profileState is ProfilePageEditing) {
+//                          profileBloc.add(ProfilePageEditSubmitted(profileState.user));
+//                        }
+//                      }
+//                    },
+//                    child: Icon(
+//                      editing ? Icons.save : Icons.edit,
+//                      color: Colors.white,
+//                    ),
+//                  ),
+//                );
               },
             ),
           );

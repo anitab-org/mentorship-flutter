@@ -7,15 +7,21 @@ abstract class ProfilePageState extends Equatable {
   @override
   List<Object> get props => [];
 }
-
-class ProfilePageInitial extends ProfilePageState {}
-
 class ProfilePageLoading extends ProfilePageState {}
 
 class ProfilePageSuccess extends ProfilePageState {
   final User user;
 
   ProfilePageSuccess(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
+class ProfilePageEditing extends ProfilePageState {
+  final User user;
+
+  ProfilePageEditing(this.user);
 
   @override
   List<Object> get props => [user];

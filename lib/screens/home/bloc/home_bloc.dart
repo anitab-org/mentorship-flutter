@@ -18,19 +18,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       yield HomePageProfile();
     }
 
-    if (event is HomeProfilePageEditClicked) {
-      final HomeState last = await this.last;
-      if (last is HomePageProfileEditing) {
-
-      }
-
-      yield HomePageProfileEditing();
-    }
-
-    if (event is HomeProfilePageEditSubmitted) {
-      yield HomePageProfile();
-    }
-
     if (event is RelationPageSelected) {
       yield HomePageRelation();
     }
