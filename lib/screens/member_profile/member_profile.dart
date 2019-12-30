@@ -20,6 +20,14 @@ class MemberProfileScreen extends StatelessWidget {
         padding: EdgeInsets.all(8),
         child: ListView(
           children: [
+            Hero(
+              tag: user.id,
+              child: Icon(
+                Icons.person,
+                size: 96,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
               child: Center(
@@ -33,7 +41,10 @@ class MemberProfileScreen extends StatelessWidget {
             Center(
               child: RaisedButton(
                 color: Theme.of(context).accentColor,
-                child: Text("Send request"),
+                child: Text(
+                  "Send request",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () => Toast.show("Not implemented yet", context),
               ),
             )

@@ -27,10 +27,13 @@ class _AnimatedMemberListTileState extends State<AnimatedMemberListTile> {
   Widget build(BuildContext context) {
     return ListTile(
       isThreeLine: true,
-      leading: Icon(
-        Icons.person,
-        size: 36,
-        color: Theme.of(context).primaryColor,
+      leading: Hero(
+        tag: widget.user.id,
+        child: Icon(
+          Icons.person,
+          size: 36,
+          color: Theme.of(context).primaryColor,
+        ),
       ),
       title: Text(widget.user.name),
       subtitle: Column(
