@@ -25,6 +25,25 @@ class _AnimatedMemberListTileState extends State<AnimatedMemberListTile> {
 
   @override
   Widget build(BuildContext context) {
+    return ListTile(
+      isThreeLine: true,
+      leading: Icon(
+        Icons.person,
+        size: 36,
+        color: Theme.of(context).primaryColor,
+      ),
+      title: Text(widget.user.name),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.user.requestStatus(),
+          ),
+          Text("Interests: ${widget.user.interests ?? "---"}"),
+        ],
+      ),
+    );
+
     return AnimatedOpacity(
       duration: Duration(milliseconds: 500),
       opacity: _lock ? 1 : 0,
