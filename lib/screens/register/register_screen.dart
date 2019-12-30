@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
+import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
 
@@ -219,19 +221,29 @@ class _RegisterFormState extends State<RegisterForm> {
 
   void _register(BuildContext context) async {
     final Register register = Register(
-      name: _nameController.text,
-      username: _usernameController.text,
-      email: _emailController.text,
-      password: _passwordController.text,
+      name: _nameController.text.trim(),
+      username: _usernameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
       acceptedTermsAndConditions: _acceptedTermsAndConditions,
       needsMentoring: _needsMentoring,
       availableToMentor: _availableToMentor,
     );
 
-    await AuthRepository.instance.register(register);
+    String message;
+    try {
+      await AuthRepository.instance.register(register);
+      message = "Great! Now confirm you email address";
+    } on Failure catch (failure) {
+      Logger.root.severe(failure.message);
+      message = failure.message;
+    } on Exception catch (exception) {
+      Logger.root.severe(exception.toString());
+      message = exception.toString();
+    }
     Scaffold.of(context).showSnackBar(
       SnackBar(
-        content: Text("Now confirm you email address"),
+        content: Text(message),
       ),
     );
   }
