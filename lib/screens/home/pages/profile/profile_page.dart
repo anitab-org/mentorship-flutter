@@ -46,8 +46,6 @@ class _ProfilePageState extends State<ProfilePage> {
     // _availableToMentor
     // _needsMentoring // TODO: Implement!
 
-    bloc.close();
-
     return BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
       if (state is ProfilePageSuccess) {
         _nameController.text = state.user.name;

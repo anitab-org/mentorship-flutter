@@ -172,12 +172,12 @@ class HomeScreen extends StatelessWidget {
                       duration: Duration(milliseconds: 500),
                       child: FloatingActionButton(
                         onPressed: () {
-                          Toast.show("Not implemented yet", context);
-
                           if (state is HomeScreenProfile) {
                             profileBloc.add(ProfilePageEditStarted());
+                            Toast.show("Edit mode ON", context);
                             if (profileState is ProfilePageEditing) {
                               profileBloc.add(ProfilePageEditSubmitted(profileBloc.user));
+                              Toast.show("Edit mode OFF", context);
                             }
                           }
                         },
