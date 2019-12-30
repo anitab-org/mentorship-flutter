@@ -11,6 +11,7 @@ import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
+import 'package:toast/toast.dart';
 
 class HomeScreen extends StatelessWidget {
   void _onTapNavbar(int index, BuildContext context) {
@@ -57,6 +58,11 @@ class HomeScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               actions: [
+                if (state is HomeScreenMembers)
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () => Toast.show("Not implemented yet", context),
+                  ),
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: () => Navigator.of(context).push(
