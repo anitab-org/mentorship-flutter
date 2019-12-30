@@ -11,7 +11,7 @@ abstract class HomeState extends Equatable {
   List<Object> get props => [];
 }
 
-class HomePageStats extends HomeState {
+class HomeScreenStats extends HomeState {
   @override
   String get title => STATS_PAGE_TITLE;
 
@@ -19,7 +19,7 @@ class HomePageStats extends HomeState {
   int get index => 0;
 }
 
-class HomePageProfile extends HomeState {
+class HomeScreenProfile extends HomeState {
 
   @override
   String get title => PROFILE_PAGE_TITLE;
@@ -28,7 +28,7 @@ class HomePageProfile extends HomeState {
   int get index => 1;
 }
 
-class HomePageRelation extends HomeState {
+class HomeScreenRelation extends HomeState {
   @override
   String get title => RELATION_PAGE_TITLE;
 
@@ -36,7 +36,7 @@ class HomePageRelation extends HomeState {
   int get index => 2;
 }
 
-class HomePageMembers extends HomeState {
+class HomeScreenMembers extends HomeState {
   @override
   String get title => MEMBERS_PAGE_TITLE;
 
@@ -44,7 +44,7 @@ class HomePageMembers extends HomeState {
   int get index => 3;
 }
 
-class HomePageRequests extends HomeState {
+class HomeScreenRequests extends HomeState {
   @override
   String get title => REQUESTS_PAGE_TITLE;
 

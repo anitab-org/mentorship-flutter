@@ -7,9 +7,8 @@ import 'package:toast/toast.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool editing;
-  final ProfilePageBloc bloc;
 
-  const ProfilePage({Key key, this.editing, this.bloc}) : super(key: key);
+  const ProfilePage({Key key, this.editing}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -32,8 +31,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    widget.bloc.add(ProfilePageShowed());
-
     return BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
       if (state is ProfilePageSuccess) {
         _nameController.text = state.user.name;
@@ -160,8 +157,14 @@ class _ProfilePageState extends State<ProfilePage> {
       }
       if (state is ProfilePageLoading) {
         return LoadingIndicator();
-      } else
-        return Text("an error occurred");
+      }
+
+      if (state is ProfilePageInitial) {
+        return Text("ProfilePageInitial");
+      }
+      else
+        return Text("Unknown ProfilePageState");
+
     });
   }
 
@@ -175,13 +178,4 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
-
-Widget someMeth() {
-  return BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
-    return ProfilePage(
-      bloc: BlocProvider.of<ProfilePageBloc>(context),
-      editing: true,
-    );
-  });
 }

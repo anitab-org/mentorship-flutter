@@ -6,28 +6,28 @@ import './bloc.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   @override
-  HomeState get initialState => HomePageStats();
+  HomeState get initialState => HomeScreenStats();
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
     if (event is StatsPageSelected) {
-      yield HomePageStats();
+      yield HomeScreenStats();
     }
 
     if (event is ProfilePageSelected) {
-      yield HomePageProfile();
+      yield HomeScreenProfile();
     }
 
     if (event is RelationPageSelected) {
-      yield HomePageRelation();
+      yield HomeScreenRelation();
     }
 
     if (event is MembersPageSelected) {
-      yield HomePageMembers();
+      yield HomeScreenMembers();
     }
 
     if (event is RequestsPageSelected) {
-      yield HomePageRequests();
+      yield HomeScreenRequests();
     }
   }
 }

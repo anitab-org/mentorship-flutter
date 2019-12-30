@@ -70,42 +70,38 @@ class HomeScreen extends StatelessWidget {
             ),
             body: BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) {
-                if (state is HomePageStats) {
+                if (state is HomeScreenStats) {
                   return Padding(
                     padding: const EdgeInsets.all(8),
                     child: StatsPage(),
                   );
                 }
 
-                if (state is HomePageProfile) {
+                if (state is HomeScreenProfile) {
                   final HomeBloc homeBloc = BlocProvider.of<HomeBloc>(context);
                   final ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
                   Logger.root.warning("homeBloc: ${homeBloc.toString()}");
                   Logger.root.warning("profileBloc: ${profileBloc.toString()}");
-//
-//                  bool editing = false;
-//                  if (profileBloc.state is ProfilePageEditing) {
-//                    editing = true;
-//                  }
-                  return BlocBuilder<ProfilePageBloc, ProfilePageState>(
-                    builder: (context, state) {
-                      return ProfilePage(
-                        bloc: BlocProvider.of<ProfilePageBloc>(context),
-                        editing: true,
-                      );
-                    },
-                  );
+
+                  profileBloc.add(ProfilePageShowed());
+
+                  bool editing = false;
+                  if (profileBloc.state is ProfilePageEditing) {
+                    editing = true;
+                  }
+
+                  return ProfilePage(editing: editing);
                 }
 
-                if (state is HomePageRelation) {
+                if (state is HomeScreenRelation) {
                   return RelationPage();
                 }
 
-                if (state is HomePageMembers) {
+                if (state is HomeScreenMembers) {
                   return MembersPage();
                 }
 
-                if (state is HomePageRequests) {
+                if (state is HomeScreenRequests) {
                   return RequestsPage();
                 }
 
@@ -156,7 +152,7 @@ class HomeScreen extends StatelessWidget {
                 bool visible = false;
                 bool editing = false;
 
-                if (state is HomePageProfile) {
+                if (state is HomeScreenProfile) {
                   visible = true;
                 }
 

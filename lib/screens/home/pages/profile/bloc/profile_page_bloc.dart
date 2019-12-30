@@ -13,12 +13,10 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   final UserRepository userRepository;
   final User user; // User object which will receive possible edits
 
-  ProfilePageBloc({this.userRepository, this.user})
-      : assert(userRepository != null),
-        assert(user != null);
+  ProfilePageBloc({this.userRepository, this.user}) : assert(userRepository != null);
 
   @override
-  ProfilePageState get initialState => ProfilePageLoading();
+  ProfilePageState get initialState => ProfilePageInitial();
 
   @override
   Stream<ProfilePageState> mapEventToState(ProfilePageEvent event) async* {
@@ -26,6 +24,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
       yield ProfilePageLoading();
       try {
         final User user = await userRepository.getCurrentUser();
+        Logger.root.warning("GETTING USEEEER");
         yield ProfilePageSuccess(user); // TODO Change to false!
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);

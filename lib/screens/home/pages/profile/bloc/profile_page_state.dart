@@ -7,6 +7,8 @@ abstract class ProfilePageState extends Equatable {
   @override
   List<Object> get props => [];
 }
+class ProfilePageInitial extends ProfilePageState {}
+
 class ProfilePageLoading extends ProfilePageState {}
 
 class ProfilePageSuccess extends ProfilePageState {
