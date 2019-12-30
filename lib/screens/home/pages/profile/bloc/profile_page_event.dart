@@ -8,7 +8,11 @@ abstract class ProfilePageEvent extends Equatable {
   List<Object> get props => null;
 }
 
-class ProfilePageShowed extends ProfilePageEvent {}
+class ProfilePageShowed extends ProfilePageEvent {
+  final String message;
+
+  ProfilePageShowed({this.message});
+}
 
 class ProfilePageEditStarted extends ProfilePageEvent {}
 

@@ -40,52 +40,63 @@ class _ProfilePageState extends State<ProfilePage> {
     // _availableToMentor
     // _needsMentoring // TODO: Implement!
 
-    return BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
-      if (state is ProfilePageSuccess) {
-        _nameController.text = state.user.name;
-        _usernameController.text = state.user.username;
-        _emailController.text = state.user.email;
-        _bioController.text = state.user.bio;
-        _slackController.text = state.user.slackUsername;
-        _locationController.text = state.user.location;
-        _occupationController.text = state.user.occupation;
-        _organizationController.text = state.user.organization;
-        _skillsController.text = state.user.skills;
-        _interestsController.text = state.user.interests;
-        _availableToMentor = state.user.availableToMentor;
-        _needsMentoring = state.user.needsMentoring;
+    return BlocListener<ProfilePageBloc, ProfilePageState>(
+      listener: (context, state) {
+        if (state.message != null) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+            ),
+          );
+        }
+      },
+      child: BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
+        if (state is ProfilePageSuccess) {
+          _nameController.text = state.user.name;
+          _usernameController.text = state.user.username;
+          _emailController.text = state.user.email;
+          _bioController.text = state.user.bio;
+          _slackController.text = state.user.slackUsername;
+          _locationController.text = state.user.location;
+          _occupationController.text = state.user.occupation;
+          _organizationController.text = state.user.organization;
+          _skillsController.text = state.user.skills;
+          _interestsController.text = state.user.interests;
+          _availableToMentor = state.user.availableToMentor;
+          _needsMentoring = state.user.needsMentoring;
 
-        return _createPage(context, state.user, false);
-      }
-      if (state is ProfilePageEditing) {
-        _nameController.text = state.user.name;
-        _usernameController.text = state.user.username;
-        _emailController.text = state.user.email;
-        _bioController.text = state.user.bio;
-        _slackController.text = state.user.slackUsername;
-        _locationController.text = state.user.location;
-        _occupationController.text = state.user.occupation;
-        _organizationController.text = state.user.organization;
-        _skillsController.text = state.user.skills;
-        _interestsController.text = state.user.interests;
-        _availableToMentor = state.user.availableToMentor;
-        _needsMentoring = state.user.needsMentoring;
+          return _createPage(context, state.user, false);
+        }
+        if (state is ProfilePageEditing) {
+          _nameController.text = state.user.name;
+          _usernameController.text = state.user.username;
+          _emailController.text = state.user.email;
+          _bioController.text = state.user.bio;
+          _slackController.text = state.user.slackUsername;
+          _locationController.text = state.user.location;
+          _occupationController.text = state.user.occupation;
+          _organizationController.text = state.user.organization;
+          _skillsController.text = state.user.skills;
+          _interestsController.text = state.user.interests;
+          _availableToMentor = state.user.availableToMentor;
+          _needsMentoring = state.user.needsMentoring;
 
-        return _createPage(context, state.user, true);
-      }
+          return _createPage(context, state.user, true);
+        }
 
-      if (state is ProfilePageFailure) {
-        return Text(state.message);
-      }
-      if (state is ProfilePageLoading) {
-        return LoadingIndicator();
-      }
+        if (state is ProfilePageFailure) {
+          return Text(state.message);
+        }
+        if (state is ProfilePageLoading) {
+          return LoadingIndicator();
+        }
 
-      if (state is ProfilePageInitial) {
-        return LoadingIndicator();
-      } else
-        return Text("Error: Unknown ProfilePageState");
-    });
+        if (state is ProfilePageInitial) {
+          return LoadingIndicator();
+        } else
+          return Text("Error: Unknown ProfilePageState");
+      }),
+    );
   }
 
   Widget _createPage(BuildContext context, User user, bool editing) {
@@ -94,6 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: ListView(
         shrinkWrap: true,
         children: [
+          SizedBox(height: 24),
           Center(
             child: ClipOval(
               child: Container(

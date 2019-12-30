@@ -24,13 +24,13 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
       yield ProfilePageLoading();
       try {
         user = await userRepository.getCurrentUser();
-        yield ProfilePageSuccess(user);
+        yield ProfilePageSuccess(user, message: event.message);
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
-        yield ProfilePageFailure(failure.message);
+        yield ProfilePageFailure(message: failure.message);
       } on Exception catch (exception) {
         Logger.root.severe(exception.toString());
-        yield ProfilePageFailure(exception.toString());
+        yield ProfilePageFailure(message: exception.toString());
       }
     }
     if (event is ProfilePageEditStarted) {
@@ -53,7 +53,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
       );
 
       CustomResponse response = await userRepository.updateUser(updatedUser);
-      add(ProfilePageShowed()); // refresh
+      add(ProfilePageShowed(message: response.message)); // refresh
     }
   }
 }
