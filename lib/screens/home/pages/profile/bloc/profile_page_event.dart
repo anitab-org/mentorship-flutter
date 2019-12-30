@@ -20,3 +20,5 @@ class ProfilePageEditSubmitted extends ProfilePageEvent {
   @override
   List<Object> get props => [user];
 }
+
+class ProfilePageEditCancelled extends ProfilePageEvent {}

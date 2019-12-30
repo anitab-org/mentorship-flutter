@@ -2,7 +2,6 @@ import 'package:chopper/chopper.dart';
 import 'package:mentorship_client/constants.dart';
 import 'package:mentorship_client/remote/auth_interceptor.dart';
 import 'package:mentorship_client/remote/models/user.dart';
-import 'package:mentorship_client/remote/responses/custom_response.dart';
 
 part 'user_service.chopper.dart';
 

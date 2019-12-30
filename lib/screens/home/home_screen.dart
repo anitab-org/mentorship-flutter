@@ -79,19 +79,12 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 if (state is HomeScreenProfile) {
-                  final HomeBloc homeBloc = BlocProvider.of<HomeBloc>(context);
-                  final ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
-                  Logger.root.warning("homeBloc: ${homeBloc.toString()}");
-                  Logger.root.warning("profileBloc: ${profileBloc.toString()}");
+                  BlocProvider.of<ProfilePageBloc>(context).add(ProfilePageShowed());
 
-                  profileBloc.add(ProfilePageShowed());
-
-                  bool editing = false;
-                  if (profileBloc.state is ProfilePageEditing) {
-                    editing = true;
-                  }
-
-                  return ProfilePage(editing: editing);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: ProfilePage(),
+                  );
                 }
 
                 if (state is HomeScreenRelation) {
@@ -150,11 +143,7 @@ class HomeScreen extends StatelessWidget {
             ),
             floatingActionButton: BlocBuilder<HomeBloc, HomeState>(
               builder: (context, homeState) {
-                bool visible = false;
-
-                if (homeState is HomeScreenProfile) {
-                  visible = true;
-                }
+                final bool visible = homeState is HomeScreenProfile;
 
                 ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
 

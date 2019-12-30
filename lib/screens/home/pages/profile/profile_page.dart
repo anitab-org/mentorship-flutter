@@ -5,17 +5,11 @@ import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class ProfilePage extends StatefulWidget {
-  final bool editing;
-
-  const ProfilePage({Key key, this.editing}) : super(key: key);
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  ProfilePageBloc bloc;
-
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _usernameController = TextEditingController(); // not changeable
@@ -88,21 +82,10 @@ class _ProfilePageState extends State<ProfilePage> {
       }
 
       if (state is ProfilePageInitial) {
-        return Text("ProfilePageInitial");
+        return LoadingIndicator();
       } else
-        return Text("Unknown ProfilePageState");
+        return Text("Error: Unknown ProfilePageState");
     });
-  }
-
-  _buildTextFormField(String text, bool editing, TextEditingController controller) {
-    return TextFormField(
-      controller: controller,
-      enabled: editing,
-      decoration: InputDecoration(
-        labelText: text,
-        border: UnderlineInputBorder(),
-      ),
-    );
   }
 
   Widget _createPage(BuildContext context, User user, bool editing) {
@@ -125,36 +108,36 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 Container(
-                  width: 100,
+                  width: MediaQuery.of(context).size.width / 2,
                   child: TextFormField(
                     controller: _nameController,
                     enabled: editing,
-                    decoration: InputDecoration(
-                      labelText: "Name",
-                      border: UnderlineInputBorder(),
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                      border: const UnderlineInputBorder(),
                     ),
                   ),
                 ),
                 TextFormField(
                   controller: _usernameController,
                   enabled: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Username",
-                    border: UnderlineInputBorder(),
+                    border: const UnderlineInputBorder(),
                   ),
                 ),
                 TextFormField(
                   controller: _emailController,
                   enabled: false,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Email",
-                    border: UnderlineInputBorder(),
+                    border: const UnderlineInputBorder(),
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Available to mentor"),
+                    const Text("Available to mentor"),
                     Checkbox(
                       tristate: true,
                       value: _availableToMentor,
@@ -167,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Needs mentoring"),
+                    const Text("Needs mentoring"),
                     Checkbox(
                       tristate: true,
                       value: _needsMentoring,
@@ -187,6 +170,17 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  _buildTextFormField(String text, bool editing, TextEditingController controller) {
+    return TextFormField(
+      controller: controller,
+      enabled: editing,
+      decoration: InputDecoration(
+        labelText: text,
+        border: UnderlineInputBorder(),
       ),
     );
   }
