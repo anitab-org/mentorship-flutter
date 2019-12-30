@@ -11,7 +11,7 @@ import './bloc.dart';
 
 class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   final UserRepository userRepository;
-  final User user; // User object which will receive possible edits
+  User user; // User object which will receive possible edits
 
   ProfilePageBloc({this.userRepository, this.user}) : assert(userRepository != null);
 
@@ -23,9 +23,8 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
     if (event is ProfilePageShowed) {
       yield ProfilePageLoading();
       try {
-        final User user = await userRepository.getCurrentUser();
-        Logger.root.warning("GETTING USEEEER");
-        yield ProfilePageSuccess(user); // TODO Change to false!
+        user = await userRepository.getCurrentUser();
+        yield ProfilePageSuccess(user);
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield ProfilePageFailure(failure.message);
@@ -39,8 +38,22 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
     }
 
     if (event is ProfilePageEditSubmitted) {
-      CustomResponse response = await userRepository.updateUser(event.user);
-      yield ProfilePageSuccess(event.user);
+      User updatedUser = User(
+        id: event.user.id,
+        name: event.user.name,
+        slackUsername: event.user.slackUsername,
+        bio: event.user.bio,
+        location: event.user.location,
+        occupation: event.user.occupation,
+        organization: event.user.organization,
+        interests: event.user.interests,
+        skills: event.user.skills,
+        needsMentoring: event.user.needsMentoring,
+        availableToMentor: event.user.availableToMentor,
+      );
+
+      CustomResponse response = await userRepository.updateUser(updatedUser);
+      add(ProfilePageShowed()); // refresh
     }
   }
 }

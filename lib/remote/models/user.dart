@@ -1,17 +1,17 @@
 class User {
-  final int id;
-  final String username;
-  final String name;
-  final String email;
-  final String slackUsername;
-  final String bio;
-  final String location;
-  final String occupation;
-  final String organization;
-  final String interests;
-  final String skills;
-  final bool needsMentoring;
-  final bool availableToMentor;
+  int id;
+  String username;
+  String name;
+  String email;
+  String slackUsername;
+  String bio;
+  String location;
+  String occupation;
+  String organization;
+  String interests;
+  String skills;
+  bool needsMentoring;
+  bool availableToMentor;
 
   User(
       {this.id,

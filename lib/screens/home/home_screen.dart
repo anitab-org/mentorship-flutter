@@ -11,6 +11,7 @@ import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
+import 'package:toast/toast.dart';
 
 class HomeScreen extends StatelessWidget {
   void _onTapNavbar(int index, BuildContext context) {
@@ -148,49 +149,46 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             floatingActionButton: BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
+              builder: (context, homeState) {
                 bool visible = false;
-                bool editing = false;
 
-                if (state is HomeScreenProfile) {
+                if (homeState is HomeScreenProfile) {
                   visible = true;
                 }
 
-                return Text("ok");
-//                ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
-//
-//                ProfilePageState profileState;
-//                if (profileBloc != null) {
-//                  profileState = profileBloc.state;
-//                } else {
-//                  profileState = ProfilePageFailure("LOL");
-//                }
-//
-//                if (profileState is ProfilePageEditing) {
-//                  editing = true;
-//                }
-//
-//                return AnimatedOpacity(
-//                  opacity: visible ? 1 : 0,
-//                  curve: Curves.ease,
-//                  duration: Duration(milliseconds: 500),
-//                  child: FloatingActionButton(
-//                    onPressed: () {
-//                      Toast.show("Not implemented yet", context);
-//
-//                      if (state is HomePageProfile) {
-//                        profileBloc.add(ProfilePageEditStarted());
-//                        if (profileState is ProfilePageEditing) {
-//                          profileBloc.add(ProfilePageEditSubmitted(profileState.user));
-//                        }
-//                      }
-//                    },
-//                    child: Icon(
-//                      editing ? Icons.save : Icons.edit,
-//                      color: Colors.white,
-//                    ),
-//                  ),
-//                );
+                ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
+
+                return BlocBuilder<ProfilePageBloc, ProfilePageState>(
+                  builder: (context, profileState) {
+                    bool editing = false;
+
+                    if (profileState is ProfilePageEditing) {
+                      editing = true;
+                    }
+
+                    return AnimatedOpacity(
+                      opacity: visible ? 1 : 0,
+                      curve: Curves.ease,
+                      duration: Duration(milliseconds: 500),
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          Toast.show("Not implemented yet", context);
+
+                          if (state is HomeScreenProfile) {
+                            profileBloc.add(ProfilePageEditStarted());
+                            if (profileState is ProfilePageEditing) {
+                              profileBloc.add(ProfilePageEditSubmitted(profileBloc.user));
+                            }
+                          }
+                        },
+                        child: Icon(
+                          editing ? Icons.save : Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
             ),
           );

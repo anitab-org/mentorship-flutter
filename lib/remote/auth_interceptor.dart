@@ -10,7 +10,6 @@ class AuthInterceptor extends RequestInterceptor {
     String token = await AuthRepository.instance.getToken();
 
     Map<String, String> headers = {"Authorization": token};
-    print("AuthInterceptor token: $token");
 
     Request authenticatedRequest = applyHeaders(request, headers);
 
