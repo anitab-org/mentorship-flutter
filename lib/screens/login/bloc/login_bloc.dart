@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
 import 'package:mentorship_client/failure.dart';
@@ -26,7 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } on Failure catch (failure) {
         yield LoginFailure(failure.message);
       } on Exception catch (exception) {
-        print(exception);
+        Logger.root.severe(exception);
         yield LoginFailure(exception.toString());
       }
     }

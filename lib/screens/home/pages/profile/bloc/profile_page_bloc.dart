@@ -52,8 +52,16 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         availableToMentor: event.user.availableToMentor,
       );
 
-      CustomResponse response = await userRepository.updateUser(updatedUser);
-      add(ProfilePageShowed(message: response.message)); // refresh
+      try {
+        CustomResponse response = await userRepository.updateUser(updatedUser);
+        add(ProfilePageShowed(message: response.message));
+      } on Failure catch (failure) {
+        Logger.root.severe(failure.message);
+        add(ProfilePageShowed(message: failure.message));
+      } on Exception catch (exception) {
+        Logger.root.severe(exception.toString());
+        add(ProfilePageShowed(message: exception.toString()));
+      }
     }
   }
 }

@@ -11,7 +11,6 @@ import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
-import 'package:toast/toast.dart';
 
 class HomeScreen extends StatelessWidget {
   void _onTapNavbar(int index, BuildContext context) {
@@ -163,10 +162,8 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () {
                           if (state is HomeScreenProfile) {
                             profileBloc.add(ProfilePageEditStarted());
-                            Toast.show("Edit mode ON", context);
                             if (profileState is ProfilePageEditing) {
                               profileBloc.add(ProfilePageEditSubmitted(profileBloc.user));
-                              Toast.show("Edit mode OFF", context);
                             }
                           }
                         },

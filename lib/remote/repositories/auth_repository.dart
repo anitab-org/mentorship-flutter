@@ -20,7 +20,7 @@ class AuthRepository {
       final response = await ApiManager.instance.authService.login(login);
 
       if (!response.isSuccessful) {
-        print("Error: ${response.error}");
+        Logger.root.severe("Error: ${response.error}");
         throw Failure.fromJson(response.error);
       }
       final AuthToken authToken = AuthToken.fromJson(response.body);
@@ -38,7 +38,7 @@ class AuthRepository {
       final response = await ApiManager.instance.authService.register(register);
 
       if (!response.isSuccessful) {
-        print("Error: ${response.error}");
+        Logger.root.severe("Error: ${response.error}");
         throw Failure.fromJson(response.error);
       }
     } on SocketException {

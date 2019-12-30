@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/models/home_stats.dart';
@@ -16,7 +17,7 @@ class UserRepository {
       final response = await ApiManager.instance.userService.getHomeStats();
 
       if (!response.isSuccessful) {
-        print("Error: ${response.error}");
+        Logger.root.severe("Error: ${response.error}");
         throw Failure.fromJson(response.error);
       }
       final HomeStats homeStats = HomeStats.fromJson(response.body);
@@ -34,7 +35,7 @@ class UserRepository {
       final response = await ApiManager.instance.userService.getVerifiedUsers();
 
       if (!response.isSuccessful) {
-        print("Error: ${response.error}");
+        Logger.root.severe("Error: ${response.error}");
         throw Failure.fromJson(response.error);
       }
       List<User> users = [];
@@ -57,7 +58,7 @@ class UserRepository {
       final response = await ApiManager.instance.userService.getCurrentUser();
 
       if (!response.isSuccessful) {
-        print("Error: ${response.error}");
+        Logger.root.severe("Error: ${response.error}");
         throw Failure.fromJson(response.error);
       }
       User user = User.fromJson(response.body);
@@ -76,7 +77,7 @@ class UserRepository {
       final response = await ApiManager.instance.userService.getUser(userId);
 
       if (!response.isSuccessful) {
-        print("Error: ${response.error}");
+        Logger.root.severe("Error: ${response.error}");
         throw Failure.fromJson(response.error);
       }
       User user = User.fromJson(response.body);
@@ -94,7 +95,7 @@ class UserRepository {
     try {
       final response = await ApiManager.instance.userService.updateUser(user);
       if (!response.isSuccessful) {
-        print("Error: ${response.error}");
+        Logger.root.severe("Error: ${response.error}");
         throw Failure.fromJson(response.error);
       }
       return CustomResponse.fromJson(response.body);
