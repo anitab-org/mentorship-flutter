@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/screens/member_profile/user_data_list.dart';
-import 'package:toast/toast.dart';
+import 'package:mentorship_client/screens/send_request/send_request_screen.dart';
 
 class MemberProfileScreen extends StatelessWidget {
   final User user;
@@ -28,12 +28,18 @@ class MemberProfileScreen extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(
-                child: Text(
-                  user.name,
-                  textScaleFactor: 2,
+            Hero(
+              tag: user.username,
+              child: Material(
+                type: MaterialType.transparency,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: Text(
+                      user.name,
+                      textScaleFactor: 2,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -45,7 +51,14 @@ class MemberProfileScreen extends StatelessWidget {
                   "Send request",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () => Toast.show("Not implemented yet", context),
+                onPressed: () => Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (c, anim1, anim2) => SendRequestScreen(user: user),
+                    transitionsBuilder: (c, anim, a2, child) =>
+                        FadeTransition(opacity: anim, child: child),
+                    transitionDuration: Duration(milliseconds: 500),
+                  ),
+                ),
               ),
             )
           ],
