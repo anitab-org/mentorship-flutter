@@ -1,7 +1,6 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/members/members_page.dart';
@@ -14,32 +13,7 @@ import 'package:mentorship_client/screens/settings/settings_screen.dart';
 import 'package:toast/toast.dart';
 
 class HomeScreen extends StatelessWidget {
-  void _onTapNavbar(int index, BuildContext context) {
-    HomeEvent event;
-
-    switch (index) {
-      case 0:
-        event = StatsPageSelected();
-        break;
-      case 1:
-        event = ProfilePageSelected();
-        break;
-      case 2:
-        event = RelationPageSelected();
-        break;
-      case 3:
-        event = MembersPageSelected();
-        break;
-      case 4:
-        event = RequestsPageSelected();
-        break;
-      default:
-        event = StatsPageSelected();
-        Logger.root.warning("BottomNavBar: Index $index is not valid!");
-    }
-
-    BlocProvider.of<HomeBloc>(context).add(event);
-  }
+  final pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,138 +27,126 @@ class HomeScreen extends StatelessWidget {
           create: (context) => HomeBloc(),
         ),
       ],
-      child: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              actions: [
-                if (state is HomeScreenMembers)
+      child: BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {
+          pageController.jumpToPage(state.index);
+        },
+        child: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                actions: [
+                  if (state is HomeScreenMembers)
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () => Toast.show("Not implemented yet", context),
+                    ),
                   IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () => Toast.show("Not implemented yet", context),
-                  ),
-                IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SettingsScreen(),
+                    icon: Icon(Icons.settings),
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SettingsScreen(),
+                      ),
                     ),
                   ),
-                ),
-              ],
-              title: Text(state.title),
-            ),
-            body: BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
-                if (state is HomeScreenStats) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: StatsPage(),
-                  );
-                }
+                ],
+                title: Text(state.title),
+              ),
+              body: PageView(
+                onPageChanged: (index) {
+                  // FIXME WHILE SCROLLING
+                  print("onPageChanged: $index");
 
-                if (state is HomeScreenProfile) {
-                  BlocProvider.of<ProfilePageBloc>(context).add(ProfilePageShowed());
+                  BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index));
+                },
+                controller: pageController,
+                children: [
+                  StatsPage(),
+                  ProfilePage(),
+                  RelationPage(),
+                  MembersPage(),
+                  RequestsPage(),
+                ],
+              ),
+              bottomNavigationBar: BottomNavyBar(
+                showElevation: false,
+                onItemSelected: (index) =>
+                    BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index)),
+                // FIXME SINGLE SELECT
+                selectedIndex: state.index,
+                items: [
+                  BottomNavyBarItem(
+                    icon: Icon(Icons.home),
+                    title: Text("Home"),
+                    activeColor: Theme.of(context).primaryColor,
+                    inactiveColor: Theme.of(context).accentColor,
+                  ),
+                  BottomNavyBarItem(
+                    icon: Icon(Icons.person),
+                    title: Text("Profile"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor,
+                  ),
+                  BottomNavyBarItem(
+                    icon: Icon(Icons.people),
+                    title: Text("Relation"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor,
+                  ),
+                  BottomNavyBarItem(
+                    icon: Icon(Icons.people_outline),
+                    title: Text("Members"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor,
+                  ),
+                  BottomNavyBarItem(
+                    icon: Icon(Icons.comment),
+                    title: Text("Requests"),
+                    inactiveColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor,
+                  )
+                ],
+              ),
+              floatingActionButton: BlocBuilder<HomeBloc, HomeState>(
+                builder: (context, homeState) {
+                  final bool visible = homeState is HomeScreenProfile;
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: ProfilePage(),
-                  );
-                }
+                  ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
 
-                if (state is HomeScreenRelation) {
-                  return RelationPage();
-                }
+                  return BlocBuilder<ProfilePageBloc, ProfilePageState>(
+                    builder: (context, profileState) {
+                      bool editing = false;
 
-                if (state is HomeScreenMembers) {
-                  return MembersPage();
-                }
+                      if (profileState is ProfilePageEditing) {
+                        editing = true;
+                      }
 
-                if (state is HomeScreenRequests) {
-                  return RequestsPage();
-                }
-
-                return Center(
-                  child: Text("Error: Unknown HomePageState"),
-                );
-              },
-            ),
-            bottomNavigationBar: BottomNavyBar(
-              showElevation: false,
-              onItemSelected: (index) => _onTapNavbar(index, context),
-              selectedIndex: state.index,
-              items: [
-                BottomNavyBarItem(
-                  icon: Icon(Icons.home),
-                  title: Text("Home"),
-                  activeColor: Theme.of(context).primaryColor,
-                  inactiveColor: Theme.of(context).accentColor,
-                ),
-                BottomNavyBarItem(
-                  icon: Icon(Icons.person),
-                  title: Text("Profile"),
-                  inactiveColor: Theme.of(context).accentColor,
-                  activeColor: Theme.of(context).primaryColor,
-                ),
-                BottomNavyBarItem(
-                  icon: Icon(Icons.people),
-                  title: Text("Relation"),
-                  inactiveColor: Theme.of(context).accentColor,
-                  activeColor: Theme.of(context).primaryColor,
-                ),
-                BottomNavyBarItem(
-                  icon: Icon(Icons.people_outline),
-                  title: Text("Members"),
-                  inactiveColor: Theme.of(context).accentColor,
-                  activeColor: Theme.of(context).primaryColor,
-                ),
-                BottomNavyBarItem(
-                  icon: Icon(Icons.comment),
-                  title: Text("Requests"),
-                  inactiveColor: Theme.of(context).accentColor,
-                  activeColor: Theme.of(context).primaryColor,
-                )
-              ],
-            ),
-            floatingActionButton: BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, homeState) {
-                final bool visible = homeState is HomeScreenProfile;
-
-                ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
-
-                return BlocBuilder<ProfilePageBloc, ProfilePageState>(
-                  builder: (context, profileState) {
-                    bool editing = false;
-
-                    if (profileState is ProfilePageEditing) {
-                      editing = true;
-                    }
-
-                    return AnimatedOpacity(
-                      opacity: visible ? 1 : 0,
-                      curve: Curves.ease,
-                      duration: Duration(milliseconds: 500),
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          if (state is HomeScreenProfile) {
-                            profileBloc.add(ProfilePageEditStarted());
-                            if (profileState is ProfilePageEditing) {
-                              profileBloc.add(ProfilePageEditSubmitted(profileBloc.user));
+                      return AnimatedOpacity(
+                        opacity: visible ? 1 : 0,
+                        curve: Curves.ease,
+                        duration: Duration(milliseconds: 500),
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            if (state is HomeScreenProfile) {
+                              profileBloc.add(ProfilePageEditStarted());
+                              if (profileState is ProfilePageEditing) {
+                                profileBloc.add(ProfilePageEditSubmitted(profileBloc.user));
+                              }
                             }
-                          }
-                        },
-                        child: Icon(
-                          editing ? Icons.save : Icons.edit,
-                          color: Colors.white,
+                          },
+                          child: Icon(
+                            editing ? Icons.save : Icons.edit,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          );
-        },
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }

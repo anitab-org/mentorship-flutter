@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    ProfilePageBloc bloc = BlocProvider.of<ProfilePageBloc>(context);
+    ProfilePageBloc bloc = BlocProvider.of<ProfilePageBloc>(context)..add(ProfilePageShowed());
 
     _nameController..addListener(() => bloc.user.name = _nameController.text);
     _bioController..addListener(() => bloc.user.bio = _bioController.text);
@@ -101,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _createPage(BuildContext context, User user, bool editing) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView(
         shrinkWrap: true,
         children: [
