@@ -3,6 +3,8 @@
 Cross-platform client for [Systers&#x27; mentorship system](https://github.com/systers/mentorship-backend), 
 written in [Flutter](https://flutter.dev/).
 
+![demo image](https://i.imgur.com/Xbg7Ty3.png)
+
 ### How was it created?
 I really liked [Systers](https://github.com/systers)'Mentorship System, wanted to try Flutter and had some free time during Christmas.
 
@@ -46,8 +48,9 @@ stuff could be written shorter, faster and in a cleanier way.
 
 ### Web support
 Flutter for Web is currently at technical preview stage. To test this functionality, I created
-a [separate branch[(https://github.com/bartekpacia/mentorship-client/tree/web_preview). 
-I successfully ran this app Chrome, it's not stable nor smooth, but hey, it works:D.
+a [separate branch](https://github.com/bartekpacia/mentorship-client/tree/web_preview). 
+I successfully ran this app in Chrome, it's not stable nor smooth, but hey, it works:D.
+
  
 *Unfortunately* I was unable to make requests to the [hosted dev server](http://systers-mentorship-dev.eu-central-1.elasticbeanstalk.com/) 
 because apparently it has CORS disabled. 
