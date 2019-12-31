@@ -15,6 +15,8 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   _setupLogging();
 
+  // Providing app-wide auth bloc, so that app state changes immediately when
+  // auth state changes.
   runApp(
     BlocProvider<AuthBloc>(
       create: (context) => AuthBloc(AuthRepository.instance)..add(AppStarted()),
@@ -23,7 +25,7 @@ void main() {
   );
 }
 
-/// Include log level and time when printing logs using [Logger.root]
+/// Adds log level and time to logs printed using [Logger.root]
 void _setupLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {

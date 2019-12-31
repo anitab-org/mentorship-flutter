@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:chopper/chopper.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 
-/// Adds JWT token to every request
+/// Custom RequestInterceptor which adds current [User]s JWT token to every request
 class AuthInterceptor extends RequestInterceptor {
   @override
   FutureOr<Request> onRequest(Request request) async {

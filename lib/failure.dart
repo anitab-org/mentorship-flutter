@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+/// Represents some failure with a message.
 class Failure {
   final String message;
 

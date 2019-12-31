@@ -7,6 +7,13 @@ import 'package:mentorship_client/remote/models/home_stats.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
 
+/// Repository for accessing various data about users. Its main task is to serve as an abstraction
+/// layer over [UserService]. [UserRepository] exposes following actions:
+/// - getting [HomeStats] for the current [User]
+/// - getting a list of verified [User]s
+/// - getting current [User]
+/// - getting particular [User] by their id
+/// - updating current [User]s profile
 class UserRepository {
   static final UserRepository instance = UserRepository._internal();
 

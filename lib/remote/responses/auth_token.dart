@@ -1,3 +1,6 @@
+/// This class represents all data necessary to create an authentication token.
+/// [authToken] represents an authentication token
+/// [expiry] represents the expiry timestamp
 class AuthToken {
   final String token;
   final double accessExpiry;

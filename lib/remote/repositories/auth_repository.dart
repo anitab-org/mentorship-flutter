@@ -8,6 +8,12 @@ import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
 import 'package:mentorship_client/remote/responses/auth_token.dart';
 
+/// Repository taking care of authentication. Its main task is to serve as an abstraction
+/// layer over [AuthService]. [AuthRepository] exposes following actions:
+/// - user login and logout
+/// - user registration
+/// - persisting JWT tokens
+/// - deleting JWT tokens
 class AuthRepository {
   static final AuthRepository instance = AuthRepository._internal();
   static const AUTH_TOKEN = "auth-token";

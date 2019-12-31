@@ -1,6 +1,7 @@
 import 'package:mentorship_client/remote/services/auth_service.dart';
 import 'package:mentorship_client/remote/services/user_service.dart';
 
+/// Singleton class that gathers all services in one place.
 class ApiManager {
   static final instance = ApiManager._internal();
 

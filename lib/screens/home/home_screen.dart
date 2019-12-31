@@ -12,6 +12,10 @@ import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
 import 'package:toast/toast.dart';
 
+/// [HomeScreen] is the main screen in the app. It's what user sees after successfully logging in.
+/// HomeScreen's main task is to have scaffold with AppBar and BottomNavBar. Content (i.e body)
+/// is provided by one of 5 Pages - [StatsPage], [ProfilePage], [RelationPage], [MembersPage] and [RequestsPage].
+/// HomeScreen manages displaying of these pages using BottomNavBar and PageView.
 class HomeScreen extends StatelessWidget {
   final pageController = PageController();
 
@@ -29,7 +33,13 @@ class HomeScreen extends StatelessWidget {
       ],
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) {
-          pageController.jumpToPage(state.index);
+          int delta = state.index - pageController.page.toInt();
+
+          if (delta < -1 || delta > 1) {
+            pageController.jumpToPage(state.index);
+          } else
+            pageController.animateToPage(state.index,
+                duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
         },
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
@@ -53,12 +63,8 @@ class HomeScreen extends StatelessWidget {
                 title: Text(state.title),
               ),
               body: PageView(
-                onPageChanged: (index) {
-                  // FIXME WHILE SCROLLING
-                  print("onPageChanged: $index");
-
-                  BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index));
-                },
+                onPageChanged: (index) => // This triggers when the user swipes screens
+                    BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index)),
                 controller: pageController,
                 children: [
                   StatsPage(),
@@ -70,9 +76,9 @@ class HomeScreen extends StatelessWidget {
               ),
               bottomNavigationBar: BottomNavyBar(
                 showElevation: false,
-                onItemSelected: (index) =>
-                    BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index)),
-                // FIXME SINGLE SELECT
+                onItemSelected:
+                    (index) => // This triggers when the user clicks item on BottomNavyBar
+                        BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index)),
                 selectedIndex: state.index,
                 items: [
                   BottomNavyBarItem(
