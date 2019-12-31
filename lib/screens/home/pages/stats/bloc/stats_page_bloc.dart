@@ -26,9 +26,6 @@ class StatsPageBloc extends Bloc<StatsPageEvent, StatsPageState> {
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield StatsPageFailure(failure.message);
-      } on Exception catch (exception) {
-        Logger.root.severe(exception.toString());
-        yield StatsPageFailure(exception.toString());
       }
     }
   }

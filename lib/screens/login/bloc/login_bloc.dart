@@ -26,9 +26,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         authBloc.add(JustLoggedIn(token.token));
       } on Failure catch (failure) {
         yield LoginFailure(failure.message);
-      } on Exception catch (exception) {
-        Logger.root.severe(exception);
-        yield LoginFailure(exception.toString());
       }
     }
   }

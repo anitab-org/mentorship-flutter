@@ -26,9 +26,6 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield MembersPageFailure(failure.message);
-      } on Exception catch (exception) {
-        Logger.root.severe(exception.toString());
-        yield MembersPageFailure(exception.toString());
       }
     }
   }
