@@ -4,7 +4,7 @@ Cross-platform client for [Systers&#x27; mentorship system](https://github.com/s
 written in [Flutter](https://flutter.dev/).
 
 ### How was it created?
-I really liked Mentorship System, wanted to try Flutter and had some free time during Christmas.
+I really liked [Systers](https://github.com/systers)'Mentorship System, wanted to try Flutter and had some free time during Christmas.
 
 ### Rationale
 Mentorship System aims to be as inclusive as possible for everyone. It should apply
