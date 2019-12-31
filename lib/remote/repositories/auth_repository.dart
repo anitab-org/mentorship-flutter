@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
 import 'package:mentorship_client/remote/responses/auth_token.dart';
+import 'package:universal_html/prefer_universal/html.dart';
 
 /// Repository taking care of authentication. Its main task is to serve as an abstraction
 /// layer over [AuthService]. [AuthRepository] exposes following actions:
@@ -17,7 +17,6 @@ import 'package:mentorship_client/remote/responses/auth_token.dart';
 class AuthRepository {
   static final AuthRepository instance = AuthRepository._internal();
   static const AUTH_TOKEN = "auth-token";
-  final _storage = FlutterSecureStorage();
 
   AuthRepository._internal();
 
@@ -59,18 +58,15 @@ class AuthRepository {
   }
 
   Future<void> deleteToken() async {
-    await _storage.delete(key: AUTH_TOKEN);
-    Logger.root.info("Deleted token.");
+    Logger.root.info("Deleted token. UNSUPPORTED ON WEB");
   }
 
-  Future<void> persistToken(String token) async {
-    await _storage.write(key: AUTH_TOKEN, value: "Bearer $token");
-    Logger.root.info("Persisted token.");
-  }
+  void persistToken(String token) => (token == null)
+      ? window.localStorage.remove('SessionId')
+      : window.localStorage['SessionId'] = "Bearer $token";
 
-  Future<String> getToken() async {
-    final String token = await _storage.read(key: AUTH_TOKEN);
-    Logger.root.severe("TOKEN: $token");
+  String getToken() {
+    final String token = window.localStorage['SessionId'];
 
     if (token != null) {
       Logger.root.info("Has token!");
