@@ -44,6 +44,20 @@ stuff could be written shorter, faster and in a cleanier way.
 - To communicate with API, [Chopper](https://pub.dev/packages/chopper) is used
 - To save JWT token, [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) is used
 
+### Web support
+Flutter for Web is currently at technical preview stage. To test this functionality, I created
+a [separate branch[(https://github.com/bartekpacia/mentorship-client/tree/web_preview). 
+I successfully ran this app Chrome, it's not stable nor smooth, but hey, it works:D.
+ 
+*Unfortunately* I was unable to make requests to the [hosted dev server](http://systers-mentorship-dev.eu-central-1.elasticbeanstalk.com/) 
+because apparently it has CORS disabled. 
+*Fortunately*, it is at least possible to run connect with server running on localhost :)
+
+To use web version of this app with your local server:
+1. Make [these small changes](https://github.com/bartekpacia/mentorship-client/tree/web_preview) to your local webserver
+to enable CORS
+2. Run local devserver
+
 ### Future?
 I'd love Systers to accept this project as one of theirs. I do realize it requires 
 better documentation and improved core architecture (look above), but I really believe
