@@ -36,6 +36,8 @@ class AuthRepository {
       throw Failure("No internet connection");
     } on HttpException {
       throw Failure("HttpException");
+    } on Exception catch (e) {
+      throw Failure(e.toString());
     }
   }
 
@@ -51,6 +53,8 @@ class AuthRepository {
       throw Failure("No internet connection");
     } on HttpException {
       throw Failure("HttpException");
+    } on Exception catch (e) {
+      throw Failure(e.toString());
     }
   }
 
