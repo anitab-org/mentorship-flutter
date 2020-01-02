@@ -9,7 +9,8 @@ abstract class TaskService extends ChopperService {
   /// Returns all the tasks from a mentorship relation
   /// [relationId] id of the mentorship relation
   @Get(path: "mentorship_relation/{relation_id}/tasks")
-  Future<Response<List<dynamic>>> getAllTasksFromMentorshipRelation(@Path("relation_id") int relationId);
+  Future<Response<List<dynamic>>> getAllTasksFromMentorshipRelation(
+      @Path("relation_id") int relationId);
 
   static TaskService create() {
     final client = ChopperClient(

@@ -1,13 +1,7 @@
-import 'dart:io';
-
-import 'package:chopper/chopper.dart';
-import 'package:logging/logging.dart';
-import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/remote/requests/relation_requests.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
-import 'package:mentorship_client/typedefs.dart';
 
 class RelationRepository {
   static final RelationRepository instance = RelationRepository._internal();
@@ -16,7 +10,8 @@ class RelationRepository {
 
   /// Returns all mentorship requests and relations of the current user
   Future<List<Relation>> getAllRelationsAndRequests() async {
-    final body = await ApiManager.callSafely(() => ApiManager.instance.relationService.getAllRelations());
+    final body =
+        await ApiManager.callSafely(() => ApiManager.instance.relationService.getAllRelations());
 
     List<Relation> relations = [];
     for (var relation in body) {
@@ -27,37 +22,43 @@ class RelationRepository {
   }
 
   Future<CustomResponse> acceptRelation(int relationId) async {
-    final body = await ApiManager.callSafely(() => ApiManager.instance.relationService.acceptRelation(relationId));
+    final body = await ApiManager.callSafely(
+        () => ApiManager.instance.relationService.acceptRelation(relationId));
 
     return CustomResponse.fromJson(body);
   }
 
   Future<CustomResponse> rejectRelation(int relationId) async {
-    final body = await ApiManager.callSafely(() => ApiManager.instance.relationService.rejectRelationship(relationId));
+    final body = await ApiManager.callSafely(
+        () => ApiManager.instance.relationService.rejectRelationship(relationId));
 
     return CustomResponse.fromJson(body);
   }
 
   Future<CustomResponse> deleteRelation(int relationId) async {
-    final body = await ApiManager.callSafely(() =>ApiManager.instance.relationService.deleteRelationship(relationId));
+    final body = await ApiManager.callSafely(
+        () => ApiManager.instance.relationService.deleteRelationship(relationId));
 
     return CustomResponse.fromJson(body);
   }
 
   Future<CustomResponse> cancelRelation(int relationId) async {
-    final body = await ApiManager.callSafely(() => ApiManager.instance.relationService.cancelRelationship(relationId));
+    final body = await ApiManager.callSafely(
+        () => ApiManager.instance.relationService.cancelRelationship(relationId));
 
     return CustomResponse.fromJson(body);
   }
 
   Future<CustomResponse> sendRequest(RelationRequest relationRequest) async {
-    final body = await ApiManager.callSafely(() => ApiManager.instance.relationService.sendRequest(relationRequest));
+    final body = await ApiManager.callSafely(
+        () => ApiManager.instance.relationService.sendRequest(relationRequest));
 
     return CustomResponse.fromJson(body);
   }
 
   Future<Relation> getCurrentRelation() async {
-    final body = await ApiManager.callSafely(() => ApiManager.instance.relationService.getCurrentRelation());
+    final body =
+        await ApiManager.callSafely(() => ApiManager.instance.relationService.getCurrentRelation());
 
     return Relation.fromJson(body);
   }

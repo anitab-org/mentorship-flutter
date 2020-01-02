@@ -63,8 +63,7 @@ class _RelationPageState extends State<RelationPage> {
                         ),
                       ],
                     ),
-                    onPressed: () => BlocProvider.of<HomeBloc>(context)
-                        .add(MembersPageSelected()),
+                    onPressed: () => BlocProvider.of<HomeBloc>(context).add(MembersPageSelected()),
                   )
                 ],
               ),
@@ -85,8 +84,7 @@ class _RelationPageState extends State<RelationPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: RaisedButton(
-                  onPressed: () => RelationRepository.instance
-                      .cancelRelation(snapshot.data.id),
+                  onPressed: () => RelationRepository.instance.cancelRelation(snapshot.data.id),
                   child: Text("Cancel".toUpperCase()),
                 ),
               )

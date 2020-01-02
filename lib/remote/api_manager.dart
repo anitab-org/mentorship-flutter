@@ -1,11 +1,12 @@
+import 'dart:io';
+
+import 'package:logging/logging.dart';
+import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/services/auth_service.dart';
 import 'package:mentorship_client/remote/services/relation_service.dart';
 import 'package:mentorship_client/remote/services/task_service.dart';
 import 'package:mentorship_client/remote/services/user_service.dart';
 import 'package:mentorship_client/typedefs.dart';
-import 'dart:io';
-import 'package:logging/logging.dart';
-import 'package:mentorship_client/failure.dart';
 
 /// Singleton class that gathers all services in one place.
 class ApiManager {
