@@ -16,8 +16,8 @@ class _$TaskService extends TaskService {
   final definitionType = TaskService;
 
   @override
-  Future<Response<List>> getAllTasksFromMentorshipRelation() {
-    final $url = 'mentorship_relations';
+  Future<Response<List>> getAllTasksFromMentorshipRelation(int relationId) {
+    final $url = 'mentorship_relation/$relationId/tasks';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<List, List>($request);
   }
