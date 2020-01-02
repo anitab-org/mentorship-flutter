@@ -23,10 +23,10 @@ class _$RelationService extends RelationService {
   }
 
   @override
-  Future<Response<List>> acceptRelation(int relationId) {
+  Future<Response<Map<String, dynamic>>> acceptRelation(int relationId) {
     final $url = 'mentorship_relation/$relationId/accept';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send<List, List>($request);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 
   @override
@@ -52,9 +52,9 @@ class _$RelationService extends RelationService {
 
   @override
   Future<Response<Map<String, dynamic>>> sendRequest(
-      RelationRequest relationshipRequest) {
+      RelationRequest relationRequest) {
     final $url = 'mentorship_relation/send_request';
-    final $body = relationshipRequest;
+    final $body = relationRequest;
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }

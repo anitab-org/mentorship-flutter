@@ -13,20 +13,26 @@ abstract class RelationService extends ChopperService {
 
   /// Performs the acceptance of a mentorship request
   @Get(path: "mentorship_relation/{relation_id}/accept")
-  Future<Response<List<dynamic>>> acceptRelation(@Path("relation_id") int relationId);
+  Future<Response<Map<String, dynamic>>> acceptRelation(@Path("relation_id") int relationId);
 
+  /// Performs the rejection of a mentorship request
   @Put(path: "mentorship_relation/{relation_id}/reject")
   Future<Response<Map<String, dynamic>>> rejectRelationship(@Path("relation_id") int relationId);
 
+  /// Performs the deletion of a mentorship request
   @Delete(path: "mentorship_relation/{relation_id}")
   Future<Response<Map<String, dynamic>>> deleteRelationship(@Path("relation_id") int relationId);
 
+  /// Performs the cancellation of a mentorship relation
   @Put(path: "mentorship_relation/{relation_id}/cancel")
   Future<Response<Map<String, dynamic>>> cancelRelationship(@Path("relation_id") int relationId);
 
+  /// Performs sending a mentorship request
+  /// [relationRequest] data required to send a mentorship request
   @Post(path: "mentorship_relation/send_request")
-  Future<Response<Map<String, dynamic>>> sendRequest(@Body() RelationRequest relationshipRequest);
+  Future<Response<Map<String, dynamic>>> sendRequest(@Body() RelationRequest relationRequest);
 
+  /// Returns the current mentorship relation
   @Get(path: "mentorship_relations/current")
   Future<Response<Map<String, dynamic>>> getCurrentRelation();
 
