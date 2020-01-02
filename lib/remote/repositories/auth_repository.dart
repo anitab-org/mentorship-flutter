@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
-import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
@@ -22,40 +19,12 @@ class AuthRepository {
   AuthRepository._internal();
 
   Future<AuthToken> login(Login login) async {
-    try {
-      final response = await ApiManager.instance.authService.login(login);
-
-      if (!response.isSuccessful) {
-        Logger.root.severe("Error: ${response.error}");
-        throw Failure.fromJson(response.error);
-      }
-      final AuthToken authToken = AuthToken.fromJson(response.body);
-
-      return authToken;
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("HttpException");
-    } on Exception catch (e) {
-      throw Failure(e.toString());
-    }
+    final body = await ApiManager.callSafely(() => ApiManager.instance.authService.login(login));
+    return AuthToken.fromJson(body);
   }
 
   Future<void> register(Register register) async {
-    try {
-      final response = await ApiManager.instance.authService.register(register);
-
-      if (!response.isSuccessful) {
-        Logger.root.severe("Error: ${response.error}");
-        throw Failure.fromJson(response.error);
-      }
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("HttpException");
-    } on Exception catch (e) {
-      throw Failure(e.toString());
-    }
+    final body = await ApiManager.callSafely(() => ApiManager.instance.authService.register(register));
   }
 
   Future<void> deleteToken() async {

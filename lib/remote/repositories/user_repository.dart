@@ -1,7 +1,3 @@
-import 'dart:io';
-
-import 'package:logging/logging.dart';
-import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/models/home_stats.dart';
 import 'package:mentorship_client/remote/models/user.dart';
@@ -21,106 +17,37 @@ class UserRepository {
 
   /// Returns home statistics for the current user
   Future<HomeStats> getHomeStats() async {
-    try {
-      final response = await ApiManager.instance.userService.getHomeStats();
-
-      if (!response.isSuccessful) {
-        Logger.root.severe("Error: ${response.error}");
-        throw Failure.fromJson(response.error);
-      }
-      final HomeStats homeStats = HomeStats.fromJson(response.body);
-
-      return homeStats;
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("HttpException");
-    } on Exception catch (e) {
-      throw Failure(e.toString());
-    }
+    final body = await ApiManager.callSafely(() => ApiManager.instance.userService.getHomeStats());
+    return HomeStats.fromJson(body);
   }
 
+  /// Returns all users with email verified
   Future<List<User>> getVerifiedUsers() async {
-    try {
-      final response = await ApiManager.instance.userService.getVerifiedUsers();
+    final body = await ApiManager.callSafely(() => ApiManager.instance.userService.getVerifiedUsers());
+    List<User> users = [];
 
-      if (!response.isSuccessful) {
-        Logger.root.severe("Error: ${response.error}");
-        throw Failure.fromJson(response.error);
-      }
-      List<User> users = [];
-
-      for (dynamic userJson in response.body) {
-        users.add(User.fromJson(userJson));
-      }
-
-      return users;
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("HttpException");
-    } on Exception catch (e) {
-      throw Failure(e.toString());
+    for (var user in body) {
+      users.add(User.fromJson(user));
     }
+
+    return users;
   }
 
   /// Returns current user profile
   Future<User> getCurrentUser() async {
-    try {
-      final response = await ApiManager.instance.userService.getCurrentUser();
-
-      if (!response.isSuccessful) {
-        Logger.root.severe("Error: ${response.error}");
-        throw Failure.fromJson(response.error);
-      }
-      User user = User.fromJson(response.body);
-
-      return user;
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("HttpException");
-    } on Exception catch (e) {
-      throw Failure(e.toString());
-    }
+    final body = await ApiManager.callSafely(() => ApiManager.instance.userService.getCurrentUser());
+    return User.fromJson(body);
   }
 
   /// Returns user profile with the specified id
   Future<User> getUser(int userId) async {
-    try {
-      final response = await ApiManager.instance.userService.getUser(userId);
-
-      if (!response.isSuccessful) {
-        Logger.root.severe("Error: ${response.error}");
-        throw Failure.fromJson(response.error);
-      }
-      User user = User.fromJson(response.body);
-
-      return user;
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("HttpException");
-    } on Exception catch (e) {
-      throw Failure(e.toString());
-    }
+    final body = await ApiManager.callSafely(() => ApiManager.instance.userService.getUser(userId));
+    return User.fromJson(body);
   }
 
   /// Updates current user's profile
   Future<CustomResponse> updateUser(User user) async {
-    try {
-      final response = await ApiManager.instance.userService.updateUser(user);
-      if (!response.isSuccessful) {
-        Logger.root.severe("Error: ${response.error}");
-        throw Failure.fromJson(response.error);
-      }
-      return CustomResponse.fromJson(response.body);
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("HttpException");
-    } on Exception catch (e) {
-      throw Failure(e.toString());
-    }
+    final body = await ApiManager.callSafely(() => ApiManager.instance.userService.updateUser(user));
+    return CustomResponse.fromJson(body);
   }
 }
