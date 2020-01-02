@@ -33,13 +33,8 @@ class HomeScreen extends StatelessWidget {
       ],
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) {
-          int delta = state.index - pageController.page.toInt();
-
-          if (delta < -1 || delta > 1) {
-            pageController.jumpToPage(state.index);
-          } else
-            pageController.animateToPage(state.index,
-                duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+          pageController.animateToPage(state.index,
+              duration: Duration(milliseconds: 450), curve: Curves.ease);
         },
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
@@ -63,8 +58,7 @@ class HomeScreen extends StatelessWidget {
                 title: Text(state.title),
               ),
               body: PageView(
-                onPageChanged: (index) => // This triggers when the user swipes screens
-                    BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index)),
+                physics: NeverScrollableScrollPhysics(),
                 controller: pageController,
                 children: [
                   StatsPage(),
