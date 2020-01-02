@@ -1,5 +1,6 @@
 import 'package:mentorship_client/remote/services/auth_service.dart';
 import 'package:mentorship_client/remote/services/relation_service.dart';
+import 'package:mentorship_client/remote/services/task_service.dart';
 import 'package:mentorship_client/remote/services/user_service.dart';
 import 'package:mentorship_client/typedefs.dart';
 import 'dart:io';
@@ -13,6 +14,7 @@ class ApiManager {
   final AuthService authService = AuthService.create();
   final UserService userService = UserService.create();
   final RelationService relationService = RelationService.create();
+  final TaskService taskService = TaskService.create();
 
   ApiManager._internal();
 
