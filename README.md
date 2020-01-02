@@ -1,4 +1,4 @@
-# mentorship_client
+# Mentorship Client
 
 Cross-platform client for [Systers&#x27; mentorship system](https://github.com/systers/mentorship-backend),
 written in [Flutter](https://flutter.dev/).
@@ -16,32 +16,24 @@ to user's mobile operating system, too :)
 
 ### Work status
 
-Basic application flow works, like changing screens and logging in/off. More
-advanced functionality coming soon.
+Basic application flow works, like changing screens and logging in/off. Core features
+and backend are fully integrated. So basically, implementing what is not done yet
+will be pure pleasure - creating interfaces with Flutter is a piece of cake :)
 
 **What works?**
 
 - Login and Registration
-- Home page (includes updating profile)
+- Home page
 - Profile page
-- Members page
+- Members page (lacks sending requests functionality)
 
-**What is missing (in comparison to [Mentorship Android](https://github.com/systers/mentorship-android))?**
+**What is missing? (in comparison to [Mentorship Android](https://github.com/systers/mentorship-android))**
 
 - Relation page (includes tasks)
 - Requests page (includes accepting requests)
-- SendRequestScreen exists but sending requests is not implemented
+- Sending requests after clicking a User in MemberPage
 - Changing password
-
-**What requires improvements?**
-
-- Part responsible for communicating with API. Auto-serialization and deserialization would
-  be very useful and remove a lot of boilerplate from repositories.
-- Error handling mechanism. Currently, there's a lot of duplicated boilerplate code in `remote/repositories`
-  catching errors. I haven't been able to find a good solution currently.
-- State management in `screens/register/register_screen.dart` - currently lacks BLoC implementation
-- Overall code quality. I did my best, but I'm sure one can find many places where certain
-  stuff could be written shorter, faster and in a cleanier way.
+- About screen
 
 ### Overview
 
@@ -66,7 +58,7 @@ I successfully ran this app in Chrome.
 
 _Unfortunately_ I was unable to make requests to the [hosted dev server](http://systers-mentorship-dev.eu-central-1.elasticbeanstalk.com/)
 because apparently it has CORS disabled.
-_Fortunately_, it is at least possible to run connect with server running on localhost :)
+_Fortunately_, it is at least possible to connect to the server running on localhost :)
 
 To use web version of this app with your local server:
 
