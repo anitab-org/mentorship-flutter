@@ -19,6 +19,7 @@ class UserRepository {
 
   UserRepository._internal();
 
+  /// Returns home statistics for the current user
   Future<HomeStats> getHomeStats() async {
     try {
       final response = await ApiManager.instance.userService.getHomeStats();
