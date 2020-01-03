@@ -7,7 +7,7 @@ written in [Flutter](https://flutter.dev/).
 
 ### How was it created?
 
-I really liked [Systers](https://github.com/systers)'Mentorship System, wanted to try Flutter and had some free time during Christmas.
+I really liked [Systers](https://github.com/systers)' Mentorship System, wanted to try Flutter and had some free time during Christmas.
 
 ### Rationale
 
@@ -18,7 +18,7 @@ to user's mobile operating system, too :)
 
 Basic application flow works, like changing screens and logging in/off. Core features
 and backend are fully integrated. So basically, implementing what is not done yet
-will be pure pleasure - creating interfaces with Flutter is a piece of cake :)
+will be a pure pleasure - creating interfaces with Flutter is a piece of cake :)
 
 **What works?**
 
@@ -62,14 +62,14 @@ _Fortunately_, it is at least possible to connect to the server running on local
 
 To use web version of this app with your local server:
 
-1. Make [these small changes](https://github.com/bartekpacia/mentorship-client/tree/web_preview) to your local webserver
+1. Make [these small changes](https://github.com/bartekpacia/mentorship-backend/commit/5c4336fa615b0a480af196954b715410e1a41ac3) to your local webserver
    to enable CORS
 2. Run local devserver
 
 ### Future?
 
 I'd love Systers to accept this project as one of theirs. I do realize it requires
-better documentation and improved core architecture (look above), but I really believe
-these problems will be solved.
+better documentation and has to be polished a bit, but I really believe these problems
+are easy to solve.
 My dream? I'll be incredibly happy, for example, if students in next year's Google Code-in will continue its development,
 improve it and polish the codebase.
