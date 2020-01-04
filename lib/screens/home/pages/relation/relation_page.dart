@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
+import 'package:mentorship_client/remote/models/task.dart';
 import 'package:mentorship_client/remote/repositories/relation_repository.dart';
+import 'package:mentorship_client/remote/repositories/task_repository.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
+import 'package:toast/toast.dart';
 
 class RelationPage extends StatefulWidget {
   @override
@@ -12,6 +15,8 @@ class RelationPage extends StatefulWidget {
 // TODO: Use BLOC to make state management more robust
 
 class _RelationPageState extends State<RelationPage> {
+  int _relationId;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -27,10 +32,15 @@ class _RelationPageState extends State<RelationPage> {
         body: TabBarView(
           children: [
             _buildDetailsTab(context),
-            Center(
-              child: Text("coming soon"),
-            ),
+            _buildTasksTab(context),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          onPressed: () => Toast.show("FAB", context),
         ),
       ),
     );
@@ -42,7 +52,7 @@ class _RelationPageState extends State<RelationPage> {
       child: FutureBuilder(
         future: RelationRepository.instance.getCurrentRelation(),
         builder: (context, AsyncSnapshot<Relation> snapshot) {
-          if (!snapshot.hasData)
+          if (!snapshot.hasData) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -68,6 +78,9 @@ class _RelationPageState extends State<RelationPage> {
                 ],
               ),
             );
+          }
+
+          _relationId = snapshot.data.id;
 
           return Column(
             children: [
@@ -86,6 +99,70 @@ class _RelationPageState extends State<RelationPage> {
                 child: RaisedButton(
                   onPressed: () => RelationRepository.instance.cancelRelation(snapshot.data.id),
                   child: Text("Cancel".toUpperCase()),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTasksTab(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: FutureBuilder(
+        future: TaskRepository.instance.getAllTasks(_relationId),
+        builder: (context, AsyncSnapshot<List<Task>> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("You are not in a relation"),
+                  RaisedButton(
+                    color: Theme.of(context).accentColor,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          "Find members",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    onPressed: () => BlocProvider.of<HomeBloc>(context).add(MembersPageSelected()),
+                  )
+                ],
+              ),
+            );
+          }
+
+          return Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      Checkbox(
+                        value: snapshot.data[index].isDone,
+                      ),
+                      Text(snapshot.data[index].description),
+                    ],
+                  );
+                },
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: RaisedButton(
+                  onPressed: () => Toast.show("Not implemented yet", context),
+                  child: Text("Create task".toUpperCase()),
                 ),
               )
             ],
