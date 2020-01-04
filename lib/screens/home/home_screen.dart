@@ -107,43 +107,6 @@ class HomeScreen extends StatelessWidget {
                   )
                 ],
               ),
-              floatingActionButton: BlocBuilder<HomeBloc, HomeState>(
-                builder: (context, homeState) {
-                  final bool visible = homeState is HomeScreenProfile;
-
-                  ProfilePageBloc profileBloc = BlocProvider.of<ProfilePageBloc>(context);
-
-                  return BlocBuilder<ProfilePageBloc, ProfilePageState>(
-                    builder: (context, profileState) {
-                      bool editing = false;
-
-                      if (profileState is ProfilePageEditing) {
-                        editing = true;
-                      }
-
-                      return AnimatedOpacity(
-                        opacity: visible ? 1 : 0,
-                        curve: Curves.ease,
-                        duration: Duration(milliseconds: 500),
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            if (state is HomeScreenProfile) {
-                              profileBloc.add(ProfilePageEditStarted());
-                              if (profileState is ProfilePageEditing) {
-                                profileBloc.add(ProfilePageEditSubmitted(profileBloc.user));
-                              }
-                            }
-                          },
-                          child: Icon(
-                            editing ? Icons.save : Icons.edit,
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
             );
           },
         ),
