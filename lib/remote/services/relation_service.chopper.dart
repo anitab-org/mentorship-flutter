@@ -25,7 +25,7 @@ class _$RelationService extends RelationService {
   @override
   Future<Response<Map<String, dynamic>>> acceptRelation(int relationId) {
     final $url = 'mentorship_relation/$relationId/accept';
-    final $request = Request('GET', $url, client.baseUrl);
+    final $request = Request('PUT', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 

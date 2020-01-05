@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/remote/repositories/relation_repository.dart';
+import 'package:mentorship_client/remote/responses/custom_response.dart';
 
 import './bloc.dart';
 
@@ -24,6 +25,17 @@ class RequestsPageBloc extends Bloc<RequestsPageEvent, RequestsPageState> {
       try {
         List<Relation> relations = await relationRepository.getAllRelationsAndRequests();
         yield RequestsPageSuccess(relations);
+      } on Failure catch (failure) {
+        Logger.root.severe("RequestsPageBloc: ${failure.message}");
+        yield RequestsPageFailure(message: failure.message);
+      }
+    }
+
+    if (event is RequestsPageRelationAccepted) {
+      try {
+        CustomResponse response = await relationRepository.acceptRelation(event.relationId);
+        List<Relation> relations = await relationRepository.getAllRelationsAndRequests();
+        yield RequestsPageSuccess(relations, message: response.message);
       } on Failure catch (failure) {
         Logger.root.severe("RequestsPageBloc: ${failure.message}");
         yield RequestsPageFailure(message: failure.message);

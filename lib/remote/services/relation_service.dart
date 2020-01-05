@@ -12,7 +12,7 @@ abstract class RelationService extends ChopperService {
   Future<Response<List<dynamic>>> getAllRelations();
 
   /// Performs the acceptance of a mentorship request
-  @Get(path: "mentorship_relation/{relation_id}/accept")
+  @Put(path: "mentorship_relation/{relation_id}/accept")
   Future<Response<Map<String, dynamic>>> acceptRelation(@Path("relation_id") int relationId);
 
   /// Performs the rejection of a mentorship request
