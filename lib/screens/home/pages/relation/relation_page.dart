@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
@@ -112,8 +113,7 @@ class _RelationPageState extends State<RelationPage> {
                   children: [
                     Text("Mentor: ${state.relation.mentor.name}"),
                     Text("Mentee: ${state.relation.mentee.name}"),
-                    Text(
-                        "End date: ${DateTime.fromMillisecondsSinceEpoch(state.relation.endsOn.toInt() * 1000).toString()}"),
+                    Text("End date: ${DateTimeExtensions.fromTimestamp(state.relation.endsOn)}"),
                     Text("Notes: ${state.relation.notes}"),
                   ],
                 ),

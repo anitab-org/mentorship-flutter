@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
 import 'package:mentorship_client/screens/request_detail/request_detail.dart';
@@ -61,12 +61,8 @@ class _RequestsPageState extends State<RequestsPage> {
       itemBuilder: (context, index) {
         Relation relation = relations[index];
 
-        DateTime startDate = DateTime.fromMillisecondsSinceEpoch((relation.sentOn * 1000).toInt());
-        DateTime endDate = DateTime.fromMillisecondsSinceEpoch((relation.endsOn * 1000).toInt());
-
-        final formatter = DateFormat('dd MMM yyyy');
-        String formattedStartDate = formatter.format(startDate);
-        String formattedEndDate = formatter.format(endDate);
+        DateTime startDate = DateTimeExtensions.fromTimestamp(relation.sentOn);
+        DateTime endDate = DateTimeExtensions.fromTimestamp(relation.endsOn);
 
         return Card(
           child: InkWell(
@@ -89,12 +85,12 @@ class _RequestsPageState extends State<RequestsPage> {
                         children: [
                           Text("Mentor: ${relation.mentor.name}"),
                           Text("Mentee: ${relation.mentee.name}"),
-                          Text("End date: $formattedEndDate"),
+                          Text("End date: ${endDate.toDateString()}"),
                         ],
                       ),
                       Column(
                         children: [
-                          Text("Sent on $formattedStartDate"),
+                          Text("Sent on ${startDate.toDateString()}"),
                         ],
                       )
                     ],

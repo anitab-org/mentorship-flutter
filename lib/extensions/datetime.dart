@@ -1,0 +1,12 @@
+import 'package:intl/intl.dart';
+
+extension DateTimeExtensions on DateTime {
+  String toDateString() {
+    final formatter = DateFormat('dd MMM yyyy');
+    return formatter.format(this);
+  }
+
+  static DateTime fromTimestamp(double timestamp) {
+    return DateTime.fromMillisecondsSinceEpoch((timestamp * 1000).toInt());
+  }
+}

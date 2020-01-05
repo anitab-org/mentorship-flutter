@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/remote/repositories/relation_repository.dart';
 import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
@@ -46,7 +47,7 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
       }
     }
 
-    DateTime endDate = DateTime.fromMillisecondsSinceEpoch((relation.endsOn * 1000).toInt());
+    DateTime endDate = DateTimeExtensions.fromTimestamp(relation.endsOn);
     String formattedEndDate = DateFormat('dd MMM yyyy').format(endDate);
 
     String summaryMessage;
