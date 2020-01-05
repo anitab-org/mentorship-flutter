@@ -1,3 +1,4 @@
+import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/remote/requests/relation_requests.dart';
@@ -60,6 +61,12 @@ class RelationRepository {
     final body =
         await ApiManager.callSafely(() => ApiManager.instance.relationService.getCurrentRelation());
 
-    return Relation.fromJson(body);
+    // TODO: Make it cleanier and prettier
+    try {
+      return Relation.fromJson(body);
+    } on NoSuchMethodError catch (error) {
+      // This means the Response Body is not a Relation. In such case the API returns a message.
+      throw Failure(CustomResponse.fromJson(body).message);
+    }
   }
 }

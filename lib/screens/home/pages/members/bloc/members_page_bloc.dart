@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/user.dart';
@@ -11,7 +12,7 @@ import './bloc.dart';
 class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
   final UserRepository userRepository;
 
-  MembersPageBloc({this.userRepository}) : assert(userRepository != null);
+  MembersPageBloc({@required this.userRepository}) : assert(userRepository != null);
 
   @override
   MembersPageState get initialState => MembersPageInitial();

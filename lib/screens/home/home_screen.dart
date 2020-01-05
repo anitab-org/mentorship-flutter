@@ -1,11 +1,14 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/remote/repositories/relation_repository.dart';
+import 'package:mentorship_client/remote/repositories/task_repository.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/members/members_page.dart';
 import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/profile/profile_page.dart';
+import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart';
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
@@ -30,6 +33,12 @@ class HomeScreen extends StatelessWidget {
         BlocProvider<HomeBloc>(
           create: (context) => HomeBloc(),
         ),
+        BlocProvider<RelationPageBloc>(
+          create: (context) => RelationPageBloc(
+            relationRepository: RelationRepository.instance,
+            taskRepository: TaskRepository.instance,
+          ),
+        )
       ],
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) {

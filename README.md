@@ -25,11 +25,11 @@ will be a pure pleasure - creating interfaces with Flutter is a piece of cake :)
 - Login and Registration
 - Home page
 - Profile page
+- Relation Page
 - Members page (lacks sending requests functionality)
 
 **What is missing? (in comparison to [Mentorship Android](https://github.com/systers/mentorship-android))**
 
-- Relation page (includes tasks)
 - Requests page (includes accepting requests)
 - Sending requests after clicking a User in MemberPage
 - Changing password

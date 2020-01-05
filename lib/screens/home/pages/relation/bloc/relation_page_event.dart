@@ -8,3 +8,12 @@ class RelationPageShowed extends RelationPageEvent {
   @override
   List<Object> get props => null;
 }
+
+class RelationPageCancelledRelation extends RelationPageEvent {
+  final int relationId;
+
+  RelationPageCancelledRelation(this.relationId);
+
+  @override
+  List<Object> get props => [relationId];
+}
