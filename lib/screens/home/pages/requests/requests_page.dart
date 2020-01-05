@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
+import 'package:mentorship_client/screens/request_detail.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class RequestsPage extends StatefulWidget {
@@ -69,7 +70,11 @@ class _RequestsPageState extends State<RequestsPage> {
 
         return Card(
           child: InkWell(
-            onTap: () {},
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => RequestDetailScreen(relation: relation),
+              ),
+            ),
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Column(
