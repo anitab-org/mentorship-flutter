@@ -151,6 +151,7 @@ class _RelationPageState extends State<RelationPage> {
                   return Row(
                     children: [
                       Checkbox(
+                        onChanged: (value) {},
                         value: snapshot.data[index].isDone,
                       ),
                       Text(snapshot.data[index].description),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/user.dart';
@@ -13,7 +14,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   final UserRepository userRepository;
   User user; // User object which will receive possible edits
 
-  ProfilePageBloc({this.userRepository, this.user}) : assert(userRepository != null);
+  ProfilePageBloc({@required this.userRepository, this.user}) : assert(userRepository != null);
 
   @override
   ProfilePageState get initialState => ProfilePageInitial();
