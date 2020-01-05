@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mentorship_client/remote/models/user.dart';
+import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/member_profile/user_data_list.dart';
 import 'package:mentorship_client/screens/send_request/send_request_screen.dart';
 
@@ -46,20 +47,26 @@ class MemberProfileScreen extends StatelessWidget {
             UserDataList(user: user),
             Center(
               child: RaisedButton(
-                color: Theme.of(context).accentColor,
-                child: Text(
-                  "Send request",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () => Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (c, anim1, anim2) => SendRequestScreen(user: user),
-                    transitionsBuilder: (c, anim, a2, child) =>
-                        FadeTransition(opacity: anim, child: child),
-                    transitionDuration: Duration(milliseconds: 500),
+                  color: Theme.of(context).accentColor,
+                  child: Text(
+                    "Send request",
+                    style: TextStyle(color: Colors.white),
                   ),
-                ),
-              ),
+                  onPressed: () async {
+                    var currentUser = await UserRepository.instance.getCurrentUser();
+
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (c, anim1, anim2) => SendRequestScreen(
+                          otherUser: user,
+                          currentUser: currentUser,
+                        ),
+                        transitionsBuilder: (c, anim, a2, child) =>
+                            FadeTransition(opacity: anim, child: child),
+                        transitionDuration: Duration(milliseconds: 500),
+                      ),
+                    );
+                  }),
             )
           ],
         ),
