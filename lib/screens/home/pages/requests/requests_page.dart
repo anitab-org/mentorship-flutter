@@ -25,58 +25,66 @@ class _RequestsPageState extends State<RequestsPage> {
             Tab(text: "All".toUpperCase()),
           ],
         ),
-        body: TabBarView(
-          children: [
-            _buildPending(context),
-            _buildPast(context),
-            _buildAll(context),
-          ],
-        ),
+        body: BlocBuilder<RequestsPageBloc, RequestsPageState>(builder: (context, state) {
+          if (state is RequestsPageSuccess) {
+            List<Relation> pendingRelations =
+                state.relations.where((rel) => rel.state == 1).toList();
+            List<Relation> pastRelations = state.relations.where((rel) => rel.state != 1).toList();
+            List<Relation> allRelations = state.relations;
+
+            return TabBarView(
+              children: [
+                _buildRequestsTab(context, pendingRelations),
+                _buildRequestsTab(context, pastRelations),
+                _buildRequestsTab(context, allRelations),
+              ],
+            );
+          }
+
+          if (state is RequestsPageFailure) {
+            return Center(
+              child: Text(state.message),
+            );
+          }
+
+          return LoadingIndicator();
+        }),
       ),
     );
   }
 
-  Widget _buildPending(BuildContext context) {
-    return BlocBuilder<RequestsPageBloc, RequestsPageState>(builder: (context, state) {
-      if (state is RequestsPageSuccess) {
-        List<Relation> pendingRelations = state.relations.where((rel) => rel.state == 1).toList();
+  Widget _buildRequestsTab(BuildContext context, List<Relation> relations) {
+    return ListView.builder(
+      itemCount: relations.length,
+      itemBuilder: (context, index) {
+        Relation relation = relations[index];
+        DateTime endDate = DateTime.fromMillisecondsSinceEpoch((relation.endsOn * 1000).toInt());
 
-        return ListView.builder(
-          itemCount: pendingRelations.length,
-          itemBuilder: (context, index) {
-            Relation relation = pendingRelations[index];
+        // var formatter = DateFormat('yyyy-MM-dd');
+        // String formattedDate = formatter.format(now);
 
-            return ListTile(
-              leading: Column(
-                children: [
-                  Text("Mentor: ${relation.mentor.name}"),
-                  Text("Mentee: ${relation.mentee.name}"),
-                ],
-              ),
-            );
-          },
+        return Card(
+          child: InkWell(
+            onTap: () {},
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Mentor: ${relation.mentor.name}"),
+                        Text("Mentee: ${relation.mentee.name}"),
+                        Text("End date: ${DateTime(endDate.year, endDate.month, endDate.day)}")
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         );
-      }
-
-      if (state is RequestsPageFailure) {
-        return Center(
-          child: Text(state.message),
-        );
-      }
-
-      return LoadingIndicator();
-    });
-  }
-
-  Widget _buildPast(BuildContext context) {
-    return Center(
-      child: Text("Past"),
-    );
-  }
-
-  Widget _buildAll(BuildContext context) {
-    return Center(
-      child: Text("All"),
+      },
     );
   }
 }
