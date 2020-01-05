@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
@@ -58,29 +59,56 @@ class _RequestsPageState extends State<RequestsPage> {
       itemCount: relations.length,
       itemBuilder: (context, index) {
         Relation relation = relations[index];
+
+        DateTime startDate = DateTime.fromMillisecondsSinceEpoch((relation.sentOn * 1000).toInt());
         DateTime endDate = DateTime.fromMillisecondsSinceEpoch((relation.endsOn * 1000).toInt());
 
-        // var formatter = DateFormat('yyyy-MM-dd');
-        // String formattedDate = formatter.format(now);
+        final formatter = DateFormat('dd MMM yyyy');
+        String formattedStartDate = formatter.format(startDate);
+        String formattedEndDate = formatter.format(endDate);
 
         return Card(
           child: InkWell(
             onTap: () {},
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Mentor: ${relation.mentor.name}"),
+                          Text("Mentee: ${relation.mentee.name}"),
+                          Text("End date: $formattedEndDate"),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Sent on $formattedStartDate"),
+                        ],
+                      )
+                    ],
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: new TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.black,
+                      ),
                       children: [
-                        Text("Mentor: ${relation.mentor.name}"),
-                        Text("Mentee: ${relation.mentee.name}"),
-                        Text("End date: ${DateTime(endDate.year, endDate.month, endDate.day)}")
+                        TextSpan(text: "Notes: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: relation.notes),
                       ],
                     ),
-                  ],
-                ),
-              ],
+                    maxLines: 3,
+                  ),
+                ],
+              ),
             ),
           ),
         );
