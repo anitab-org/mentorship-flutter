@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
-import 'package:mentorship_client/screens/request_detail.dart';
+import 'package:mentorship_client/screens/request_detail/request_detail.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class RequestsPage extends StatefulWidget {

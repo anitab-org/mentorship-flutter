@@ -30,16 +30,5 @@ class RequestsPageBloc extends Bloc<RequestsPageEvent, RequestsPageState> {
         yield RequestsPageFailure(message: failure.message);
       }
     }
-
-    if (event is RequestsPageRelationAccepted) {
-      try {
-        CustomResponse response = await relationRepository.acceptRelation(event.relationId);
-        List<Relation> relations = await relationRepository.getAllRelationsAndRequests();
-        yield RequestsPageSuccess(relations, message: response.message);
-      } on Failure catch (failure) {
-        Logger.root.severe("RequestsPageBloc: ${failure.message}");
-        yield RequestsPageFailure(message: failure.message);
-      }
-    }
   }
 }
