@@ -10,6 +10,7 @@ import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/profile/profile_page.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/relation_page.dart';
+import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
@@ -38,7 +39,12 @@ class HomeScreen extends StatelessWidget {
             relationRepository: RelationRepository.instance,
             taskRepository: TaskRepository.instance,
           ),
-        )
+        ),
+        BlocProvider<RequestsPageBloc>(
+          create: (context) => RequestsPageBloc(
+            relationRepository: RelationRepository.instance,
+          ),
+        ),
       ],
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) {

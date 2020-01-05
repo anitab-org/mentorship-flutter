@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/remote/models/relation.dart';
+import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class RequestsPage extends StatefulWidget {
   @override
@@ -8,6 +12,8 @@ class RequestsPage extends StatefulWidget {
 class _RequestsPageState extends State<RequestsPage> {
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<RequestsPageBloc>(context).add(RequestsPageShowed());
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -31,9 +37,35 @@ class _RequestsPageState extends State<RequestsPage> {
   }
 
   Widget _buildPending(BuildContext context) {
-    return Center(
-      child: Text("Pending"),
-    );
+    return BlocBuilder<RequestsPageBloc, RequestsPageState>(builder: (context, state) {
+      if (state is RequestsPageSuccess) {
+        List<Relation> pendingRelations = state.relations.where((rel) => rel.state == 1).toList();
+
+        return ListView.builder(
+          itemCount: pendingRelations.length,
+          itemBuilder: (context, index) {
+            Relation relation = pendingRelations[index];
+
+            return ListTile(
+              leading: Column(
+                children: [
+                  Text("Mentor: ${relation.mentor.name}"),
+                  Text("Mentee: ${relation.mentee.name}"),
+                ],
+              ),
+            );
+          },
+        );
+      }
+
+      if (state is RequestsPageFailure) {
+        return Center(
+          child: Text(state.message),
+        );
+      }
+
+      return LoadingIndicator();
+    });
   }
 
   Widget _buildPast(BuildContext context) {
