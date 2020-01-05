@@ -33,14 +33,32 @@ class _RelationPageState extends State<RelationPage> {
             _buildTasksTab(context),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          onPressed: () => Toast.show("FAB", context),
-        ),
+        floatingActionButton: _buildFab(context),
       ),
+    );
+  }
+
+  Widget _buildFab(BuildContext context) {
+    return BlocBuilder<RelationPageBloc, RelationPageState>(
+      builder: (context, state) {
+        bool visible = false;
+
+        if (state is RelationPageSuccess) {
+          visible = (state.relation != null);
+        }
+
+        return AnimatedOpacity(
+          opacity: visible ? 1 : 0,
+          duration: Duration(milliseconds: 500),
+          child: FloatingActionButton(
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () => Toast.show("Not implemented yet", context),
+          ),
+        );
+      },
     );
   }
 
