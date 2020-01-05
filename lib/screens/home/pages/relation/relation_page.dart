@@ -27,11 +27,18 @@ class _RelationPageState extends State<RelationPage> {
             Tab(text: "Tasks".toUpperCase()),
           ],
         ),
-        body: TabBarView(
-          children: [
-            _buildDetailsTab(context),
-            _buildTasksTab(context),
-          ],
+        body: BlocListener<RelationPageBloc, RelationPageState>(
+          listener: (context, state) {
+            if (state.message != null) {
+              Scaffold.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+            }
+          },
+          child: TabBarView(
+            children: [
+              _buildDetailsTab(context),
+              _buildTasksTab(context),
+            ],
+          ),
         ),
         floatingActionButton: _buildFab(context),
       ),
@@ -63,7 +70,7 @@ class _RelationPageState extends State<RelationPage> {
   }
 
   Widget _buildDetailsTab(BuildContext context) {
-    // error here
+    RelationPageBloc bloc = BlocProvider.of<RelationPageBloc>(context);
 
     return Padding(
       padding: EdgeInsets.all(16),
@@ -113,6 +120,7 @@ class _RelationPageState extends State<RelationPage> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: RaisedButton(
+                    child: Text("Cancel".toUpperCase()),
                     onPressed: () {
                       showDialog(
                         context: context,
@@ -123,8 +131,7 @@ class _RelationPageState extends State<RelationPage> {
                             FlatButton(
                               child: Text("Yes"),
                               onPressed: () {
-                                BlocProvider.of<RelationPageBloc>(context)
-                                    .add(RelationPageCancelledRelation(state.relation.id));
+                                bloc.add(RelationPageCancelledRelation(state.relation.id));
                               },
                             ),
                             FlatButton(
@@ -137,7 +144,6 @@ class _RelationPageState extends State<RelationPage> {
                         ),
                       );
                     },
-                    child: Text("Cancel".toUpperCase()),
                   ),
                 )
               ],
