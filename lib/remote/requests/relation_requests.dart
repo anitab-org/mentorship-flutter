@@ -1,3 +1,8 @@
+/// Rpresents all data necessary to send a mentorship relation request.
+/// [mentorId] represents mentor user id
+/// [menteeId] represents mentee user id
+/// [notes] represents a description of the mentorship relation
+/// [endDate] represents end date of the mentorship relation
 class RelationRequest {
   final int mentorId;
   final int menteeId;
@@ -7,11 +12,11 @@ class RelationRequest {
   RelationRequest({this.mentorId, this.menteeId, this.notes, this.endDate});
 
   factory RelationRequest.fromJson(Map<String, dynamic> json) => RelationRequest(
-    mentorId: json["mentor_id"],
-    menteeId: json["mentee_id"],
-    notes: json["notes"],
-    endDate: json["end_date"],
-  );
+        mentorId: json["mentor_id"],
+        menteeId: json["mentee_id"],
+        notes: json["notes"],
+        endDate: json["end_date"],
+      );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

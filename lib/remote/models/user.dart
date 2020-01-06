@@ -1,3 +1,4 @@
+/// Represents all the information related to a user of the system
 class User {
   int id;
   String username;
@@ -28,6 +29,7 @@ class User {
       this.needsMentoring,
       this.availableToMentor});
 
+  /// Returns info about user's availability to be a mentor and a mentee
   String requestStatus() {
     if (needsMentoring && availableToMentor) {
       return "Available to mentor and to be a mentee.";
