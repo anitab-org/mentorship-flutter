@@ -4,6 +4,7 @@ import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
 import 'package:mentorship_client/screens/request_detail/request_detail.dart';
+import 'package:mentorship_client/widgets/bold_text.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class RequestsPage extends StatefulWidget {
@@ -99,13 +100,15 @@ class _RequestsPageState extends State<RequestsPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Mentor: ${relation.mentor.name}"),
-                            Text("Mentee: ${relation.mentee.name}"),
-                            Text("End date: ${endDate.toDateString()}"),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BoldText("Mentor: ", relation.mentor.name),
+                              BoldText("Mentee: ", relation.mentee.name),
+                              BoldText("End date: ", endDate.toDateString()),
+                            ],
+                          ),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -117,19 +120,7 @@ class _RequestsPageState extends State<RequestsPage> {
                         )
                       ],
                     ),
-                    RichText(
-                      text: TextSpan(
-                        style: new TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(text: "Notes: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: relation.notes),
-                        ],
-                      ),
-                      maxLines: 3,
-                    ),
+                    BoldText("Notes: ", relation.notes),
                   ],
                 ),
               ),

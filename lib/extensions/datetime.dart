@@ -6,6 +6,7 @@ extension DateTimeX on DateTime {
     return formatter.format(this);
   }
 
+  /// Returns DateTime from timestamp expressed as seconds
   static DateTime fromTimestamp(double timestamp) {
     return DateTime.fromMillisecondsSinceEpoch((timestamp * 1000).toInt());
   }
