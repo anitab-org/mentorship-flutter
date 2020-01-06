@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
@@ -241,10 +242,6 @@ class _RegisterFormState extends State<RegisterForm> {
       Logger.root.severe(exception.toString());
       message = exception.toString();
     }
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
+    context.showSnackBar(message);
   }
 }

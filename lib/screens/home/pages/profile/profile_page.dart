@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
@@ -66,11 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
         body: BlocListener<ProfilePageBloc, ProfilePageState>(
           listener: (context, state) {
             if (state.message != null) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
+              context.showSnackBar(state.message);
             }
           },
           child: BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {

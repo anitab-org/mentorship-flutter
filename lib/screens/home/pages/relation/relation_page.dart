@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
@@ -31,7 +32,7 @@ class _RelationPageState extends State<RelationPage> {
         body: BlocListener<RelationPageBloc, RelationPageState>(
           listener: (context, state) {
             if (state.message != null) {
-              Scaffold.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+              context.showSnackBar(state.message);
             }
           },
           child: Builder(
@@ -113,7 +114,8 @@ class _RelationPageState extends State<RelationPage> {
                   children: [
                     Text("Mentor: ${state.relation.mentor.name}"),
                     Text("Mentee: ${state.relation.mentee.name}"),
-                    Text("End date: ${DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()}"),
+                    Text(
+                        "End date: ${DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()}"),
                     Text("Notes: ${state.relation.notes}"),
                   ],
                 ),

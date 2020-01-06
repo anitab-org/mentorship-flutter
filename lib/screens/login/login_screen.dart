@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
+import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/screens/login/bloc/bloc.dart';
@@ -77,18 +78,10 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
+          context.showSnackBar(state.message);
         }
         if (state is LoginSuccess) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Login successful"),
-            ),
-          );
+          context.showSnackBar("Login successful");
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
