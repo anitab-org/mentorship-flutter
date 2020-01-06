@@ -2,7 +2,7 @@ class RelationRequest {
   final int mentorId;
   final int menteeId;
   final String notes;
-  final double endDate;
+  final int endDate;
 
   RelationRequest({this.mentorId, this.menteeId, this.notes, this.endDate});
 

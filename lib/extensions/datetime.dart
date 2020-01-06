@@ -9,4 +9,8 @@ extension DateTimeExtensions on DateTime {
   static DateTime fromTimestamp(double timestamp) {
     return DateTime.fromMillisecondsSinceEpoch((timestamp * 1000).toInt());
   }
+
+  int toTimestamp() {
+    return (this.millisecondsSinceEpoch / 1000).round();
+  }
 }

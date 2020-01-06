@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/remote/repositories/relation_repository.dart';
@@ -97,10 +98,11 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
                         _endDate = await showDatePicker(
                           context: context,
                           initialDate:
-                              DateTime(initialDate.year, initialDate.month, initialDate.day + 1),
-                          firstDate: DateTime.now(),
+                              DateTime(initialDate.year, initialDate.month, initialDate.day + 29),
+                          firstDate:
+                              DateTime(initialDate.year, initialDate.month, initialDate.day + 29),
                           lastDate:
-                              DateTime(initialDate.year, initialDate.month + 1, initialDate.day),
+                              DateTime(initialDate.year, initialDate.month + 6, initialDate.day),
                         );
                       },
                       icon: Icon(Icons.calendar_today),
@@ -138,7 +140,7 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
                           mentorId: mentorId,
                           menteeId: menteeId,
                           notes: _notesController.text,
-                          endDate: (_endDate.millisecondsSinceEpoch * 1000).toDouble(),
+                          endDate: _endDate.toTimestamp(),
                         );
 
                         try {
