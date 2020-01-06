@@ -40,7 +40,6 @@ class AuthRepository {
 
   Future<String> getToken() async {
     final String token = await _storage.read(key: AUTH_TOKEN);
-    Logger.root.severe("TOKEN: $token");
 
     if (token != null) {
       Logger.root.info("Has token!");

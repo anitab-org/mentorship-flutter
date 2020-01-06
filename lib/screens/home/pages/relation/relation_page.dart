@@ -35,13 +35,25 @@ class _RelationPageState extends State<RelationPage> {
               context.showSnackBar(state.message);
             }
           },
-          child: Builder(
-            builder: (context) => TabBarView(
-              children: [
-                _buildDetailsTab(context),
-                _buildTasksTab(context),
-              ],
-            ),
+          child: BlocBuilder<RelationPageBloc, RelationPageState>(
+            builder: (context, state) {
+              if (state is RelationPageSuccess) {
+                return TabBarView(
+                  children: [
+                    _buildDetailsTab(context, state),
+                    _buildTasksTab(context, state),
+                  ],
+                );
+              }
+
+              if (state is RelationPageFailure) {
+                return Center(
+                  child: Text(state.message),
+                );
+              }
+
+              return LoadingIndicator();
+            },
           ),
         ),
         floatingActionButton: _buildFab(context),
@@ -73,163 +85,149 @@ class _RelationPageState extends State<RelationPage> {
     );
   }
 
-  Widget _buildDetailsTab(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: BlocBuilder<RelationPageBloc, RelationPageState>(
-        builder: (context, state) {
-          if (state is RelationPageSuccess) {
-            if (state.relation == null) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("You are not in a relation"),
-                    RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            "Find members",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+  Widget _buildDetailsTab(BuildContext context, RelationPageState state) {
+    if (state is RelationPageSuccess) {
+      return Padding(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Mentor: ${state.relation.mentor.name}"),
+                  Text("Mentee: ${state.relation.mentee.name}"),
+                  Text(
+                      "End date: ${DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()}"),
+                  Text("Notes: ${state.relation.notes}"),
+                ],
+              ),
+            ),
+            RaisedButton(
+              color: Theme.of(context).accentColor,
+              child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text("Cancel Relation"),
+                    content: Text("Are you sure you want to cancel the relation"),
+                    actions: [
+                      FlatButton(
+                        child: Text("Yes"),
+                        onPressed: () {
+                          BlocProvider.of<RelationPageBloc>(context)
+                              .add(RelationPageCancelledRelation(state.relation.id));
+                        },
                       ),
-                      onPressed: () =>
-                          BlocProvider.of<HomeBloc>(context).add(MembersPageSelected()),
-                    )
-                  ],
-                ),
-              );
-            }
-            return Column(
-              children: [
-                ListView(
-                  shrinkWrap: true,
-                  children: [
-                    Text("Mentor: ${state.relation.mentor.name}"),
-                    Text("Mentee: ${state.relation.mentee.name}"),
-                    Text(
-                        "End date: ${DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()}"),
-                    Text("Notes: ${state.relation.notes}"),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
-                    child: Text("Cancel".toUpperCase()),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Cancel Relation"),
-                          content: Text("Are you sure you want to cancel the relation"),
-                          actions: [
-                            FlatButton(
-                              child: Text("Yes"),
-                              onPressed: () {
-                                BlocProvider.of<RelationPageBloc>(context)
-                                    .add(RelationPageCancelledRelation(state.relation.id));
-                              },
-                            ),
-                            FlatButton(
-                              child: Text("No"),
-                              onPressed: () {
-                                Toast.show("nothing happens", context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                      FlatButton(
+                        child: Text("No"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
                   ),
-                )
-              ],
-            );
-          }
+                );
+              },
+            )
+          ],
+        ),
+      );
+    }
 
-          if (state is RelationPageFailure) {
-            return Center(
-              child: Text(state.message),
-            );
-          }
+    if (state is RelationPageFailure) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(state.message),
+            RaisedButton(
+              color: Theme.of(context).accentColor,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Find members",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              onPressed: () => BlocProvider.of<HomeBloc>(context).add(MembersPageSelected()),
+            )
+          ],
+        ),
+      );
+    }
 
-          return LoadingIndicator();
-        },
-      ),
-    );
+    return LoadingIndicator();
   }
 
-  Widget _buildTasksTab(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: BlocBuilder<RelationPageBloc, RelationPageState>(
-        builder: (context, state) {
-          if (state is RelationPageSuccess) {
-            if (state.relation == null) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("You are not in a relation"),
-                    RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            "Find members",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      onPressed: () =>
-                          BlocProvider.of<HomeBloc>(context).add(MembersPageSelected()),
-                    )
-                  ],
-                ),
+  Widget _buildTasksTab(BuildContext context, RelationPageState state) {
+    if (state is RelationPageSuccess) {
+      return Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.tasks.length,
+            itemBuilder: (context, index) {
+              if (state.tasks.length == 0) {
+                return Center(
+                  child: Text("No tasks"),
+                );
+              }
+
+              return Row(
+                children: [
+                  Checkbox(
+                    onChanged: (value) {},
+                    value: state.tasks[index].isDone,
+                  ),
+                  Text(state.tasks[index].description),
+                ],
               );
-            }
-            return Column(
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.tasks.length,
-                  itemBuilder: (context, index) {
-                    return Text("tasks:)");
-                    return Row(
-                      children: [
-                        Checkbox(
-                          onChanged: (value) {},
-                          value: state.tasks[index].isDone,
-                        ),
-                        Text(state.tasks[index].description),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            );
-          }
+            },
+          ),
+        ],
+      );
+    }
 
-          if (state is RelationPageFailure) {
-            return Center(
-              child: Text(state.message),
-            );
-          }
+    if (state is RelationPageFailure) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(state.message),
+            RaisedButton(
+              color: Theme.of(context).accentColor,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Find members",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              onPressed: () => BlocProvider.of<HomeBloc>(context).add(MembersPageSelected()),
+            )
+          ],
+        ),
+      );
+    }
 
-          return LoadingIndicator();
-        },
-      ),
-    );
+    return LoadingIndicator();
   }
 }
