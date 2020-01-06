@@ -29,6 +29,8 @@ class _RequestsPageState extends State<RequestsPage> {
         ),
         body: BlocBuilder<RequestsPageBloc, RequestsPageState>(builder: (context, state) {
           if (state is RequestsPageSuccess) {
+            state.relations.sort((rel1, rel2) => rel2.sentOn.compareTo(rel1.sentOn));
+
             List<Relation> pendingRelations =
                 state.relations.where((rel) => rel.state == 1).toList();
             List<Relation> pastRelations = state.relations.where((rel) => rel.state != 1).toList();
@@ -71,44 +73,65 @@ class _RequestsPageState extends State<RequestsPage> {
                 builder: (context) => RequestDetailScreen(relation: relation),
               ),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Mentor: ${relation.mentor.name}"),
-                          Text("Mentee: ${relation.mentee.name}"),
-                          Text("End date: ${endDate.toDateString()}"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("Sent on ${startDate.toDateString()}"),
-                        ],
-                      )
-                    ],
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      style: new TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                      ),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  tileMode: TileMode.repeated,
+                  // Where the linear gradient begins and ends
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  // Add one stop for each color. Stops should increase from 0 to 1
+                  colors: [
+                    // Colors are easy thanks to Flutter's Colors class.
+                    relation.sentByMe
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).accentColor,
+                    Colors.white,
+                  ],
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextSpan(text: "Notes: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                        TextSpan(text: relation.notes),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Mentor: ${relation.mentor.name}"),
+                            Text("Mentee: ${relation.mentee.name}"),
+                            Text("End date: ${endDate.toDateString()}"),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text("Sent on ${startDate.toDateString()}"),
+                            SizedBox(height: 4),
+                            if (relation.sentByMe) Text("Sent by me") else Text("To me")
+                          ],
+                        )
                       ],
                     ),
-                    maxLines: 3,
-                  ),
-                ],
+                    RichText(
+                      text: TextSpan(
+                        style: new TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(text: "Notes: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(text: relation.notes),
+                        ],
+                      ),
+                      maxLines: 3,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
