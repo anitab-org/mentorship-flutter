@@ -172,6 +172,12 @@ class _RelationPageState extends State<RelationPage> {
 
   Widget _buildTasksTab(BuildContext context, RelationPageState state) {
     if (state is RelationPageSuccess) {
+      if (state.tasks.length == 0) {
+        return Center(
+          child: Text("There are no tasks"),
+        );
+      }
+
       return Scaffold(
         floatingActionButton: _buildFab(context),
         body: Column(
@@ -180,12 +186,6 @@ class _RelationPageState extends State<RelationPage> {
               shrinkWrap: true,
               itemCount: state.tasks.length,
               itemBuilder: (context, index) {
-                if (state.tasks.length == 0) {
-                  return Center(
-                    child: Text("No tasks"),
-                  );
-                }
-
                 return Row(
                   children: [
                     Checkbox(
