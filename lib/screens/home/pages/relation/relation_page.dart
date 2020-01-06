@@ -4,6 +4,7 @@ import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
+import 'package:mentorship_client/widgets/bold_text.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 import 'package:toast/toast.dart';
 
@@ -98,11 +99,11 @@ class _RelationPageState extends State<RelationPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Mentor: ${state.relation.mentor.name}"),
-                  Text("Mentee: ${state.relation.mentee.name}"),
-                  Text(
-                      "End date: ${DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()}"),
-                  Text("Notes: ${state.relation.notes}"),
+                  BoldText("Mentor: ", state.relation.mentor.name),
+                  BoldText("Mentee: ", state.relation.mentee.name),
+                  BoldText(
+                      "End date: ", DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()),
+                  BoldText("Notes: ", state.relation.notes),
                 ],
               ),
             ),
@@ -172,32 +173,36 @@ class _RelationPageState extends State<RelationPage> {
 
   Widget _buildTasksTab(BuildContext context, RelationPageState state) {
     if (state is RelationPageSuccess) {
-      if (state.tasks.length == 0) {
-        return Center(
-          child: Text("There are no tasks"),
-        );
-      }
-
       return Scaffold(
         floatingActionButton: _buildFab(context),
-        body: Column(
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: state.tasks.length,
-              itemBuilder: (context, index) {
-                return Row(
-                  children: [
-                    Checkbox(
-                      onChanged: (value) {},
-                      value: state.tasks[index].isDone,
-                    ),
-                    Text(state.tasks[index].description),
-                  ],
-                );
-              },
-            ),
-          ],
+        body: Builder(
+          builder: (context) {
+            if (state.tasks.length == 0) {
+              return Center(
+                child: Text("There are no tasks"),
+              );
+            }
+
+            return Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.tasks.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Checkbox(
+                          onChanged: (value) {},
+                          value: state.tasks[index].isDone,
+                        ),
+                        Text(state.tasks[index].description),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            );
+          },
         ),
       );
     }
