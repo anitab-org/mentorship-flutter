@@ -56,7 +56,6 @@ class _RelationPageState extends State<RelationPage> {
             },
           ),
         ),
-        floatingActionButton: _buildFab(context),
       ),
     );
   }
@@ -173,30 +172,33 @@ class _RelationPageState extends State<RelationPage> {
 
   Widget _buildTasksTab(BuildContext context, RelationPageState state) {
     if (state is RelationPageSuccess) {
-      return Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: state.tasks.length,
-            itemBuilder: (context, index) {
-              if (state.tasks.length == 0) {
-                return Center(
-                  child: Text("No tasks"),
-                );
-              }
+      return Scaffold(
+        floatingActionButton: _buildFab(context),
+        body: Column(
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: state.tasks.length,
+              itemBuilder: (context, index) {
+                if (state.tasks.length == 0) {
+                  return Center(
+                    child: Text("No tasks"),
+                  );
+                }
 
-              return Row(
-                children: [
-                  Checkbox(
-                    onChanged: (value) {},
-                    value: state.tasks[index].isDone,
-                  ),
-                  Text(state.tasks[index].description),
-                ],
-              );
-            },
-          ),
-        ],
+                return Row(
+                  children: [
+                    Checkbox(
+                      onChanged: (value) {},
+                      value: state.tasks[index].isDone,
+                    ),
+                    Text(state.tasks[index].description),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       );
     }
 
