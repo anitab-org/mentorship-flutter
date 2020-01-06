@@ -34,11 +34,13 @@ class _RelationPageState extends State<RelationPage> {
               Scaffold.of(context).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
-          child: TabBarView(
-            children: [
-              _buildDetailsTab(context),
-              _buildTasksTab(context),
-            ],
+          child: Builder(
+            builder: (context) => TabBarView(
+              children: [
+                _buildDetailsTab(context),
+                _buildTasksTab(context),
+              ],
+            ),
           ),
         ),
         floatingActionButton: _buildFab(context),
@@ -71,8 +73,6 @@ class _RelationPageState extends State<RelationPage> {
   }
 
   Widget _buildDetailsTab(BuildContext context) {
-    RelationPageBloc bloc = BlocProvider.of<RelationPageBloc>(context);
-
     return Padding(
       padding: EdgeInsets.all(16),
       child: BlocBuilder<RelationPageBloc, RelationPageState>(
@@ -113,7 +113,7 @@ class _RelationPageState extends State<RelationPage> {
                   children: [
                     Text("Mentor: ${state.relation.mentor.name}"),
                     Text("Mentee: ${state.relation.mentee.name}"),
-                    Text("End date: ${DateTimeX.fromTimestamp(state.relation.endsOn)}"),
+                    Text("End date: ${DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()}"),
                     Text("Notes: ${state.relation.notes}"),
                   ],
                 ),
@@ -131,7 +131,8 @@ class _RelationPageState extends State<RelationPage> {
                             FlatButton(
                               child: Text("Yes"),
                               onPressed: () {
-                                bloc.add(RelationPageCancelledRelation(state.relation.id));
+                                BlocProvider.of<RelationPageBloc>(context)
+                                    .add(RelationPageCancelledRelation(state.relation.id));
                               },
                             ),
                             FlatButton(
