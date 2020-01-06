@@ -47,7 +47,7 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
       }
     }
 
-    DateTime endDate = DateTimeExtensions.fromTimestamp(relation.endsOn);
+    DateTime endDate = DateTimeX.fromTimestamp(relation.endsOn);
     String formattedEndDate = DateFormat('dd MMM yyyy').format(endDate);
 
     String summaryMessage;

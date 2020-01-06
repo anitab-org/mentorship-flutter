@@ -61,8 +61,8 @@ class _RequestsPageState extends State<RequestsPage> {
       itemBuilder: (context, index) {
         Relation relation = relations[index];
 
-        DateTime startDate = DateTimeExtensions.fromTimestamp(relation.sentOn);
-        DateTime endDate = DateTimeExtensions.fromTimestamp(relation.endsOn);
+        DateTime startDate = DateTimeX.fromTimestamp(relation.sentOn);
+        DateTime endDate = DateTimeX.fromTimestamp(relation.endsOn);
 
         return Card(
           child: InkWell(

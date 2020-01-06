@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-extension DateTimeExtensions on DateTime {
+extension DateTimeX on DateTime {
   String toDateString() {
     final formatter = DateFormat('dd MMM yyyy');
     return formatter.format(this);

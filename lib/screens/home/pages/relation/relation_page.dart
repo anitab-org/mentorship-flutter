@@ -113,7 +113,7 @@ class _RelationPageState extends State<RelationPage> {
                   children: [
                     Text("Mentor: ${state.relation.mentor.name}"),
                     Text("Mentee: ${state.relation.mentee.name}"),
-                    Text("End date: ${DateTimeExtensions.fromTimestamp(state.relation.endsOn)}"),
+                    Text("End date: ${DateTimeX.fromTimestamp(state.relation.endsOn)}"),
                     Text("Notes: ${state.relation.notes}"),
                   ],
                 ),
