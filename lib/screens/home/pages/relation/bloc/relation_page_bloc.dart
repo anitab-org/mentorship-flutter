@@ -65,6 +65,18 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
       }
     }
 
+    if (event is TaskCompleted) {
+      try {
+        CustomResponse response =
+            await taskRepository.completeTask(event.relation.id, event.taskId);
+        var tasks = await taskRepository.getAllTasks(event.relation.id);
+        yield RelationPageSuccess(event.relation, tasks, message: response.message);
+      } on Failure catch (failure) {
+        Logger.root.severe(failure.message);
+        yield RelationPageFailure(message: failure.message);
+      }
+    }
+
     if (event is TaskDeleted) {
       try {
         CustomResponse response = await taskRepository.deleteTask(event.relation.id, event.taskId);

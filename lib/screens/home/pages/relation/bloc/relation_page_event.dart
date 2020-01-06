@@ -30,6 +30,17 @@ class TaskCreated extends RelationPageEvent {
   List<Object> get props => [relation, taskRequest];
 }
 
+class TaskCompleted extends RelationPageEvent {
+  final Relation relation;
+  final int taskId;
+
+  TaskCompleted(this.relation, this.taskId);
+
+  @override
+  List<Object> get props => [relation, taskId];
+}
+
+
 class TaskDeleted extends RelationPageEvent {
   final Relation relation;
   final int taskId;

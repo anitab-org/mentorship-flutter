@@ -67,63 +67,43 @@ class _RequestsPageState extends State<RequestsPage> {
         DateTime startDate = DateTimeX.fromTimestamp(relation.sentOn);
         DateTime endDate = DateTimeX.fromTimestamp(relation.endsOn);
 
-        return Card(
-          child: InkWell(
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => RequestDetailScreen(relation: relation),
-              ),
+        return InkWell(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => RequestDetailScreen(relation: relation),
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  tileMode: TileMode.repeated,
-                  // Where the linear gradient begins and ends
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  // Add one stop for each color. Stops should increase from 0 to 1
-                  colors: [
-                    // Colors are easy thanks to Flutter's Colors class.
-                    relation.sentByMe
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).accentColor,
-                    Colors.white,
-                  ],
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Column(
+          ),
+          child: ListTile(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              BoldText("Mentor: ", relation.mentor.name),
-                              BoldText("Mentee: ", relation.mentee.name),
-                              BoldText("End date: ", endDate.toDateString()),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text("Sent on ${startDate.toDateString()}"),
-                            SizedBox(height: 4),
-                            if (relation.sentByMe) Text("Sent by me") else Text("To me")
-                          ],
-                        )
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BoldText("Mentor: ", relation.mentor.name),
+                          BoldText("Mentee: ", relation.mentee.name),
+                          BoldText("End date: ", endDate.toDateString()),
+                        ],
+                      ),
                     ),
-                    BoldText("Notes: ", relation.notes),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text("Sent on ${startDate.toDateString()}"),
+                        SizedBox(height: 4),
+                        if (relation.sentByMe) Text("Sent by me") else Text("To me")
+                      ],
+                    )
                   ],
                 ),
-              ),
+                BoldText("Notes: ", relation.notes),
+                Divider(),
+              ],
             ),
           ),
         );
