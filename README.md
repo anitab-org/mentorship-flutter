@@ -16,24 +16,25 @@ to user's mobile operating system, too :)
 
 ### Work status
 
-Basic application flow works, like changing screens and logging in/off. Core features
-and backend are fully integrated. So basically, implementing what is not done yet
-will be a pure pleasure - creating interfaces with Flutter is a piece of cake :)
+Application is high-fidelity copy of the Android version. It has all of the
+features implemented, though some may not work perfectly.
 
 **What works?**
+Almost everything.
 
 - Login and Registration
 - Home page
 - Profile page
 - Relation Page
-- Members page (lacks sending requests functionality)
+- Members page
 
 **What is missing? (in comparison to [Mentorship Android](https://github.com/systers/mentorship-android))**
 
-- Requests page (includes accepting requests)
-- Sending requests after clicking a User in MemberPage
+- RelationPage: updating `availableToMentor` and `needsMentoring` status i
 - Changing password
 - About screen
+
+Occasional UI bugs may occur – in that write on [Systers Zulip chat](https://systers-opensource.zulipchat.com/#narrow/stream/212722-gci/topic/Cross-platform.20mentorship).
 
 ### Overview
 
@@ -45,6 +46,7 @@ will be a pure pleasure - creating interfaces with Flutter is a piece of cake :)
 - App uses [BLoC pattern](https://bloclibrary.dev/#/coreconcepts) extensively
 - To communicate with API, [Chopper](https://pub.dev/packages/chopper) is used
 - To save JWT token, [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) is used
+- If you find something in code that looks a bit odd, it might be some useful extension method from `lib/extensions`
 
 ### Web support
 
