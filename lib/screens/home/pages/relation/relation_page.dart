@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/extensions/datetime.dart';
-import 'package:mentorship_client/screens/home/bloc/bloc.dart';
+import 'package:mentorship_client/remote/models/task.dart';
+import 'package:mentorship_client/remote/requests/task_request.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/bold_text.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
-import 'package:toast/toast.dart';
 
 class RelationPage extends StatefulWidget {
   @override
@@ -61,67 +61,45 @@ class _RelationPageState extends State<RelationPage> {
     );
   }
 
-  Widget _buildFab(BuildContext context) {
-    return BlocBuilder<RelationPageBloc, RelationPageState>(
-      builder: (context, state) {
-        bool visible = false;
-
-        if (state is RelationPageSuccess) {
-          visible = (state.relation != null);
-        }
-
-        return AnimatedOpacity(
-          opacity: visible ? 1 : 0,
-          duration: Duration(milliseconds: 500),
-          child: FloatingActionButton(
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
+  Widget _buildDetailsTab(BuildContext context, RelationPageSuccess state) {
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BoldText("Mentor: ", state.relation.mentor.name),
+                BoldText("Mentee: ", state.relation.mentee.name),
+                BoldText(
+                    "End date: ", DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()),
+                BoldText("Notes: ", state.relation.notes),
+              ],
             ),
-            onPressed: () => Toast.show("Not implemented yet", context),
           ),
-        );
-      },
-    );
-  }
+          RaisedButton(
+            color: Theme.of(context).accentColor,
+            child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
+            onPressed: () {
+              final bloc = BlocProvider.of<RelationPageBloc>(context);
 
-  Widget _buildDetailsTab(BuildContext context, RelationPageState state) {
-    if (state is RelationPageSuccess) {
-      return Padding(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BoldText("Mentor: ", state.relation.mentor.name),
-                  BoldText("Mentee: ", state.relation.mentee.name),
-                  BoldText(
-                      "End date: ", DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()),
-                  BoldText("Notes: ", state.relation.notes),
-                ],
-              ),
-            ),
-            RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
                     title: Text("Cancel Relation"),
                     content: Text("Are you sure you want to cancel the relation"),
                     actions: [
                       FlatButton(
                         child: Text("Yes"),
                         onPressed: () {
-                          BlocProvider.of<RelationPageBloc>(context)
-                              .add(RelationPageCancelledRelation(state.relation.id));
+                          bloc.add(RelationPageCancelledRelation(state.relation.id));
+                          Navigator.of(context).pop();
                         },
                       ),
                       FlatButton(
@@ -131,110 +109,107 @@ class _RelationPageState extends State<RelationPage> {
                         },
                       ),
                     ],
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      );
-    }
-
-    if (state is RelationPageFailure) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(state.message),
-            RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Find members",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-              onPressed: () => BlocProvider.of<HomeBloc>(context).add(MembersPageSelected()),
-            )
-          ],
-        ),
-      );
-    }
-
-    return LoadingIndicator();
+                  );
+                },
+              );
+            },
+          )
+        ],
+      ),
+    );
   }
 
-  Widget _buildTasksTab(BuildContext context, RelationPageState state) {
-    if (state is RelationPageSuccess) {
-      return Scaffold(
-        floatingActionButton: _buildFab(context),
-        body: Builder(
-          builder: (context) {
-            if (state.tasks.length == 0) {
-              return Center(
-                child: Text("There are no tasks"),
-              );
-            }
-
-            return Column(
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.tasks.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        Checkbox(
-                          onChanged: (value) {},
-                          value: state.tasks[index].isDone,
-                        ),
-                        Text(state.tasks[index].description),
-                      ],
-                    );
-                  },
-                ),
-              ],
+  Widget _buildTasksTab(BuildContext context, RelationPageSuccess state) {
+    return Scaffold(
+      floatingActionButton: _buildFab(context, state),
+      body: Builder(
+        builder: (context) {
+          if (state.tasks.length == 0) {
+            return Center(
+              child: Text("There are no tasks"),
             );
-          },
-        ),
-      );
-    }
+          }
 
-    if (state is RelationPageFailure) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(state.message),
-            RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Find members",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-              onPressed: () => BlocProvider.of<HomeBloc>(context).add(MembersPageSelected()),
-            )
-          ],
-        ),
-      );
-    }
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.tasks.length,
+            itemBuilder: (context, index) {
+              Task task = state.tasks[index];
+              final bloc = BlocProvider.of<RelationPageBloc>(context);
 
-    return LoadingIndicator();
+              return InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Delete task"),
+                      content: Text("Are you sure you want to delete the task?"),
+                      actions: [
+                        FlatButton(
+                          child: Text("Delete"),
+                          onPressed: () {
+                            bloc.add(TaskDeleted(state.relation, task.id));
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Checkbox(
+                      onChanged: (value) {},
+                      value: task.isDone,
+                    ),
+                    Text(task.description),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildFab(BuildContext context, RelationPageSuccess state) {
+    final _taskInputController = TextEditingController();
+
+    final bloc = BlocProvider.of<RelationPageBloc>(context);
+
+    return FloatingActionButton(
+      child: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Create task"),
+            content: TextField(
+              controller: _taskInputController,
+              decoration: InputDecoration(hintText: "Task description"),
+            ),
+            actions: [
+              FlatButton(
+                child: Text("Create"),
+                onPressed: () {
+                  bloc.add(
+                    TaskCreated(
+                      state.relation,
+                      TaskRequest(description: _taskInputController.text),
+                    ),
+                  );
+
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:mentorship_client/remote/models/relation.dart';
+import 'package:mentorship_client/remote/requests/task_request.dart';
 
 abstract class RelationPageEvent extends Equatable {
   const RelationPageEvent();
@@ -16,4 +18,24 @@ class RelationPageCancelledRelation extends RelationPageEvent {
 
   @override
   List<Object> get props => [relationId];
+}
+
+class TaskCreated extends RelationPageEvent {
+  final Relation relation;
+  final TaskRequest taskRequest;
+
+  TaskCreated(this.relation, this.taskRequest);
+
+  @override
+  List<Object> get props => [relation, taskRequest];
+}
+
+class TaskDeleted extends RelationPageEvent {
+  final Relation relation;
+  final int taskId;
+
+  TaskDeleted(this.relation, this.taskId);
+
+  @override
+  List<Object> get props => [relation, taskId];
 }

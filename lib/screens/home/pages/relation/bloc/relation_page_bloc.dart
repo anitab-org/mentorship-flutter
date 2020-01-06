@@ -44,7 +44,32 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
       yield RelationPageLoading();
       try {
         CustomResponse response = await relationRepository.cancelRelation(event.relationId);
-        yield RelationPageSuccess(null, null, message: response.message);
+        yield RelationPageFailure(
+            message: response
+                .message); // Failure, because relation doesn't exist anymore. It's kinda dirty but works
+      } on Failure catch (failure) {
+        Logger.root.severe(failure.message);
+        yield RelationPageFailure(message: failure.message);
+      }
+    }
+
+    if (event is TaskCreated) {
+      try {
+        CustomResponse response =
+            await taskRepository.createTask(event.relation.id, event.taskRequest);
+        var tasks = await taskRepository.getAllTasks(event.relation.id);
+        yield RelationPageSuccess(event.relation, tasks, message: response.message);
+      } on Failure catch (failure) {
+        Logger.root.severe(failure.message);
+        yield RelationPageFailure(message: failure.message);
+      }
+    }
+
+    if (event is TaskDeleted) {
+      try {
+        CustomResponse response = await taskRepository.deleteTask(event.relation.id, event.taskId);
+        var tasks = await taskRepository.getAllTasks(event.relation.id);
+        yield RelationPageSuccess(event.relation, tasks, message: response.message);
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield RelationPageFailure(message: failure.message);
