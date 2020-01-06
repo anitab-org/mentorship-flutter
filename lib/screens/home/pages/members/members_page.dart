@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/members/bloc/bloc.dart';
-import 'package:mentorship_client/screens/home/pages/members/widgets/animated_member_list_tile.dart';
+import 'package:mentorship_client/screens/home/pages/members/widgets/member_list_tile.dart';
 import 'package:mentorship_client/screens/member_profile/member_profile.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
@@ -28,7 +28,7 @@ class _MembersPageState extends State<MembersPage> {
 
                 return InkWell(
                   onTap: () => _openMemberProfileScreen(context, user),
-                  child: AnimatedMemberListTile(user: user),
+                  child: MemberListTile(user: user),
                 );
               },
             );

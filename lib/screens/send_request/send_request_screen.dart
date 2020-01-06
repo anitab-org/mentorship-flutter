@@ -89,21 +89,25 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
                 Row(
                   children: [
                     Text("End date: "),
-                    Text(_endDate.toIso8601String()),
+                    Text(_endDate.toDateString()),
                     IconButton(
                       onPressed: () async {
                         Toast.show("juhu", context);
                         var initialDate = DateTime.now();
 
-                        _endDate = await showDatePicker(
+                        DateTime newlySelectedDate = await showDatePicker(
                           context: context,
                           initialDate:
                               DateTime(initialDate.year, initialDate.month, initialDate.day + 29),
                           firstDate:
                               DateTime(initialDate.year, initialDate.month, initialDate.day + 29),
-                          lastDate:
-                              DateTime(initialDate.year, initialDate.month + 6, initialDate.day),
+                          lastDate: DateTime(
+                              initialDate.year, initialDate.month, initialDate.day + 168),
                         );
+
+                        setState(() {
+                          _endDate = newlySelectedDate;
+                        });
                       },
                       icon: Icon(Icons.calendar_today),
                     ),
