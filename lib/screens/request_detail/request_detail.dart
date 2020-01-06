@@ -5,7 +5,6 @@ import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/remote/repositories/relation_repository.dart';
-import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
 import 'package:mentorship_client/screens/request_detail/bloc/bloc.dart';
 
 class RequestDetailScreen extends StatefulWidget {
@@ -79,81 +78,122 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
     }
 
     return BlocProvider(
-      create: (context) => RequestsPageBloc(relationRepository: RelationRepository.instance),
+      create: (context) => RequestDetailBloc(relationRepository: RelationRepository.instance),
       child: Scaffold(
         appBar: AppBar(
           title: Text("Request detail"),
         ),
-        body: BlocListener<RequestsPageBloc, RequestsPageState>(
-          listener: (context, state) {
-            if (state.message != null) {
-              context.showSnackBar(state.message);
-            }
-          },
-          child: BlocBuilder<RequestsPageBloc, RequestsPageState>(
-            builder: (context, state) => Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Text(
-                      "$requestDirection $otherUserName",
-                      textScaleFactor: 2,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 24),
-                Text(
-                  summaryMessage,
-                  textScaleFactor: 2,
-                  textAlign: TextAlign.center,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Notes: "),
-                        Text(relation.notes),
-                      ],
-                    ),
-                  ),
-                ),
-                if (widget.relation.state == 1) // Pending
-                  RaisedButton(
-                    onPressed: () {
-                      BlocProvider.of<RequestDetailBloc>(context)
-                          .add(RequestAccepted(widget.relation.id));
-                    },
-                    color: Theme.of(context).accentColor,
-                    child: Text(
-                      "Accept",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
-                else
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
+        body: Builder(
+          builder: (context) {
+            return BlocConsumer<RequestDetailBloc, RequestDetailState>(
+              listener: (context, state) {
+                if (state.message != null) {
+                  context.showSnackBar(state.message);
+                }
+
+                if (state is RequestConsidered) {
+                  Navigator.of(context).pop();
+                }
+              },
+              builder: (context, state) {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
                       child: Padding(
                         padding: EdgeInsets.all(8),
                         child: Text(
-                          "This relation was $relationStatus",
-                          textScaleFactor: 1.5,
+                          "$requestDirection $otherUserName",
+                          textScaleFactor: 2,
                         ),
                       ),
                     ),
-                  ),
-              ],
-            ),
-          ),
+                    SizedBox(height: 24),
+                    Text(
+                      summaryMessage,
+                      textScaleFactor: 2,
+                      textAlign: TextAlign.center,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Notes: "),
+                            Text(relation.notes),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (widget.relation.state == 1) // Pending
+                      Builder(builder: (context) => _buildActionButtons(context, widget.relation))
+                    else
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              "This relation was $relationStatus",
+                              textScaleFactor: 1.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            );
+          },
         ),
       ),
     );
+  }
+
+  Widget _buildActionButtons(BuildContext context, Relation relation) {
+    bool endTimePassed = DateTimeX.fromTimestamp(relation.endsOn).millisecondsSinceEpoch <
+        DateTime.now().millisecondsSinceEpoch;
+
+    if (!endTimePassed) {
+      if (relation.sentByMe) {
+        return RaisedButton(
+          onPressed: () {
+            BlocProvider.of<RequestDetailBloc>(context)
+                .add(RequestDeleted(relationId: widget.relation.id));
+          },
+          color: Colors.red,
+          child: Text("Delete", style: TextStyle(color: Colors.white)),
+        );
+      } else {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            RaisedButton(
+              onPressed: () {
+                BlocProvider.of<RequestDetailBloc>(context)
+                    .add(RequestAccepted(relationId: widget.relation.id));
+              },
+              color: Colors.green,
+              child: Text("Accept", style: TextStyle(color: Colors.white)),
+            ),
+            SizedBox(width: 16),
+            RaisedButton(
+              onPressed: () {
+                BlocProvider.of<RequestDetailBloc>(context)
+                    .add(RequestRejected(relationId: widget.relation.id));
+              },
+              color: Colors.deepOrange,
+              child: Text("Reject", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      }
+    } else {
+      return Center(child: Text("The end date for this request has passed!"));
+    }
   }
 }

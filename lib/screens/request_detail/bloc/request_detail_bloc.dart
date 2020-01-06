@@ -22,7 +22,27 @@ class RequestDetailBloc extends Bloc<RequestDetailEvent, RequestDetailState> {
     if (event is RequestAccepted) {
       try {
         CustomResponse response = await relationRepository.acceptRelation(event.relationId);
-        yield InitialRequestDetailState(message: response.message);
+        yield RequestConsidered(message: response.message);
+      } on Failure catch (failure) {
+        Logger.root.severe("RequestsDetailBloc: ${failure.message}");
+        yield InitialRequestDetailState(message: failure.message);
+      }
+    }
+
+    if (event is RequestDeleted) {
+      try {
+        CustomResponse response = await relationRepository.deleteRelation(event.relationId);
+        yield RequestConsidered(message: response.message);
+      } on Failure catch (failure) {
+        Logger.root.severe("RequestsDetailBloc: ${failure.message}");
+        yield InitialRequestDetailState(message: failure.message);
+      }
+    }
+
+    if (event is RequestRejected) {
+      try {
+        CustomResponse response = await relationRepository.rejectRelation(event.relationId);
+        yield RequestConsidered(message: response.message);
       } on Failure catch (failure) {
         Logger.root.severe("RequestsDetailBloc: ${failure.message}");
         yield InitialRequestDetailState(message: failure.message);
