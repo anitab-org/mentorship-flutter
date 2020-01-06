@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 extension BuildContextX on BuildContext {
   void showSnackBar(String text) {
@@ -7,5 +8,9 @@ extension BuildContextX on BuildContext {
         content: Text(text),
       ),
     );
+  }
+
+  void toast(String text) {
+    Toast.show(text, this);
   }
 }
