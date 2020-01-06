@@ -1,5 +1,7 @@
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/models/task.dart';
+import 'package:mentorship_client/remote/requests/task_request.dart';
+import 'package:mentorship_client/remote/responses/custom_response.dart';
 
 class TaskRepository {
   static final TaskRepository instance = TaskRepository._internal();
@@ -18,5 +20,26 @@ class TaskRepository {
     }
 
     return tasks;
+  }
+
+  Future<CustomResponse> createTask(int relationId, TaskRequest taskRequest) async {
+    final body = await ApiManager.callSafely(
+        () => ApiManager.instance.taskService.createTask(relationId, taskRequest));
+
+    return CustomResponse.fromJson(body);
+  }
+
+  Future<CustomResponse> completeTask(int relationId, int taskId) async {
+    final body = await ApiManager.callSafely(
+        () => ApiManager.instance.taskService.completeTask(relationId, taskId));
+
+    return CustomResponse.fromJson(body);
+  }
+
+  Future<CustomResponse> deleteTask(int relationId, int taskId) async {
+    final body = await ApiManager.callSafely(
+        () => ApiManager.instance.taskService.deleteTask(relationId, taskId));
+
+    return CustomResponse.fromJson(body);
   }
 }
