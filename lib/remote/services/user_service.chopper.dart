@@ -50,4 +50,13 @@ class _$UserService extends UserService {
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
+
+  @override
+  Future<Response<Map<String, dynamic>>> changePassword(
+      ChangePassword changePassword) {
+    final $url = 'user/change_password';
+    final $body = changePassword;
+    final $request = Request('PUT', $url, client.baseUrl, body: $body);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
 }

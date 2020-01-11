@@ -1,6 +1,7 @@
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/models/home_stats.dart';
 import 'package:mentorship_client/remote/models/user.dart';
+import 'package:mentorship_client/remote/requests/change_password.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
 
 /// Repository for accessing various data about users. Its main task is to serve as an abstraction
@@ -53,6 +54,12 @@ class UserRepository {
   Future<CustomResponse> updateUser(User user) async {
     final body = await ApiManager.callSafely(
         () => ApiManager.instance.userService.updateUser(user));
+    return CustomResponse.fromJson(body);
+  }
+
+  Future<CustomResponse> changePassword(ChangePassword changePassword) async {
+    final body = await ApiManager.callSafely(
+            () => ApiManager.instance.userService.changePassword(changePassword));
     return CustomResponse.fromJson(body);
   }
 }

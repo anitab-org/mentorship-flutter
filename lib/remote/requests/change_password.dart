@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
+
 class ChangePassword {
   final String currentPassword;
   final String newPassword;
 
-  ChangePassword({this.currentPassword, this.newPassword});
+  ChangePassword({@required this.currentPassword, @required this.newPassword});
 
   factory ChangePassword.fromJson(Map<String, dynamic> json) {
     return ChangePassword(
@@ -12,7 +14,7 @@ class ChangePassword {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map <String, dynamic>();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data["current_password"] = this.currentPassword;
     data["new_password"] = this.newPassword;
     return data;

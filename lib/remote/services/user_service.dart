@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:mentorship_client/constants.dart';
 import 'package:mentorship_client/remote/auth_interceptor.dart';
 import 'package:mentorship_client/remote/models/user.dart';
+import 'package:mentorship_client/remote/requests/change_password.dart';
 
 part 'user_service.chopper.dart';
 
@@ -26,6 +27,10 @@ abstract class UserService extends ChopperService {
   /// Updates the current user's profile
   @Put(path: "user")
   Future<Response<Map<String, dynamic>>> updateUser(@Body() User user);
+
+  /// Updates the current user's current password
+  @Put(path: "user/change_password")
+  Future<Response<Map<String, dynamic>>> changePassword(@Body() ChangePassword changePassword);
 
   static UserService create() {
     final client = ChopperClient(
