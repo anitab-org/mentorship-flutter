@@ -27,14 +27,14 @@ Almost everything.
 - Profile page
 - Relation Page
 - Members page
+- Changing password
 
 **What is missing? (in comparison to [Mentorship Android](https://github.com/systers/mentorship-android))**
 
-- RelationPage: updating `availableToMentor` and `needsMentoring` status i
-- Changing password
-- About screen
+- RelationPage: updating `availableToMentor` and `needsMentoring` status doesn't work
+- About screen is basically About dialog. It's very simple, more info should be added.
 
-Occasional UI bugs may occur – in that write on [Systers Zulip chat](https://systers-opensource.zulipchat.com/#narrow/stream/212722-gci/topic/Cross-platform.20mentorship).
+Occasional UI bugs may occur – in this case, please create an issue.
 
 ### Overview
 
@@ -56,7 +56,7 @@ I successfully ran this app in Chrome.
 
 [web example here](https://i.imgur.com/zPaWStL.mp4)
 
-> It's not stable nor smooth (yet), but hey, it works.
+> It's neither stable nor works smoothly (yet), but hey, it works.
 
 _Unfortunately_ I was unable to make requests to the [hosted dev server](http://systers-mentorship-dev.eu-central-1.elasticbeanstalk.com/)
 because apparently it has CORS disabled.
