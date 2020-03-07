@@ -16,7 +16,7 @@ to user's mobile operating system, too :)
 
 ### Work status
 
-Application is high-fidelity copy of the Android version. It has all of the
+Application is a high-fidelity copy of the Android version. It has all essential
 features implemented, though some may not work perfectly.
 
 **What works?**
