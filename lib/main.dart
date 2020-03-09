@@ -45,6 +45,7 @@ class MentorshipApp extends StatelessWidget {
         }
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Systers Mentorship',
         theme: ThemeData(
           primarySwatch: Colors.purple,
