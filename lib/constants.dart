@@ -1,5 +1,5 @@
 const String API_URL =
-    "http://systers-mentorship-dev.eu-central-1.elasticbeanstalk.com/"; // TODO Find a better way to store it
+    "https://mentorship-backend-temp.herokuapp.com/"; // TODO Find a better way to store it
 
 const String STATS_PAGE_TITLE = "Home";
 const String PROFILE_PAGE_TITLE = "My Profile";
