@@ -4,11 +4,12 @@ on:
     paths:
       - '.github/workflows/**'
   pull_request:
-    branches: [develop,test]
+    branches: [develop]
     paths:
       - '.github/workflows/**'
       - 'pubspec.yaml'
       - 'pubspec.lock'
+      - 'lib/**'
       - 'ios/**'
       - 'android/**'
 jobs:
