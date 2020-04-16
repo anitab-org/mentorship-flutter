@@ -41,5 +41,3 @@ jobs:
       - run: flutter pub get
         working-directory: ./
       - run: flutter build appbundle
-        working-directory: ./
-      - run: git diff --exit-code
