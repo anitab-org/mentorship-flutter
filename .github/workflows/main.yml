@@ -26,8 +26,6 @@ jobs:
       - run: flutter pub get
         working-directory: ./
       - run: flutter build ios --no-codesign
-        working-directory: ./
-      - run: git diff --exit-code
   buildandroid:
     name: Build Android
     runs-on: ubuntu-latest
