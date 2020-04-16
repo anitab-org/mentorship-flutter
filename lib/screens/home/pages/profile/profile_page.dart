@@ -27,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    //ignore: close_sinks
     ProfilePageBloc bloc = BlocProvider.of<ProfilePageBloc>(context)..add(ProfilePageShowed());
 
     _nameController..addListener(() => bloc.user.name = _nameController.text);
@@ -51,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            //ignore: close_sinks
             final bloc = BlocProvider.of<ProfilePageBloc>(context);
 
             if (state is ProfilePageEditing) {

@@ -44,7 +44,7 @@ class _StatsPageState extends State<StatsPage> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             "Recent Achievements",
-                            style: Theme.of(context).textTheme.title,
+                            style: Theme.of(context).textTheme.headline6,
                           )),
                     ),
                     for (Task achievement in state.homeStats.achievements)
@@ -89,11 +89,11 @@ class _StatsPageState extends State<StatsPage> {
         children: [
           Text(
             text,
-            style: Theme.of(context).textTheme.title.apply(color: Colors.grey[600]),
+            style: Theme.of(context).textTheme.headline6.apply(color: Colors.grey[600]),
           ),
           Text(
             count.toString(),
-            style: Theme.of(context).textTheme.subtitle.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.subtitle2.copyWith(fontWeight: FontWeight.bold),
           ),
         ],
       ),
