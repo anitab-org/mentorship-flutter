@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:logging/logging.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
 import 'package:mentorship_client/failure.dart';

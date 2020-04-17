@@ -49,6 +49,7 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
   }
 
   Widget _buildBody(BuildContext context) {
+    //ignore: close_sinks
     SendRequestBloc bloc = BlocProvider.of<SendRequestBloc>(context);
 
     return ListView(

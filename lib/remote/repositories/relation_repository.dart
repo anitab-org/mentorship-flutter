@@ -65,6 +65,7 @@ class RelationRepository {
     try {
       return Relation.fromJson(body);
     } on NoSuchMethodError catch (error) {
+      print(error);
       // This means the Response Body is not a Relation. In such case the API returns a message.
       throw Failure(CustomResponse.fromJson(body).message);
     }

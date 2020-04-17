@@ -86,6 +86,7 @@ class _RelationPageState extends State<RelationPage> {
             color: Theme.of(context).accentColor,
             child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
             onPressed: () {
+              //ignore: close_sinks
               final bloc = BlocProvider.of<RelationPageBloc>(context);
 
               showDialog(
@@ -135,6 +136,7 @@ class _RelationPageState extends State<RelationPage> {
             itemCount: state.tasks.length,
             itemBuilder: (context, index) {
               Task task = state.tasks[index];
+              //ignore: close_sinks
               final bloc = BlocProvider.of<RelationPageBloc>(context);
 
               return InkWell(
@@ -184,6 +186,7 @@ class _RelationPageState extends State<RelationPage> {
   Widget _buildFab(BuildContext context, RelationPageSuccess state) {
     final _taskInputController = TextEditingController();
 
+    //ignore: close_sinks
     final bloc = BlocProvider.of<RelationPageBloc>(context);
 
     return FloatingActionButton(

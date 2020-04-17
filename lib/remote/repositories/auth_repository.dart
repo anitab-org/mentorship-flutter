@@ -24,8 +24,7 @@ class AuthRepository {
   }
 
   Future<void> register(Register register) async {
-    final body =
-        await ApiManager.callSafely(() => ApiManager.instance.authService.register(register));
+    await ApiManager.callSafely(() => ApiManager.instance.authService.register(register));
   }
 
   Future<void> deleteToken() async {

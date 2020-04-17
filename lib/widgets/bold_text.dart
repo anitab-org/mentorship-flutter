@@ -12,7 +12,7 @@ class BoldText extends StatelessWidget {
     return RichText(
       maxLines: maxLines,
       text: TextSpan(
-        style: Theme.of(context).textTheme.body1,
+        style: Theme.of(context).textTheme.bodyText2,
         children: [
           TextSpan(text: firstText, style: TextStyle(fontWeight: FontWeight.bold)),
           TextSpan(text: secondText)
