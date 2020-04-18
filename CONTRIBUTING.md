@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-* You can join us on [AnitaB.org Open Source Zulip](https://anitab-org.zulipchat.com/).  Each active repo has its own stream to direct questions to (for example #powerup or #portal).  Mentorship System stream topic - Flutter is [#mentorship-flutter](https://anitab-org.zulipchat.com/#narrow/stream/222534-mentorship-system/topic/Flutter).
+* You can join us on [AnitaB.org Open Source Zulip](https://anitab-org.zulipchat.com/).  Each active repo has its own stream to direct questions to (for example #powerup or #portal).  Mentorship System stream is [#mentorship-system](https://anitab-org.zulipchat.com/#narrow/stream/222534-mentorship-system).
 * Remember that this is an inclusive community, committed to creating a safe, positive environment.  See the full [Code of Conduct](http://www.systers.io/code-of-conduct.html).
 * Follow our [Commit Message Style Guide](https://github.com/anitab-org/mentorship-android/wiki/Commit-Message-Style-Guide) when you commit your changes.
 * Please consider raising an issue before submitting a pull request (PR) to solve a problem that is not present in our [issue tracker](https://github.com/anitab-org/mentorship-flutter/issues). This allows maintainers to first validate the issue you are trying to solve and also reference the PR to a specific issue.
@@ -14,7 +14,7 @@
 
 ## General Guidelines
 
-* If you’re just getting started work on an issue labeled “First Timers Only” in any project. Additional resources are available on our [website](http://www.systers.io).
+* If you’re just getting started work on an issue labeled “First Timers Only” in any project. 
 * In an active repository (not an archived one), choose an open issue from the issue list, claim it in the comments, and a maintainer will assign it to you.  
 * After approval you must make continuous notes on your progress in the issue while working.  If there is not at least one comment every 3 days, the maintainer can reassign the issue.
 * Create a branch specific to the issue you're working on, so that you send a PR from that branch instead of the base branch on your fork.
