@@ -78,4 +78,4 @@ improve it and polish the codebase.
 
 ### Contact us
 
-Any query? Feel free to reach out to the maintainers and our community on [AnitaB.org Open Source Zulip](https://anitab-org.zulipchat.com/). If you are interested in contributing to the mentorship system-flutter, we have a dedicated stream for this project [#mentorship-system](https://anitab-org.zulipchat.com/#narrow/stream/222534-mentorship-system/topic/Flutter), where you can ask your doubts and interact with our community. 
+In case of any query, feel free to reach out to the maintainers and our community on [AnitaB.org Open Source Zulip](https://anitab-org.zulipchat.com/). If you are interested in contributing to the mentorship system-flutter, we have a dedicated stream for this project [#mentorship-system](https://anitab-org.zulipchat.com/#narrow/stream/222534-mentorship-system/topic/Flutter), where you can ask your doubts and interact with our community. 
