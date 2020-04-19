@@ -1,4 +1,4 @@
-if [ "$TRAVIS_REPO_SLUG" != "Techno-Disaster/mentorship-flutter" ]; then
+if [ "$TRAVIS_REPO_SLUG" != "anitab-org/mentorship-flutter" ]; then
     echo "Not the original repo. Skip apk upload."
     exit 0
 fi
@@ -33,7 +33,7 @@ if [ "$TRAVIS_BRANCH" == "develop" ]; then
     git init
 
     # Copy the generated apks in to the repository we just created
-    cp $HOME/build/Techno-Disaster/mentorship-flutter/build/app/outputs/apk/release/app-release.apk $HOME/apk/
+    cp $HOME/build/anitab-org/mentorship-flutter/build/app/outputs/apk/release/app-release.apk $HOME/apk/
 
     # Add and commit the apks
     git add app-release.apk
@@ -43,7 +43,7 @@ if [ "$TRAVIS_BRANCH" == "develop" ]; then
     git branch -m apk
 
     # Pushing the apk branch to the anitab-org repository
-    git push https://Techno-Disaster:$GITHUB_TK@github.com/Techno-Disaster/mentorship-flutter apk -fq> /dev/null
+    git push https://anitab-org:$GITHUB_TK@github.com/anitab-org/mentorship-flutter apk -fq> /dev/null
     if [ $? -eq 0 ]; then
         echo "Apk push successful."
     else
