@@ -1,7 +1,7 @@
-os: 
+os:
   - linux
-sudo: required
-  addons:
+sudo: false
+addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
     sources:
@@ -9,12 +9,11 @@ sudo: required
     packages:
       - libstdc++6
       - fonts-droid
-
 before_script:
-  - chmod +x generate-apks.sh
-  - git clone https://github.com/flutter/flutter.git -b beta
+  - git clone https://github.com/flutter/flutter.git -b stable
   - ./flutter/bin/flutter doctor
 script:
-  - ./flutter/bin/flutter build apk
-after_success:
- - ./generate-apks.sh
+  - ./flutter/bin/flutter test
+cache:
+  directories:
+    - $HOME/.pub-cache
