@@ -15,4 +15,4 @@ before_script:
 script:
   - ./flutter/bin/flutter build apk
 after_success:
- - ./generate-apks.sh
+  - ./generate-apks.sh
