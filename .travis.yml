@@ -1,12 +1,13 @@
-os:
-  - linux
 language: android
+dist: trusty
 android:
   components:
     - platform-tools
     - tools
     - build-tools-28.0.3
     - android-28
+    - add-on
+    - extra
 before_script:
   - git clone https://github.com/flutter/flutter.git -b stable
   - ./flutter/bin/flutter doctor
