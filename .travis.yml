@@ -1,24 +1,14 @@
 os:
   - linux
-language: java
-jdk: oraclejdk14
-sudo: false
-addons:
-  apt:
-    # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
-    sources:
-      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
-    packages:
-      - libstdc++6
-before_cache:
-  # Do not cache a few Gradle files/directories (see https://docs.travis-ci.com/user/languages/java/#Caching)
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-cache:
-  directories:
-    # Android SDK
-    - $HOME/android-sdk-dl
-    - $HOME/android-sdk
+language: android
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools-28.0.3
+    - android-28
+before_install:
+ - yes | ${ANDROID_HOME}/tools/bin/sdkmanager "platforms;android-28"
 install:
   # Download and unzip the Android SDK tools (if not already there thanks to the cache mechanism)
   # Latest version available here: https://developer.android.com/studio/#command-tools
