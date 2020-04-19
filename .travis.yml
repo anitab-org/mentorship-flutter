@@ -13,8 +13,9 @@ before_script:
   - ./flutter/bin/flutter doctor --android-licenses
   - chmod +x generate-apks.sh
 script:
-  - pwd
   - ./flutter/bin/flutter build apk
 after_success:
-  - pwd
   - ./generate-apks.sh
+cache:
+  directories:
+    - $HOME/.pub-cache
