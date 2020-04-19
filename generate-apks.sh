@@ -33,11 +33,9 @@ if [ "$TRAVIS_BRANCH" == "develop" ]; then
     git init
 
     # Copy the generated apks in to the repository we just created
-    cp $HOME/build/Techno-Disaster/mentorship-flutter/build/app/outputs/apk/debug/app-debug.apk $HOME/apk/
     cp $HOME/build/Techno-Disaster/mentorship-flutter/build/app/outputs/apk/release/app-release.apk $HOME/apk/
 
     # Add and commit the apks
-    git add app-debug.apk
     git add app-release.apk
     git commit -m "Apk update: Travis build $TRAVIS_BUILD_NUMBER by $COMMITTER_NAME"
 
@@ -45,7 +43,7 @@ if [ "$TRAVIS_BRANCH" == "develop" ]; then
     git branch -m apk
 
     # Pushing the apk branch to the anitab-org repository
-    git push https://Techno-Disaster:${{secrets.secret}}@github.com/Techno-Disaster/mentorship-flutter apk -fq> /dev/null
+    git push https://Techno-Disaster:${{ secrets.secret }}@github.com/Techno-Disaster/mentorship-flutter apk -fq> /dev/null
     if [ $? -eq 0 ]; then
         echo "Apk push successful."
     else
