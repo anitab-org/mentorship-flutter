@@ -9,7 +9,8 @@ android:
     - add-on
     - extra
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b stable
+  - git clone https://github.com/flutter/flutter.git -b dev
+  - ./flutter/bin/flutter doctor --android-licenses
   - ./flutter/bin/flutter doctor
 script:
   - ./flutter/bin/flutter build apk
