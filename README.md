@@ -75,3 +75,7 @@ better documentation and has to be polished a bit, but I really believe these pr
 are easy to solve.
 My dream? I'll be incredibly happy, for example, if students in next year's Google Code-in will continue its development,
 improve it and polish the codebase.
+
+### Contact us
+
+Feel free to reach out to the maintainers and our community on [AnitaB.org Open Source Zulip](https://anitab-org.zulipchat.com/). If you are interested in participating in discussions related to this project, we have a dedicated stream for this project [#mentorship-system](https://anitab-org.zulipchat.com/#narrow/stream/222534-mentorship-system), where you can ask your doubts and interact with our community.
