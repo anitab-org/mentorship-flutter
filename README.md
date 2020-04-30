@@ -1,18 +1,20 @@
 # Mentorship Client
 
-Cross-platform client for [Systers&#x27; mentorship system](https://github.com/systers/mentorship-backend),
-written in [Flutter](https://flutter.dev/).
+Cross-platform client for the [AnitaB.org's](https://anitab.org/) [Mentorship System](https://github.com/anitab-org/mentorship-backend),
+written in [Flutter](https://flutter.dev/) framework.
+
+> Work in progress
 
 ![demo image](https://i.imgur.com/Xbg7Ty3.png)
 
-### How was it created?
-
-I really liked [Systers](https://github.com/systers)' Mentorship System, wanted to try Flutter and had some free time during Christmas.
-
 ### Rationale
 
-Mentorship System aims to be as inclusive as possible for everyone. It should apply
-to user's mobile operating system, too :)
+AnitaB.org aims to be as inclusive as possible for everyone. It should apply
+to user's mobile operating system, too :) That's why we decided to use Flutter
+to deliver high-quality app for everybody – Android, iOS, and web users.
+
+From the technical point of view, having one codebase for all platforms will make
+adding new featuresand bug fixes much faster.
 
 ### Work status
 
@@ -34,21 +36,24 @@ Almost everything.
 - RelationPage: updating `availableToMentor` and `needsMentoring` status doesn't work
 - About screen is basically About dialog. It's very simple, more info should be added.
 
-Occasional UI bugs may occur – in this case, please create an issue.
+Occasional UI bugs may occur – in this case, please [file an issue](https://github.com/anitab-org/mentorship-flutter/issues/new/choose).
 
 ### Overview
 
-- App _tries_ to follow Clean Architecure guidelines. Logic is separated into 4 layers:
+The architecture of the app isn't top-notch, but currently it does it job quite well. If you have an idea
+on how to improve it, feel free to create an issue.
+
+- App _tries_ to follow Clean Architecture guidelines. Logic is separated into 4 layers:
   - `UI`
   - `BLoC`
   - `Repository`
   - `Service`
 - App uses [BLoC pattern](https://bloclibrary.dev/#/coreconcepts) extensively
-- To communicate with API, [Chopper](https://pub.dev/packages/chopper) is used
+- To communicate with the API, [Chopper](https://pub.dev/packages/chopper) is used
 - To save JWT token, [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) is used
 - If you find something in code that looks a bit odd, it might be some useful extension method from `lib/extensions`
 
-### Web support
+#### Web support
 
 Flutter for Web is currently at technical preview stage. To test this functionality, I created
 a [separate branch](https://github.com/bartekpacia/mentorship-client/tree/web_preview).
@@ -67,14 +72,6 @@ To use web version of this app with your local server:
 1. Make [these small changes](https://github.com/bartekpacia/mentorship-backend/commit/5c4336fa615b0a480af196954b715410e1a41ac3) to your local webserver
    to enable CORS
 2. Run local devserver
-
-### Future?
-
-I'd love Systers to accept this project as one of theirs. I do realize it requires
-better documentation and has to be polished a bit, but I really believe these problems
-are easy to solve.
-My dream? I'll be incredibly happy, for example, if students in next year's Google Code-in will continue its development,
-improve it and polish the codebase.
 
 ### Contact us
 
