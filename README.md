@@ -1,6 +1,6 @@
 # Mentorship Client
 
-Cross-platform client for the [AnitaB.org's](https://anitab.org/) [Mentorship System](https://github.com/anitab-org/mentorship-backend),
+[Mentorship System](https://github.com/anitab-org/mentorship-backend) is an application that allows women in tech to mentor each other, on career development topics, through 1:1 relations for a certain period. This is the flutter client for this project.
 written in [Flutter](https://flutter.dev/) framework.
 
 > Work in progress
