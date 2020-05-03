@@ -19,7 +19,7 @@ adding new featuresand bug fixes much faster.
 
 ## Contributing 
 
-Please read our [Contributing guidelines](https://github.com/anitab-org/mentorship-flutter/blob/develop/CONTRIBUTING.md), [Code of Conduct](https://github.com/anitab-org/mentorship-flutter/blob/develop/code_of_conduct.md) and [Reporting Guidelines](https://github.com/anitab-org/mentorship-flutter/blob/develop/.github/reporting_guidelines.md).
+Please read our [Contributing guidelines](CONTRIBUTING.md), [Code of Conduct](code_of_conduct.md) and [Reporting Guidelines](.github/reporting_guidelines.md).
 
 If you have any questions or simply want to interact with our community, come and join us at out [AnitaB.org Open Source Zulip](https://anitab-org.zulipchat.com/#).
 We have a dedicated stream for this project [#mentorship-system](https://anitab-org.zulipchat.com/#narrow/stream/222534-mentorship-system).
