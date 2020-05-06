@@ -7,7 +7,7 @@ import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/remote/requests/change_password.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
-import 'package:package_info/package_info.dart';
+import 'package:mentorship_client/screens/settings/about.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -22,7 +22,8 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.info_outline),
               title: Text("Info"),
-              onTap: () => _showAppInfo(context),
+              onTap: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage())),
             ),
             ListTile(
               leading: Icon(Icons.feedback),
@@ -52,23 +53,6 @@ class SettingsScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Future<void> _showAppInfo(BuildContext context) async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-    showAboutDialog(
-      context: context,
-      applicationIcon: Image.asset(
-        "assets/images/mentorship_system_logo.png",
-        width: 50,
-        height: 50,
-      ),
-      applicationName: "Mentorship App",
-      applicationVersion: "version ${packageInfo.version}, build ${packageInfo.buildNumber}",
-      applicationLegalese:
-          "Client app for Mentorship System. Cross-platform version initially created by Bartek Pacia.",
     );
   }
 
