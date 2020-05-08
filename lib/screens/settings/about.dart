@@ -14,7 +14,7 @@ class AboutPage extends StatelessWidget {
             children: <Widget>[
               _buildMainCard(context),
               _buildGeneralCard(context),
-              _buildContriCard(context)
+              _buildContributingCard(context)
             ],
           ),
         ),
@@ -61,7 +61,7 @@ Widget _buildMainCard(BuildContext context) {
 }
 
 @override
-Widget _buildContriCard(BuildContext context) {
+Widget _buildContributingCard(BuildContext context) {
   return Card(
     child: Padding(
       padding: const EdgeInsets.all(8.0),
