@@ -39,9 +39,30 @@ class _RequestsPageState extends State<RequestsPage> {
 
             return TabBarView(
               children: [
-                _buildRequestsTab(context, pendingRelations),
-                _buildRequestsTab(context, pastRelations),
-                _buildRequestsTab(context, allRelations),
+                pendingRelations.length == 0
+                    ? Center(
+                        child: Text(
+                          "You don't have any pending mentorship requests.",
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      )
+                    : _buildRequestsTab(context, pendingRelations),
+                pastRelations.length == 0
+                    ? Center(
+                        child: Text(
+                          "You don't have any past mentorship requests.",
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      )
+                    : _buildRequestsTab(context, pastRelations),
+                allRelations.length == 0
+                    ? Center(
+                        child: Text(
+                          "You don't have any mentorship requests.",
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      )
+                    : _buildRequestsTab(context, allRelations),
               ],
             );
           }
