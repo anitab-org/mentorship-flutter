@@ -35,3 +35,8 @@ lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+/lib/remote/services/user_service.chopper.dart
+/lib/remote/services/task_service.chopper.dart
+/lib/remote/services/auth_service.chopper.dart
+/lib/remote/services/relation_service.chopper.dart

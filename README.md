@@ -47,19 +47,20 @@ We have a dedicated stream for this project [#mentorship-system](https://anitab-
 3. Fork and clone the [mentorship-flutter](https://github.com/anitab-org/mentorship-flutter) repository to your local machine.
 4. Open the project on your IDE. Don't be shocked if you see error warnings.
 5. Open the terminal and run `flutter channel beta` to switch from stable channel to beta channel of flutter. The beta channel is the one we are using for this project.
-6. Once done, run the project by running `flutter run` in the terminal to run the app in debug mode. To build a release build you can do the following:
+6. Some files in this project are generated and because of this, they aren't tracked by git. You need to generate manually by running `flutter pub run build_runner build`.
+7. Once done, run the project by running `flutter run` in the terminal to run the app in debug mode. To build a release build you can do the following:
 
-  *for Android app*
+  *for the Android app*
 
   In the terminal, run the `flutter build apk` command. To build the apk specific to your device arch you can run `flutter build apk --split-per-abi` or `flutter build appbundle --target-platform android-arm,android-arm64,android-x64` (remove arguments which are not required) to get only your arch build. You can read more about this [here](https://flutter.dev/docs/deployment/android)
 
-  *for IOS app*
+  *for the iOS app*
 
   To build a release for IOS app, run `flutter build ios` from the terminal. To learn more on creating build archive, release app on TestFlight or to App Store, click [here](https://flutter.dev/docs/deployment/ios).
 
+8. You are now good to go!🎉
 
-
-By default the backend of this project is set to the mentorship-backend dev server. You are now set to go.
+By default, the backend of this project is set to the mentorship-backend dev server. 
 
 ### Web support
 
