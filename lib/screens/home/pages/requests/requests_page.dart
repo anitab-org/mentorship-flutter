@@ -40,15 +40,15 @@ class _RequestsPageState extends State<RequestsPage> {
             return TabBarView(
               children: [
                 pendingRelations.length == 0
-                    ? NoRequestHelper(message: "You don't have any pending mentorship requests.")
+                    ? NoRequestsInfo(message: "You don't have any pending mentorship requests.")
                     : _buildRequestsTab(context, pendingRelations),
                 pastRelations.length == 0
-                    ? NoRequestHelper(
+                    ? NoRequestsInfo(
                         message: "You don't have any past mentorship requests.",
                       )
                     : _buildRequestsTab(context, pastRelations),
                 allRelations.length == 0
-                    ? NoRequestHelper(message: "You don't have any mentorship requests.")
+                    ? NoRequestsInfo(message: "You don't have any mentorship requests.")
                     : _buildRequestsTab(context, allRelations),
               ],
             );
@@ -120,9 +120,9 @@ class _RequestsPageState extends State<RequestsPage> {
   }
 }
 
-class NoRequestHelper extends StatelessWidget {
+class NoRequestsInfo extends StatelessWidget {
   final String message;
-  const NoRequestHelper({this.message});
+  const NoRequestsInfo({this.message});
   @override
   Widget build(BuildContext context) {
     return Center(
