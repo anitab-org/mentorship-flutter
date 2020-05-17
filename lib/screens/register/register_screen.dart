@@ -4,6 +4,10 @@ import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
+
+
 
 /// This screen will let the user to sign up into the system using name, username,
 /// email and password.
@@ -104,118 +108,164 @@ class _RegisterFormState extends State<RegisterForm> {
     return Form(
       key: _formKey,
       child: Column(
-        children: [
-          TextFormField(
-            controller: _nameController,
-            validator: _validateName,
-            decoration: InputDecoration(
-              labelText: "Name",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: spacing),
-          TextFormField(
-            controller: _usernameController,
-            validator: _validateName,
-            decoration: InputDecoration(
-              labelText: "Username",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: spacing),
-          TextFormField(
-            controller: _emailController,
-            validator: _validateEmail,
-            decoration: InputDecoration(
-              labelText: "Email",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: spacing),
-          TextFormField(
-            controller: _passwordController,
-            validator: _validatePassword,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
-                onPressed: _togglePasswordVisibility,
+          children: [
+            TextFormField(
+              controller: _nameController,
+              validator: _validateName,
+              decoration: InputDecoration(
+                labelText: "Name",
+                border: OutlineInputBorder(),
               ),
-              labelText: "Enter password",
-              border: OutlineInputBorder(),
             ),
-            obscureText: !_passwordVisible,
-          ),
-          SizedBox(height: spacing),
-          TextFormField(
-            controller: _confirmPasswordController,
-            validator: _validatePassword,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
-                onPressed: _togglePasswordVisibility,
+            SizedBox(height: spacing),
+            TextFormField(
+              controller: _usernameController,
+              validator: _validateName,
+              decoration: InputDecoration(
+                labelText: "Username",
+                border: OutlineInputBorder(),
               ),
-              labelText: "Confirm password",
-              border: OutlineInputBorder(),
             ),
-            obscureText: !_passwordVisible,
-          ),
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Text("Available to be a:"),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    value: _availableToMentor,
-                    onChanged: _toggleAvailableToMentor,
+            SizedBox(height: spacing),
+            TextFormField(
+              controller: _emailController,
+              validator: _validateEmail,
+              decoration: InputDecoration(
+                labelText: "Email",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: spacing),
+            TextFormField(
+              controller: _passwordController,
+              validator: _validatePassword,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                  onPressed: _togglePasswordVisibility,
+                ),
+                labelText: "Enter password",
+                border: OutlineInputBorder(),
+              ),
+              obscureText: !_passwordVisible,
+            ),
+            SizedBox(height: spacing),
+            TextFormField(
+              controller: _confirmPasswordController,
+              validator: _validatePassword,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                  onPressed: _togglePasswordVisibility,
+                ),
+                labelText: "Confirm password",
+                border: OutlineInputBorder(),
+              ),
+              obscureText: !_passwordVisible,
+            ),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Text("Available to be a:"),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _availableToMentor,
+                      onChanged: _toggleAvailableToMentor,
+                    ),
+                    Text("Mentor"),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _needsMentoring,
+                      onChanged: _toggleNeedsMentoring,
+                    ),
+                    Text("Mentee"),
+                  ],
+                ),
+              ],
+            ),
+
+            Column (
+              children: [
+                CheckboxListTile(
+                  title: RichText(
+                    text: TextSpan(
+                      children: [
+
+                        TextSpan(
+                          text: "I affirm that I have read and accept to be bound by the AnitaB.org ",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        TextSpan(
+                            text: "Code of Conduct",
+                            style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                launch('https://ghc.anitab.org/code-of-conduct');
+                              }
+                        ),
+                        TextSpan(
+                          text: " , ",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        TextSpan(
+                            text: "Terms",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline, color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                launch('https://anitab.org/terms-of-use');
+                              }
+                        ),
+                        TextSpan (
+                          text: " and ",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        TextSpan(
+                            text: "Privacy Policy",
+                            style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                launch('https://anitab.org/privacy-policy');
+                              }
+                        ),
+                        TextSpan(
+                          text: ". Further, I consent to use of my information for the stated purpose.",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
-                  Text("Mentor"),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _needsMentoring,
-                    onChanged: _toggleNeedsMentoring,
-                  ),
-                  Text("Mentee"),
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Checkbox(
-                value: _acceptedTermsAndConditions,
-                onChanged: _toggleTermsAndConditions,
-              ),
-              Flexible(
-                child: Text("I affirm that I have read and accept to be bound by the "
-                    "AnitaB.org Code of Conduct, Terms and Privacy Policy. Further, "
-                    "I consent to use of my information for the stated purpose."),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Text("Sign up"),
-              onPressed: () => _register(context),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  value: _acceptedTermsAndConditions,
+                  onChanged: _toggleTermsAndConditions,
+                ),
+                  ],
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: FlatButton(
-              splashColor: Theme.of(context).accentColor,
-              child: Text("Login"),
-              onPressed: () => Navigator.of(context).pop(),
+
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: RaisedButton(
+                color: Theme.of(context).accentColor,
+                child: Text("Sign up"),
+                onPressed: () => _register(context),
+              ),
             ),
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: FlatButton(
+                splashColor: Theme.of(context).accentColor,
+                child: Text("Login"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            )
+          ]
       ),
     );
   }
