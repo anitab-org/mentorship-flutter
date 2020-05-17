@@ -40,28 +40,15 @@ class _RequestsPageState extends State<RequestsPage> {
             return TabBarView(
               children: [
                 pendingRelations.length == 0
-                    ? Center(
-                        child: Text(
-                          "You don't have any pending mentorship requests.",
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                      )
+                    ? NoRequestHelper(message: "You don't have any pending mentorship requests.")
                     : _buildRequestsTab(context, pendingRelations),
                 pastRelations.length == 0
-                    ? Center(
-                        child: Text(
-                          "You don't have any past mentorship requests.",
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
+                    ? NoRequestHelper(
+                        message: "You don't have any past mentorship requests.",
                       )
                     : _buildRequestsTab(context, pastRelations),
                 allRelations.length == 0
-                    ? Center(
-                        child: Text(
-                          "You don't have any mentorship requests.",
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                      )
+                    ? NoRequestHelper(message: "You don't have any mentorship requests.")
                     : _buildRequestsTab(context, allRelations),
               ],
             );
@@ -129,6 +116,20 @@ class _RequestsPageState extends State<RequestsPage> {
           ),
         );
       },
+    );
+  }
+}
+
+class NoRequestHelper extends StatelessWidget {
+  final String message;
+  const NoRequestHelper({this.message});
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        message,
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
     );
   }
 }
