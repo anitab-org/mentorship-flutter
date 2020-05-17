@@ -32,11 +32,7 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text("Log out"),
-              onTap: () {
-                BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
-
-                Navigator.of(context).pop();
-              },
+              onTap: () => _showConfirmLogoutDialog(context),
             ),
             ListTile(
               leading: Icon(Icons.lock_outline),
@@ -56,12 +52,38 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _showChangePasswordDialog(BuildContext theContext) async {
+  void _showConfirmLogoutDialog(BuildContext context){
+    showDialog(
+      context: context,
+      builder:(context) {
+        return AlertDialog(
+          title : Text('Log Out'),
+          content: Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: ()=> Navigator.of(context).pop(),),
+            FlatButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+  Future<void> _showChangePasswordDialog(BuildContext context) async {
     final _currentPassController = TextEditingController();
     final _newPassController = TextEditingController();
 
     showDialog(
-      context: theContext,
+      context: context,
       builder: (context) => AlertDialog(
         title: Text("Change password"),
         content: Column(
@@ -88,9 +110,9 @@ class SettingsScreen extends StatelessWidget {
               try {
                 CustomResponse response =
                     await UserRepository.instance.changePassword(changePassword);
-                theContext.showSnackBar(response.message);
+                context.showSnackBar(response.message);
               } on Failure catch (failure) {
-                theContext.showSnackBar(failure.message);
+                context.showSnackBar(failure.message);
               }
 
               Navigator.of(context).pop();
@@ -98,6 +120,7 @@ class SettingsScreen extends StatelessWidget {
           ),
         ],
       ),
+
     );
   }
 }
