@@ -1,8 +1,8 @@
 # Cross-platform client for Mentorship System
 
-| Branch | [Travis](https://travis-ci.org/) 
+| Branch | [Travis](https://travis-ci.org/)
 | :---: | :---: |
-| [develop](https://github.com/anitab-org/mentorship-flutter/tree/develop) | [![Build Status](https://travis-ci.com/anitab-org/mentorship-flutter.svg?branch=develop)](https://travis-ci.com/anitab-org/mentorship-flutter) 
+| [develop](https://github.com/anitab-org/mentorship-flutter/tree/develop) | [![Build Status](https://travis-ci.com/anitab-org/mentorship-flutter.svg?branch=develop)](https://travis-ci.com/anitab-org/mentorship-flutter)
 
 Mentorship System is an application that allows women in tech to mentor each other, on career development topics, through 1:1 relations for a certain period of time.
 
@@ -21,7 +21,7 @@ to deliver a high-quality app for everybody – Android, iOS, and web users.
 From the technical point of view, having one codebase for all platforms will make
 adding new featuresand bug fixes much faster.
 
-## Contributing 
+## Contributing
 
 Please read our [Contributing guidelines](CONTRIBUTING.md), [Code of Conduct](code_of_conduct.md) and [Reporting Guidelines](.github/reporting_guidelines.md).
 
@@ -40,26 +40,9 @@ We have a dedicated stream for this project [#mentorship-system](https://anitab-
 - To save JWT token, [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) is used
 - If you find something in code that looks a bit odd, it might be some useful extension method from `lib/extensions`
 
-#### Setup instructions
+## Setup Instructions
 
-1. Install Flutter by following instructions from [flutter.dev](https://flutter.dev).
-2. Make sure you install the **Flutter** and **Dart** plugins. The installation instructions above should have instructions on this too.
-3. Fork and clone the [mentorship-flutter](https://github.com/anitab-org/mentorship-flutter) repository to your local machine.
-4. Open the project on your IDE. Don't be shocked if you see error warnings.
-5. Open the terminal and run `flutter channel beta` to switch from stable channel to beta channel of flutter. The beta channel is the one we are using for this project.
-6. Once done, run the project by running `flutter run` in the terminal to run the app in debug mode. To build a release build you can do the following:
-
-  *for Android app*
-
-  In the terminal, run the `flutter build apk` command. To build the apk specific to your device arch you can run `flutter build apk --split-per-abi` or `flutter build appbundle --target-platform android-arm,android-arm64,android-x64` (remove arguments which are not required) to get only your arch build. You can read more about this [here](https://flutter.dev/docs/deployment/android)
-
-  *for IOS app*
-
-  To build a release for IOS app, run `flutter build ios` from the terminal. To learn more on creating build archive, release app on TestFlight or to App Store, click [here](https://flutter.dev/docs/deployment/ios).
-
-
-
-By default the backend of this project is set to the mentorship-backend dev server. You are now set to go.
+In order to setup the project locally, setup instructions have been defined here(docs/setup-instructions.md)
 
 ### Web support
 
