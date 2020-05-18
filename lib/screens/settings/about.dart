@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:expandable/expandable.dart';
+import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   @override
@@ -28,7 +29,7 @@ _launchURL() async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    print("Could not launch");
+    Logger.root.warning("Error: Could not launch $url");
   }
 }
 
