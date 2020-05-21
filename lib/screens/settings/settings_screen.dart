@@ -55,28 +55,29 @@ class SettingsScreen extends StatelessWidget {
 
   void _showConfirmLogoutDialog(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Log Out'),
-            content: Text('Are you sure you want to logout?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Cancel'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              FlatButton(
-                child: Text('Confirm'),
-                onPressed: () {
-                  BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Log Out'),
+          content: Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            FlatButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
 
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _showChangePasswordDialog(BuildContext theContext) async {
@@ -84,10 +85,9 @@ class SettingsScreen extends StatelessWidget {
     final _newPassController = TextEditingController();
     showDialog(
       context: theContext,
-      builder: (BuildContext context) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text("Change password"),
         content: Column(
-          // Then, the content of your dialog.
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
