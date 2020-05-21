@@ -226,6 +226,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> showloader(BuildContext context) {
     return showDialog(
       context: context,
+      barrierDismissible: false,
       child: LoadingIndicator(),
     );
   }

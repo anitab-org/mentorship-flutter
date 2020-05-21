@@ -128,6 +128,7 @@ class SettingsScreen extends StatelessWidget {
   Future<void> showloader(BuildContext context) {
     return showDialog(
       context: context,
+      barrierDismissible: false,
       child: LoadingIndicator(),
     );
   }
