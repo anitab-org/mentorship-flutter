@@ -78,12 +78,6 @@ class SettingsScreen extends StatelessWidget {
           ],
         ),
         actions: [
-        FlatButton(
-      child: Text("Cancel"),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
           FlatButton(
             child: Text("Submit"),
             onPressed: () async {
@@ -102,7 +96,7 @@ class SettingsScreen extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-            ],
+        ],
       ),
     );
   }
