@@ -56,6 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
             final bloc = BlocProvider.of<ProfilePageBloc>(context);
 
             if (state is ProfilePageEditing) {
+              showloader(context);
               bloc.add(ProfilePageEditSubmitted(BlocProvider.of<ProfilePageBloc>(context).user));
             } else if (state is ProfilePageSuccess) {
               bloc.add(ProfilePageEditStarted());
@@ -70,6 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
           listener: (context, state) {
             if (state.message != null) {
               context.showSnackBar(state.message);
+              Navigator.of(context).pop();
             }
           },
           child: BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
@@ -218,6 +220,13 @@ class _ProfilePageState extends State<ProfilePage> {
         labelText: text,
         border: UnderlineInputBorder(),
       ),
+    );
+  }
+
+  Future<void> showloader(BuildContext context) {
+    return showDialog(
+      context: context,
+      child: LoadingIndicator(),
     );
   }
 }

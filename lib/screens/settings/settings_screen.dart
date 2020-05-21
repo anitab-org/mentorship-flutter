@@ -8,6 +8,7 @@ import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/remote/requests/change_password.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
 import 'package:mentorship_client/screens/settings/about.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -52,41 +53,41 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _showConfirmLogoutDialog(BuildContext context){
+  void _showConfirmLogoutDialog(BuildContext context) {
     showDialog(
-      context: context,
-      builder:(context) {
-        return AlertDialog(
-          title : Text('Log Out'),
-          content: Text('Are you sure you want to logout?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: ()=> Navigator.of(context).pop(),),
-            FlatButton(
-              child: Text('Confirm'),
-              onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Log Out'),
+            content: Text('Are you sure you want to logout?'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              FlatButton(
+                child: Text('Confirm'),
+                onPressed: () {
+                  BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
 
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      }
-    );
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
-  Future<void> _showChangePasswordDialog(BuildContext context) async {
+  Future<void> _showChangePasswordDialog(BuildContext theContext) async {
     final _currentPassController = TextEditingController();
     final _newPassController = TextEditingController();
-
     showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
+      context: theContext,
+      builder: (BuildContext context) => AlertDialog(
         title: Text("Change password"),
         content: Column(
+          // Then, the content of your dialog.
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
@@ -107,20 +108,27 @@ class SettingsScreen extends StatelessWidget {
                 currentPassword: _currentPassController.text,
                 newPassword: _newPassController.text,
               );
+              Navigator.of(context).pop();
+              showloader(context);
               try {
                 CustomResponse response =
                     await UserRepository.instance.changePassword(changePassword);
-                context.showSnackBar(response.message);
+                theContext.showSnackBar(response.message);
               } on Failure catch (failure) {
-                context.showSnackBar(failure.message);
+                theContext.showSnackBar(failure.message);
               }
-
-              Navigator.of(context).pop();
+              Navigator.of(theContext).pop();
             },
           ),
         ],
       ),
+    );
+  }
 
+  Future<void> showloader(BuildContext context) {
+    return showDialog(
+      context: context,
+      child: LoadingIndicator(),
     );
   }
 }
