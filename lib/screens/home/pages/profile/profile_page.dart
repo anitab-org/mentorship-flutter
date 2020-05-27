@@ -56,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
             final bloc = BlocProvider.of<ProfilePageBloc>(context);
 
             if (state is ProfilePageEditing) {
-              showloader(context);
+              showProgressIndicator(context);
               bloc.add(ProfilePageEditSubmitted(BlocProvider.of<ProfilePageBloc>(context).user));
             } else if (state is ProfilePageSuccess) {
               bloc.add(ProfilePageEditStarted());
@@ -211,23 +211,15 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
 
-  _buildTextFormField(String text, bool editing, TextEditingController controller) {
-    return TextFormField(
-      controller: controller,
-      enabled: editing,
-      decoration: InputDecoration(
-        labelText: text,
-        border: UnderlineInputBorder(),
-      ),
-    );
-  }
-
-  Future<void> showloader(BuildContext context) {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      child: LoadingIndicator(),
-    );
-  }
+_buildTextFormField(String text, bool editing, TextEditingController controller) {
+  return TextFormField(
+    controller: controller,
+    enabled: editing,
+    decoration: InputDecoration(
+      labelText: text,
+      border: UnderlineInputBorder(),
+    ),
+  );
 }

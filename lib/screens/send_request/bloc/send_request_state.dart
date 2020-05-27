@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 abstract class SendRequestState extends Equatable {
-  final String message;
+  String message;
 
   SendRequestState({this.message});
 

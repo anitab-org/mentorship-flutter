@@ -80,11 +80,11 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _showChangePasswordDialog(BuildContext theContext) async {
+  Future<void> _showChangePasswordDialog(BuildContext topcontext) async {
     final _currentPassController = TextEditingController();
     final _newPassController = TextEditingController();
     showDialog(
-      context: theContext,
+      context: topcontext,
       builder: (context) => AlertDialog(
         title: Text("Change password"),
         content: Column(
@@ -109,27 +109,19 @@ class SettingsScreen extends StatelessWidget {
                 newPassword: _newPassController.text,
               );
               Navigator.of(context).pop();
-              showloader(context);
+              showProgressIndicator(context);
               try {
                 CustomResponse response =
                     await UserRepository.instance.changePassword(changePassword);
-                theContext.showSnackBar(response.message);
+                topcontext.showSnackBar(response.message);
               } on Failure catch (failure) {
-                theContext.showSnackBar(failure.message);
+                topcontext.showSnackBar(failure.message);
               }
-              Navigator.of(theContext).pop();
+              Navigator.of(topcontext).pop();
             },
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> showloader(BuildContext context) {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      child: LoadingIndicator(),
     );
   }
 }
