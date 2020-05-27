@@ -98,6 +98,7 @@ class BottomLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.only(bottom: 8.0),
       alignment: Alignment.center,
       child: Center(
         child: SizedBox(

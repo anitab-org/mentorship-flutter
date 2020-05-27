@@ -27,11 +27,8 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
           yield MembersPageLoading();
           final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
           yield MembersPageSuccess(users: users, hasReachedMax: false);
-          print(currentState);
         }
         if (currentState is MembersPageSuccess) {
-          print("bloc number");
-          print(currentState.users.length ~/ 10);
           final users =
               await userRepository.getVerifiedUsers((currentState.users.length ~/ 10) + 1);
           yield users.isEmpty
@@ -41,7 +38,6 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
                   hasReachedMax: false,
                 );
         }
-        print(currentState);
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield MembersPageFailure(failure.message);
