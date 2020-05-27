@@ -34,3 +34,29 @@ Apart from [formatting your code using `dartfmt`](https://flutter.dev/docs/devel
 
   **Visual Studio Code**:
   <img width="964" alt="VSCode format" src="https://user-images.githubusercontent.com/40357511/80772789-21e10780-8b58-11ea-9e22-7ebdf0b61977.png">
+
+- To create reusable pieces of UI, create a new class extending `StatelessWidget`. Do not create functions returning `Widget`.
+  [Why?](https://stackoverflow.com/questions/53234825/what-is-the-difference-between-functions-and-classes-to-create-reusable-widgets)
+
+  Example of **bad code**
+
+  ```
+  Widget _buildSomeWidgets(BuildContext context) {
+    return Center(
+      child: Text("Hi!"),
+    );
+  }
+  ```
+
+  Example of **good code**
+
+  ```
+  class _SomeWidgets extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return Center(
+        child: Text("Hi!"),
+      );
+    }
+  }
+  ```

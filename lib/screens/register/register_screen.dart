@@ -39,6 +39,7 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
+  
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
@@ -51,7 +52,7 @@ class _RegisterFormState extends State<RegisterForm> {
   bool _availableToMentor = false;
   bool _needsMentoring = false;
   bool _acceptedTermsAndConditions = false;
-
+  int _radiovalue;
   void _togglePasswordVisibility() {
     setState(() {
       _passwordVisible = !_passwordVisible;
@@ -79,15 +80,21 @@ class _RegisterFormState extends State<RegisterForm> {
     return null;
   }
 
-  void _toggleAvailableToMentor(bool value) {
+  void _handleRadioValueChange(int value) {
     setState(() {
-      _availableToMentor = !_availableToMentor;
-    });
-  }
-
-  void _toggleNeedsMentoring(bool value) {
-    setState(() {
-      _needsMentoring = !_needsMentoring;
+      _radiovalue = value;
+      switch (_radiovalue) {
+        case 0:
+          _availableToMentor = !_availableToMentor;
+          break;
+        case 1:
+          _needsMentoring = !_needsMentoring;
+          break;
+        case 2:
+          _needsMentoring = !_needsMentoring;
+          _availableToMentor = !_availableToMentor;
+          break;
+      }
     });
   }
 
@@ -168,20 +175,32 @@ class _RegisterFormState extends State<RegisterForm> {
             children: [
               Row(
                 children: [
-                  Checkbox(
-                    value: _availableToMentor,
-                    onChanged: _toggleAvailableToMentor,
+                  Radio(
+                    value: 0,
+                    groupValue: _radiovalue,
+                    onChanged: _handleRadioValueChange,
                   ),
                   Text("Mentor"),
                 ],
               ),
               Row(
                 children: [
-                  Checkbox(
-                    value: _needsMentoring,
-                    onChanged: _toggleNeedsMentoring,
+                  Radio(
+                    value: 1,
+                    groupValue: _radiovalue,
+                    onChanged: _handleRadioValueChange,
                   ),
                   Text("Mentee"),
+                ],
+              ),
+              Row(
+                children: [
+                  Radio(
+                    value: 2,
+                    groupValue: _radiovalue,
+                    onChanged: _handleRadioValueChange,
+                  ),
+                  Text("Both"),
                 ],
               ),
             ],

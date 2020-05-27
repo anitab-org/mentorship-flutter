@@ -39,9 +39,17 @@ class _RequestsPageState extends State<RequestsPage> {
 
             return TabBarView(
               children: [
-                _buildRequestsTab(context, pendingRelations),
-                _buildRequestsTab(context, pastRelations),
-                _buildRequestsTab(context, allRelations),
+                pendingRelations.length == 0
+                    ? NoRequestsInfo(message: "You don't have any pending mentorship requests.")
+                    : _buildRequestsTab(context, pendingRelations),
+                pastRelations.length == 0
+                    ? NoRequestsInfo(
+                        message: "You don't have any past mentorship requests.",
+                      )
+                    : _buildRequestsTab(context, pastRelations),
+                allRelations.length == 0
+                    ? NoRequestsInfo(message: "You don't have any mentorship requests.")
+                    : _buildRequestsTab(context, allRelations),
               ],
             );
           }
@@ -108,6 +116,20 @@ class _RequestsPageState extends State<RequestsPage> {
           ),
         );
       },
+    );
+  }
+}
+
+class NoRequestsInfo extends StatelessWidget {
+  final String message;
+  const NoRequestsInfo({this.message});
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        message,
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
     );
   }
 }
