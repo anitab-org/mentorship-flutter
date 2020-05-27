@@ -22,10 +22,9 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
     final currentState = state;
 
     if (event is MembersPageShowed && !_hasReachedMax(currentState)) {
-      yield MembersPageLoading();
-      // if (event is Fetch && !_hasReachedMax(currentState)) {
       try {
         if (currentState is MembersPageInitial) {
+          yield MembersPageLoading();
           final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
           yield MembersPageSuccess(users: users, hasReachedMax: false);
           print(currentState);
@@ -33,7 +32,8 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
         if (currentState is MembersPageSuccess) {
           print("bloc number");
           print(currentState.users.length ~/ 10);
-          final users = await userRepository.getVerifiedUsers(currentState.users.length ~/ 10);
+          final users =
+              await userRepository.getVerifiedUsers((currentState.users.length ~/ 10) + 1);
           yield users.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
               : MembersPageSuccess(
@@ -42,8 +42,6 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
                 );
         }
         print(currentState);
-        // final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
-        // yield MembersPageSuccess(users);
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield MembersPageFailure(failure.message);

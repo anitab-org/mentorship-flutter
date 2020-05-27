@@ -7,11 +7,4 @@ abstract class MembersPageEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class MembersPageShowed extends MembersPageEvent {
-  final int pageNumber;
-
-  MembersPageShowed(this.pageNumber);
-
-  @override
-  List<Object> get props => [pageNumber];
-}
+class MembersPageShowed extends MembersPageEvent {}
