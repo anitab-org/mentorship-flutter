@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
@@ -65,7 +66,7 @@ class RelationRepository {
     try {
       return Relation.fromJson(body);
     } on NoSuchMethodError catch (error) {
-      print(error);
+      Logger.root.info(error);
       // This means the Response Body is not a Relation. In such case the API returns a message.
       throw Failure(CustomResponse.fromJson(body).message);
     }

@@ -35,6 +35,16 @@ Apart from [formatting your code using `dartfmt`](https://flutter.dev/docs/devel
   **Visual Studio Code**:
   <img width="964" alt="VSCode format" src="https://user-images.githubusercontent.com/40357511/80772789-21e10780-8b58-11ea-9e22-7ebdf0b61977.png">
 
+
+- When you want to print something to the console, *do not* use `print()`; use `Logger.root` instead. You should also use appropriate log leve. Example:
+    ```
+    if (token != null) {
+          Logger.root.info("Found a token.");
+        } else {
+          Logger.root.severe("Error: no token!");
+        }
+    ```
+
 - To create reusable pieces of UI, create a new class extending `StatelessWidget`. Do not create functions returning `Widget`.
   [Why?](https://stackoverflow.com/questions/53234825/what-is-the-difference-between-functions-and-classes-to-create-reusable-widgets)
 
@@ -60,3 +70,4 @@ Apart from [formatting your code using `dartfmt`](https://flutter.dev/docs/devel
     }
   }
   ```
+
