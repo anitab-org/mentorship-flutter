@@ -24,7 +24,7 @@ if [ "$TRAVIS_BRANCH" == "develop" ]; then
 
     # Setting up git configurations
     git config --global user.name "Techno-Disaster"
-    git config --global user.email "nitnnirve@gmail.com"
+    git config --global user.email "nitinnirve@gmail.com"
 
     # Creating a new git repository
     cd $HOME
