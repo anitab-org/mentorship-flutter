@@ -16,7 +16,7 @@ abstract class UserService extends ChopperService {
   @Get(path: "users/verified")
   Future<Response<List<dynamic>>> getVerifiedUsers({
     @Query("page") int page,
-    @Query("per_page") int perPage = 10,
+    @Query("per_page") int perPage = 20,
   });
 
   /// Returns the current user profile

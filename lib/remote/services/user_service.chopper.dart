@@ -24,8 +24,7 @@ class _$UserService extends UserService {
   }
 
   @override
-  Future<Response<List<dynamic>>> getVerifiedUsers(
-      {int page, int perPage = 10}) {
+  Future<Response<List<dynamic>>> getVerifiedUsers({int page, int perPage = 20}) {
     final $url = 'users/verified';
     final $params = <String, dynamic>{'page': page, 'per_page': perPage};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
@@ -55,8 +54,7 @@ class _$UserService extends UserService {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> changePassword(
-      ChangePassword changePassword) {
+  Future<Response<Map<String, dynamic>>> changePassword(ChangePassword changePassword) {
     final $url = 'user/change_password';
     final $body = changePassword;
     final $request = Request('PUT', $url, client.baseUrl, body: $body);
