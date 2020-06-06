@@ -52,75 +52,110 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _showConfirmLogoutDialog(BuildContext context){
+  void _showConfirmLogoutDialog(BuildContext context) {
     showDialog(
-      context: context,
-      builder:(context) {
-        return AlertDialog(
-          title : Text('Log Out'),
-          content: Text('Are you sure you want to logout?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: ()=> Navigator.of(context).pop(),),
-            FlatButton(
-              child: Text('Confirm'),
-              onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Log Out'),
+            content: Text('Are you sure you want to logout?'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              FlatButton(
+                child: Text('Confirm'),
+                onPressed: () {
+                  BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
 
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      }
-    );
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> _showChangePasswordDialog(BuildContext context) async {
     final _currentPassController = TextEditingController();
     final _newPassController = TextEditingController();
+    final _newPassConfirmController = TextEditingController();
+    bool _passwordVisible = false;
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Change password"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: _currentPassController,
-              decoration: InputDecoration(labelText: "Current password"),
-            ),
-            TextFormField(
-              controller: _newPassController,
-              decoration: InputDecoration(labelText: "New password"),
-            ),
-          ],
-        ),
-        actions: [
-          FlatButton(
-            child: Text("Submit"),
-            onPressed: () async {
-              ChangePassword changePassword = ChangePassword(
-                currentPassword: _currentPassController.text,
-                newPassword: _newPassController.text,
-              );
-              try {
-                CustomResponse response =
-                    await UserRepository.instance.changePassword(changePassword);
-                context.showSnackBar(response.message);
-              } on Failure catch (failure) {
-                context.showSnackBar(failure.message);
-              }
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          void _togglePassVisibility() {
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          }
 
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+          return AlertDialog(
+            title: Text("Change password"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _currentPassController,
+                  decoration: InputDecoration(labelText: "Current password"),
+                ),
+                TextFormField(
+                  controller: _newPassController,
+                  decoration: InputDecoration(
+                    labelText: "New password",
+                    suffixIcon: IconButton(
+                      icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                      onPressed: _togglePassVisibility,
+                    ),
+                  ),
+                  obscureText: !_passwordVisible,
+                ),
+                TextFormField(
+                  controller: _newPassConfirmController,
+                  decoration: InputDecoration(
+                    labelText: "Confirm password",
+                    suffixIcon: IconButton(
+                      icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                      onPressed: _togglePassVisibility,
+                    ),
+                  ),
+                  obscureText: !_passwordVisible
+                  ,
+                )
+              ],
+            ),
+            actions: [
+              FlatButton(
+                child: Text("Submit"),
+                onPressed: () async {
+                  if (_newPassConfirmController.text != _newPassController.text) {
+                    _newPassController.clear();
+                    _newPassConfirmController.clear();
+                  } else {
+                    ChangePassword changePassword = ChangePassword(
+                      currentPassword: _currentPassController.text,
+                      newPassword: _newPassController.text,
+                    );
+                    try {
+                      CustomResponse response =
+                          await UserRepository.instance.changePassword(changePassword);
+                      context.showSnackBar(response.message);
+                    } on Failure catch (failure) {
+                      context.showSnackBar(failure.message);
+                    }
+
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
+          );
+        },
       ),
-
     );
   }
 }
