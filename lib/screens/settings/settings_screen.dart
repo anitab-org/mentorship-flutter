@@ -82,79 +82,113 @@ class SettingsScreen extends StatelessWidget {
     final _currentPassController = TextEditingController();
     final _newPassController = TextEditingController();
     final _newPassConfirmController = TextEditingController();
-    bool _passwordVisible = false;
+    final _formKey = GlobalKey<FormState>();
+    bool _newPasswordVisible = false;
+    bool _currentPasswordVisible = false;
+    bool _confirmPasswordVisible = false;
+
+    String _validatePasswords(String password) {
+      if (password.isEmpty) {
+        return "This field cannot be empty";
+      } else {
+        return null;
+      }
+    }
+
+    String _validateConfirmPass(String password) {
+      if (password.isEmpty) {
+        return "This field cannot be empty";
+      } else if (password != _newPassController.text) {
+        return "Passwords do not match";
+      } else {
+        return null;
+      }
+    }
 
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) {
-          void _togglePassVisibility() {
-            setState(() {
-              _passwordVisible = !_passwordVisible;
-            });
-          }
-
-          return AlertDialog(
-            title: Text("Change password"),
-            content: Column(
+        builder: (context, setState) => AlertDialog(
+          title: Text("Change password"),
+          content: Form(
+            key: _formKey,
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
                   controller: _currentPassController,
-                  decoration: InputDecoration(labelText: "Current password"),
+                  decoration: InputDecoration(
+                    labelText: "Current password",
+                    suffixIcon: IconButton(
+                      icon: Icon(_currentPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _currentPasswordVisible = !_currentPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) => _validatePasswords(value),
+                  obscureText: !_currentPasswordVisible,
                 ),
                 TextFormField(
                   controller: _newPassController,
                   decoration: InputDecoration(
                     labelText: "New password",
                     suffixIcon: IconButton(
-                      icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
-                      onPressed: _togglePassVisibility,
+                      icon: Icon(_newPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _newPasswordVisible = !_newPasswordVisible;
+                        });
+                      },
                     ),
                   ),
-                  obscureText: !_passwordVisible,
+                  validator: (value) => _validatePasswords(value),
+                  obscureText: !_newPasswordVisible,
                 ),
                 TextFormField(
                   controller: _newPassConfirmController,
                   decoration: InputDecoration(
                     labelText: "Confirm password",
                     suffixIcon: IconButton(
-                      icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
-                      onPressed: _togglePassVisibility,
+                      icon: Icon(_confirmPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _confirmPasswordVisible = !_confirmPasswordVisible;
+                        });
+                      },
                     ),
                   ),
-                  obscureText: !_passwordVisible
-                  ,
-                )
+                  obscureText: !_confirmPasswordVisible,
+                  validator: (value) => _validateConfirmPass(value),
+                ),
               ],
             ),
-            actions: [
-              FlatButton(
-                child: Text("Submit"),
-                onPressed: () async {
-                  if (_newPassConfirmController.text != _newPassController.text) {
-                    _newPassController.clear();
-                    _newPassConfirmController.clear();
-                  } else {
-                    ChangePassword changePassword = ChangePassword(
-                      currentPassword: _currentPassController.text,
-                      newPassword: _newPassController.text,
-                    );
-                    try {
-                      CustomResponse response =
-                          await UserRepository.instance.changePassword(changePassword);
-                      context.showSnackBar(response.message);
-                    } on Failure catch (failure) {
-                      context.showSnackBar(failure.message);
-                    }
-
-                    Navigator.of(context).pop();
+          ),
+          actions: [
+            FlatButton(
+              child: Text("Submit"),
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  ChangePassword changePassword = ChangePassword(
+                    currentPassword: _currentPassController.text,
+                    newPassword: _newPassController.text,
+                  );
+                  try {
+                    CustomResponse response =
+                        await UserRepository.instance.changePassword(changePassword);
+                    context.showSnackBar(response.message);
+                  } on Failure catch (failure) {
+                    context.showSnackBar(failure.message);
                   }
-                },
-              ),
-            ],
-          );
-        },
+
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
