@@ -57,15 +57,15 @@ class SettingsScreen extends StatelessWidget {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Log Out'),
+            title: Text("Log Out"),
             content: Text('Are you sure you want to logout?'),
             actions: <Widget>[
               FlatButton(
-                child: Text('Cancel'),
+                child: Text("Cancel"),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               FlatButton(
-                child: Text('Confirm'),
+                child: Text("Confirm"),
                 onPressed: () {
                   BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
 
