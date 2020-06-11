@@ -34,6 +34,7 @@ class _RelationPageState extends State<RelationPage> {
           listener: (context, state) {
             if (state.message != null) {
               context.showSnackBar(state.message);
+              Navigator.of(context).pop();
             }
           },
           child: BlocBuilder<RelationPageBloc, RelationPageState>(
@@ -152,6 +153,7 @@ class _RelationPageState extends State<RelationPage> {
                           onPressed: () {
                             bloc.add(TaskDeleted(state.relation, task.id));
                             Navigator.of(context).pop();
+                            showProgressIndicator(context);
                           },
                         )
                       ],
@@ -163,8 +165,8 @@ class _RelationPageState extends State<RelationPage> {
                     GestureDetector(
                       onTap: () {
                         if (!task.isDone) {
-                          context.toast("hey");
                           bloc.add(TaskCompleted(state.relation, task.id));
+                          showProgressIndicator(context);
                         } else
                           context.toast("Task already achieved.");
                       },
@@ -215,6 +217,7 @@ class _RelationPageState extends State<RelationPage> {
                   );
 
                   Navigator.of(context).pop();
+                  showProgressIndicator(context);
                 },
               )
             ],
