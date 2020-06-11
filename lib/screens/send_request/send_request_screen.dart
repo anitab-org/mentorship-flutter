@@ -128,10 +128,11 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
                         lastDate:
                             DateTime(initialDate.year, initialDate.month, initialDate.day + 168),
                       );
-
-                      setState(() {
-                        _endDate = newlySelectedDate;
-                      });
+                      if(newlySelectedDate != null){
+                        setState(() {
+                          _endDate = newlySelectedDate;
+                        });
+                      }
                     },
                     icon: Icon(Icons.calendar_today),
                   ),

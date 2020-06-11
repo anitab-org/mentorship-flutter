@@ -12,9 +12,9 @@ import './bloc.dart';
 
 class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   final UserRepository userRepository;
-  User user; // User object which will receive possible edits
+  User _user; // User object which will receive possible edits
 
-  ProfilePageBloc({@required this.userRepository, this.user}) : assert(userRepository != null);
+  ProfilePageBloc({@required this.userRepository}) : assert(userRepository != null);
 
   @override
   ProfilePageState get initialState => ProfilePageInitial();
@@ -24,15 +24,15 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
     if (event is ProfilePageShowed) {
       yield ProfilePageLoading();
       try {
-        user = await userRepository.getCurrentUser();
-        yield ProfilePageSuccess(user, message: event.message);
+        _user = await userRepository.getCurrentUser();
+        yield ProfilePageSuccess(_user, message: event.message);
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield ProfilePageFailure(message: failure.message);
       }
     }
     if (event is ProfilePageEditStarted) {
-      yield ProfilePageEditing(user);
+      yield ProfilePageEditing(_user);
     }
 
     if (event is ProfilePageEditSubmitted) {
