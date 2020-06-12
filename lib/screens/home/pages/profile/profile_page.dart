@@ -134,123 +134,126 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _createPage(BuildContext context, User user, bool editing) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          SizedBox(height: 24),
-          Center(
-            child: ClipOval(
-              child: Container(
-                color: Colors.deepPurple,
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.width / 2,
+    return Opacity(
+      opacity: editing ? 1.0 : 0.5,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            SizedBox(height: 24),
+            Center(
+              child: ClipOval(
+                child: Container(
+                  color: Colors.deepPurple,
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: MediaQuery.of(context).size.width / 2,
+                ),
               ),
             ),
-          ),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: TextFormField(
-                    controller: _nameController,
-                    enabled: editing,
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: TextFormField(
+                      controller: _nameController,
+                      enabled: editing,
+                      onSaved: (value) {
+                        user.name = value;
+                      },
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(
+                        border: const UnderlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _usernameController,
+                    enabled: false,
                     onSaved: (value) {
                       user.name = value;
                     },
-                    textAlign: TextAlign.center,
                     decoration: const InputDecoration(
+                      labelText: "Username",
                       border: const UnderlineInputBorder(),
                     ),
                   ),
-                ),
-                TextFormField(
-                  controller: _usernameController,
-                  enabled: false,
-                  onSaved: (value) {
-                    user.name = value;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: "Username",
-                    border: const UnderlineInputBorder(),
-                  ),
-                ),
-                TextFormField(
-                  controller: _emailController,
-                  enabled: false,
-                  onSaved: (value) {
-                    user.email = value;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: "Email",
-                    border: const UnderlineInputBorder(),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Available to mentor"),
-                    Checkbox(
-                      value: _availableToMentor,
-                      onChanged: editing
-                          ? (value) {
-                              setState(() {
-                                _availableToMentor = value;
-                              });
-                            }
-                          : null,
+                  TextFormField(
+                    controller: _emailController,
+                    enabled: false,
+                    onSaved: (value) {
+                      user.email = value;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      border: const UnderlineInputBorder(),
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Needs mentoring"),
-                    Checkbox(
-                      value: _needsMentoring,
-                      onChanged: editing
-                          ? (value) {
-                              setState(() {
-                                _needsMentoring = value;
-                              });
-                            }
-                          : null,
-                    ),
-                  ],
-                ),
-                _buildTextFormField(
-                  "Bio",
-                  editing,
-                  _bioController,
-                  (value) {
-                    user.bio = value;
-                  },
-                ),
-                _buildTextFormField("Slack username", editing, _slackController, (value) {
-                  user.slackUsername = value;
-                }),
-                _buildTextFormField("Location", editing, _locationController, (value) {
-                  user.location = value;
-                }),
-                _buildTextFormField("Occupation", editing, _occupationController, (value) {
-                  user.occupation = value;
-                }),
-                _buildTextFormField("Organization", editing, _organizationController, (value) {
-                  user.organization = value;
-                }),
-                _buildTextFormField("Skills", editing, _skillsController, (value) {
-                  user.skills = value;
-                }),
-                _buildTextFormField("Interests", editing, _interestsController, (value) {
-                  user.interests = value;
-                }),
-              ],
-            ),
-          )
-        ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Available to mentor"),
+                      Checkbox(
+                        value: _availableToMentor,
+                        onChanged: editing
+                            ? (value) {
+                                setState(() {
+                                  _availableToMentor = value;
+                                });
+                              }
+                            : null,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Needs mentoring"),
+                      Checkbox(
+                        value: _needsMentoring,
+                        onChanged: editing
+                            ? (value) {
+                                setState(() {
+                                  _needsMentoring = value;
+                                });
+                              }
+                            : null,
+                      ),
+                    ],
+                  ),
+                  _buildTextFormField(
+                    "Bio",
+                    editing,
+                    _bioController,
+                    (value) {
+                      user.bio = value;
+                    },
+                  ),
+                  _buildTextFormField("Slack username", editing, _slackController, (value) {
+                    user.slackUsername = value;
+                  }),
+                  _buildTextFormField("Location", editing, _locationController, (value) {
+                    user.location = value;
+                  }),
+                  _buildTextFormField("Occupation", editing, _occupationController, (value) {
+                    user.occupation = value;
+                  }),
+                  _buildTextFormField("Organization", editing, _organizationController, (value) {
+                    user.organization = value;
+                  }),
+                  _buildTextFormField("Skills", editing, _skillsController, (value) {
+                    user.skills = value;
+                  }),
+                  _buildTextFormField("Interests", editing, _interestsController, (value) {
+                    user.interests = value;
+                  }),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
