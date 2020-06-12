@@ -29,6 +29,8 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //ignore: close_sinks
+
     return BlocProvider<SendRequestBloc>(
       create: (context) => SendRequestBloc(relationRepository: RelationRepository.instance),
       child: Scaffold(
@@ -40,7 +42,7 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
             if (state.message != null) {
               context.showSnackBar(state.message);
               Navigator.of(context).pop();
-              state.message = null;
+              BlocProvider.of<SendRequestBloc>(context).add(ResetSnackbarMessage());
             }
           },
           child: Builder(
@@ -128,7 +130,7 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
                         lastDate:
                             DateTime(initialDate.year, initialDate.month, initialDate.day + 168),
                       );
-                      if(newlySelectedDate != null){
+                      if (newlySelectedDate != null) {
                         setState(() {
                           _endDate = newlySelectedDate;
                         });
