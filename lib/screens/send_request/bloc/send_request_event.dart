@@ -16,5 +16,5 @@ class RelationRequestSent extends SendRequestEvent {
 
 class ResetSnackbarMessage extends SendRequestEvent {
   @override
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => null;
 }

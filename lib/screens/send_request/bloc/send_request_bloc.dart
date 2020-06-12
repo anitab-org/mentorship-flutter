@@ -29,12 +29,7 @@ class SendRequestBloc extends Bloc<SendRequestEvent, SendRequestState> {
       }
     }
     if (event is ResetSnackbarMessage) {
-      try {
-        yield InitialSendRequestState(message: null);
-      } on Failure catch (failure) {
-        Logger.root.severe("SendRequestBloc: ${failure.message}");
-        yield InitialSendRequestState(message: failure.message);
-      }
+      yield InitialSendRequestState(message: null);
     }
   }
 }
