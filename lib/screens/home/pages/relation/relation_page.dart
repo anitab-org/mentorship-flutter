@@ -32,7 +32,7 @@ class _RelationPageState extends State<RelationPage> {
         ),
         body: BlocListener<RelationPageBloc, RelationPageState>(
           listener: (context, state) {
-            if (state.message != null) {
+            if (state.message != null && state is RelationPageSuccess) {
               context.showSnackBar(state.message);
               Navigator.of(context).pop();
             }
