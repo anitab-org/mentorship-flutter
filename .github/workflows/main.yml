@@ -24,7 +24,6 @@ jobs:
       - run: git clone https://github.com/flutter/flutter.git -b beta _flutter --depth 1
       - run: echo "::add-path::$GITHUB_WORKSPACE/_flutter/bin"
       - run: flutter pub upgrade
-      - run: flutter pub get
         working-directory: ./
       - run: flutter build ios --no-codesign
   buildandroid:
@@ -38,6 +37,5 @@ jobs:
       - run: git clone https://github.com/flutter/flutter.git -b beta _flutter --depth 1
       - run: echo "::add-path::$GITHUB_WORKSPACE/_flutter/bin"
       - run: flutter pub upgrade
-      - run: flutter pub get
         working-directory: ./
       - run: flutter build appbundle
