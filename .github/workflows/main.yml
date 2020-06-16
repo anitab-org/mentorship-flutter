@@ -37,6 +37,7 @@ jobs:
           java-version: '12.x'
       - run: git clone https://github.com/flutter/flutter.git -b beta --depth 1
       - run: export PATH="$PATH:`pwd`/flutter/bin"
+      - run: which flutter
       - run: flutter pub get
         working-directory: ./
       - run: flutter build appbundle
