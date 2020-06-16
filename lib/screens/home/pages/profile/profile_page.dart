@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     context.bloc<ProfilePageBloc>()..add(ProfilePageShowed());
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 500),
       upperBound: 0.5,
     );
     super.initState();
