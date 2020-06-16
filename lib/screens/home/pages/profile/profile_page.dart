@@ -10,7 +10,7 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _usernameController = TextEditingController(); // not changeable
@@ -25,10 +25,16 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _availableToMentor;
   bool _needsMentoring;
   bool editing = false;
+  AnimationController _animationController;
 
   @override
   void initState() {
     context.bloc<ProfilePageBloc>()..add(ProfilePageShowed());
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 400),
+      upperBound: 0.5,
+    );
     super.initState();
   }
 
@@ -64,7 +70,9 @@ class _ProfilePageState extends State<ProfilePage> {
               user.interests = _interestsController.text;
 
               bloc.add(ProfilePageEditSubmitted(user));
+              _animationController.reverse();
             } else if (state is ProfilePageSuccess) {
+              _animationController.forward();
               bloc.add(ProfilePageEditStarted());
             }
           },
@@ -134,8 +142,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _createPage(BuildContext context, User user, bool editing) {
-    return Opacity(
-      opacity: editing ? 1.0 : 0.5,
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return Opacity(
+          opacity: 0.5 + _animationController.value,
+          child: child,
+        );
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
