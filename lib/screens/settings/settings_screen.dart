@@ -83,9 +83,7 @@ class SettingsScreen extends StatelessWidget {
     final _newPassController = TextEditingController();
     final _newPassConfirmController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
-    bool _newPasswordVisible = false;
-    bool _currentPasswordVisible = false;
-    bool _confirmPasswordVisible = false;
+    bool _passwordVisible = false;
 
     String _validatePasswords(String password) {
       if (password.isEmpty) {
@@ -108,87 +106,83 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: Text("Change password"),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: _currentPassController,
-                  decoration: InputDecoration(
-                    labelText: "Current password",
-                    suffixIcon: IconButton(
-                      icon: Icon(_currentPasswordVisible ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _currentPasswordVisible = !_currentPasswordVisible;
-                        });
-                      },
-                    ),
-                  ),
-                  validator: (value) => _validatePasswords(value),
-                  obscureText: !_currentPasswordVisible,
-                ),
-                TextFormField(
-                  controller: _newPassController,
-                  decoration: InputDecoration(
-                    labelText: "New password",
-                    suffixIcon: IconButton(
-                      icon: Icon(_newPasswordVisible ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _newPasswordVisible = !_newPasswordVisible;
-                        });
-                      },
-                    ),
-                  ),
-                  validator: (value) => _validatePasswords(value),
-                  obscureText: !_newPasswordVisible,
-                ),
-                TextFormField(
-                  controller: _newPassConfirmController,
-                  decoration: InputDecoration(
-                    labelText: "Confirm password",
-                    suffixIcon: IconButton(
-                      icon: Icon(_confirmPasswordVisible ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _confirmPasswordVisible = !_confirmPasswordVisible;
-                        });
-                      },
-                    ),
-                  ),
-                  obscureText: !_confirmPasswordVisible,
-                  validator: (value) => _validateConfirmPass(value),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            FlatButton(
-              child: Text("Submit"),
-              onPressed: () async {
-                if (_formKey.currentState.validate()) {
-                  ChangePassword changePassword = ChangePassword(
-                    currentPassword: _currentPassController.text,
-                    newPassword: _newPassController.text,
-                  );
-                  try {
-                    CustomResponse response =
-                        await UserRepository.instance.changePassword(changePassword);
-                    context.showSnackBar(response.message);
-                  } on Failure catch (failure) {
-                    context.showSnackBar(failure.message);
-                  }
+        builder: (context, setState) {
+          void _togglePasswordVisibility() {
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          }
 
-                  Navigator.of(context).pop();
-                }
-              },
+          return AlertDialog(
+            title: Text("Change password"),
+            content: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: _currentPassController,
+                    decoration: InputDecoration(
+                      labelText: "Current password",
+                      suffixIcon: IconButton(
+                        icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                        onPressed: _togglePasswordVisibility,
+                      ),
+                    ),
+                    validator: (value) => _validatePasswords(value),
+                    obscureText: !_passwordVisible,
+                  ),
+                  TextFormField(
+                    controller: _newPassController,
+                    decoration: InputDecoration(
+                      labelText: "New password",
+                      suffixIcon: IconButton(
+                        icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                        onPressed: _togglePasswordVisibility,
+                      ),
+                    ),
+                    validator: (value) => _validatePasswords(value),
+                    obscureText: !_passwordVisible,
+                  ),
+                  TextFormField(
+                    controller: _newPassConfirmController,
+                    decoration: InputDecoration(
+                      labelText: "Confirm password",
+                      suffixIcon: IconButton(
+                        icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                        onPressed: _togglePasswordVisibility,
+                      ),
+                    ),
+                    obscureText: !_passwordVisible,
+                    validator: (value) => _validateConfirmPass(value),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+            actions: [
+              FlatButton(
+                child: Text("Submit"),
+                onPressed: () async {
+                  if (_formKey.currentState.validate()) {
+                    ChangePassword changePassword = ChangePassword(
+                      currentPassword: _currentPassController.text,
+                      newPassword: _newPassController.text,
+                    );
+                    try {
+                      CustomResponse response =
+                          await UserRepository.instance.changePassword(changePassword);
+                      context.showSnackBar(response.message);
+                    } on Failure catch (failure) {
+                      context.showSnackBar(failure.message);
+                    }
+
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
+          );
+        },
       ),
     );
   }
