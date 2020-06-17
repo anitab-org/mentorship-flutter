@@ -1,9 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// This screen will let the user to sign up into the system using name, username,
 /// email and password.
@@ -39,7 +41,6 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
@@ -212,9 +213,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onChanged: _toggleTermsAndConditions,
               ),
               Flexible(
-                child: Text("I affirm that I have read and accept to be bound by the "
-                    "AnitaB.org Code of Conduct, Terms and Privacy Policy. Further, "
-                    "I consent to use of my information for the stated purpose."),
+                child: ConditionsText(),
               ),
             ],
           ),
@@ -223,7 +222,7 @@ class _RegisterFormState extends State<RegisterForm> {
             child: RaisedButton(
               color: Theme.of(context).accentColor,
               child: Text("Sign up"),
-              onPressed: () => _register(context),
+              onPressed: _acceptedTermsAndConditions ? () => _register(context) : null,
             ),
           ),
           Padding(
@@ -262,5 +261,75 @@ class _RegisterFormState extends State<RegisterForm> {
       message = exception.toString();
     }
     context.showSnackBar(message);
+  }
+}
+
+class ConditionsText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            text: "By checking this box, I affirm that I have read and accept to be bound by the "
+                "AnitaB.org ",
+          ),
+          TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch("https://ghc.anitab.org/code-of-conduct/");
+              },
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            text: "Code of Conduct",
+          ),
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            text: ", ",
+          ),
+          TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch("https://anitab.org/terms-of-use/");
+              },
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            text: "Terms",
+          ),
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            text: ", and ",
+          ),
+          TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch("https://anitab.org/privacy-policy/");
+              },
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            text: "Privacy Policy",
+          ),
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            text: ". Further, I consent to the use of my information for the stated purpose.",
+          ),
+        ],
+      ),
+    );
   }
 }
