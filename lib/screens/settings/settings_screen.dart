@@ -52,30 +52,30 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _showConfirmLogoutDialog(BuildContext context){
+  void _showConfirmLogoutDialog(BuildContext context) {
     showDialog(
-      context: context,
-      builder:(context) {
-        return AlertDialog(
-          title : Text('Log Out'),
-          content: Text('Are you sure you want to logout?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: ()=> Navigator.of(context).pop(),),
-            FlatButton(
-              child: Text('Confirm'),
-              onPressed: () {
-                BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Log Out'),
+            content: Text('Are you sure you want to logout?'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              FlatButton(
+                child: Text('Confirm'),
+                onPressed: () {
+                  BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
 
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      }
-    );
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> _showChangePasswordDialog(BuildContext context) async {
@@ -101,6 +101,10 @@ class SettingsScreen extends StatelessWidget {
         ),
         actions: [
           FlatButton(
+            child: Text('Cancel'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          FlatButton(
             child: Text("Submit"),
             onPressed: () async {
               ChangePassword changePassword = ChangePassword(
@@ -120,7 +124,6 @@ class SettingsScreen extends StatelessWidget {
           ),
         ],
       ),
-
     );
   }
 }
