@@ -148,12 +148,18 @@ class _RelationPageState extends State<RelationPage> {
                       content: Text("Are you sure you want to delete the task?"),
                       actions: [
                         FlatButton(
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
                           child: Text("Delete"),
                           onPressed: () {
                             bloc.add(TaskDeleted(state.relation, task.id));
                             Navigator.of(context).pop();
                           },
-                        )
+                        ),
                       ],
                     ),
                   );
@@ -163,8 +169,30 @@ class _RelationPageState extends State<RelationPage> {
                     GestureDetector(
                       onTap: () {
                         if (!task.isDone) {
-                          context.toast("hey");
-                          bloc.add(TaskCompleted(state.relation, task.id));
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Mark task"),
+                                content: Text("Mark task as complete?"),
+                                actions: [
+                                  FlatButton(
+                                    child: Text("No"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text("Yes"),
+                                    onPressed: () {
+                                      bloc.add(TaskCompleted(state.relation, task.id));
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         } else
                           context.toast("Task already achieved.");
                       },
