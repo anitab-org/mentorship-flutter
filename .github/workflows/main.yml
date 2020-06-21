@@ -24,7 +24,7 @@ jobs:
       - run: git clone https://github.com/flutter/flutter.git --depth 1 -b v1.15.17 _flutter
       - run: echo "::add-path::$GITHUB_WORKSPACE/_flutter/bin"
       - run: flutter pub get
-      - run: flutter test
+      - run: flutter test --coverage        
         working-directory: ./
       - run: flutter build ios --no-codesign
   buildandroid:
@@ -38,7 +38,7 @@ jobs:
       - run: git clone https://github.com/flutter/flutter.git --depth 1 -b v1.15.17 _flutter
       - run: echo "::add-path::$GITHUB_WORKSPACE/_flutter/bin"
       - run: flutter pub get
-      - run: flutter test
+      - run: flutter test --coverage
         working-directory: ./
       - run: flutter build appbundle
       - uses: codecov/codecov-action@v1.0.2
