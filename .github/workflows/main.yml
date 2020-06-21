@@ -14,7 +14,7 @@ on:
       - 'android/**'
 jobs:
   buildios:
-    name: Build iOS
+    name: Build and test iOS builds
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
         working-directory: ./
       - run: flutter build ios --no-codesign
   buildandroid:
-    name: Build Android
+    name: Build and test Android builds
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
