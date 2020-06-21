@@ -2,7 +2,10 @@
 
 |                                  Branch                                  |                                                        [Travis](https://travis-ci.org/)                                                        |
 | :----------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: |
-| [develop](https://github.com/anitab-org/mentorship-flutter/tree/develop) | [![Build Status](https://travis-ci.com/anitab-org/mentorship-flutter.svg?branch=develop)](https://travis-ci.com/anitab-org/mentorship-flutter) |
+| [develop](https://github.com/anitab-org/mentorship-flutter/tree/develop) | [![Build Status](https://travis-ci.com/anitab-org/mentorship-flutter.svg?branch=develop)](https://travis-ci.com/anitab-org/mentorship-flutter) | 
+
+
+[![codecov](https://codecov.io/gh/Techno-Disaster/mentorship-flutter/branch/master/graph/badge.svg)](https://codecov.io/gh/Techno-Disaster/mentorship-flutter)
 
 Mentorship System is an application that allows women in tech to mentor each other, on career development topics, through 1:1 relations for a certain period of time.
 
