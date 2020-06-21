@@ -41,3 +41,7 @@ jobs:
       - run: flutter test
         working-directory: ./
       - run: flutter build appbundle
+      - uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./coverage/lcov.info
