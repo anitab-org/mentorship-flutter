@@ -77,8 +77,7 @@ class _RelationPageState extends State<RelationPage> {
                               ),
                               Flexible(
                                   child: Text(
-                                "Find members",
-                                maxLines: 1,
+                                "Find members",                                
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
