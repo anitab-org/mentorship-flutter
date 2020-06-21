@@ -4,6 +4,8 @@ import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/remote/models/task.dart';
 import 'package:mentorship_client/remote/requests/task_request.dart';
+import 'package:mentorship_client/screens/home/bloc/bloc.dart';
+import 'package:mentorship_client/screens/home/bloc/home_bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/bold_text.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
@@ -49,7 +51,44 @@ class _RelationPageState extends State<RelationPage> {
 
               if (state is RelationPageFailure) {
                 return Center(
-                  child: Text(state.message),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(state.message),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 40,
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 17,
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        child: RaisedButton(
+                          color: Theme.of(context).accentColor,
+                          onPressed: () {
+                            //ignore: close_sinks
+                            final bloc = BlocProvider.of<HomeBloc>(context);
+
+                            bloc.add(MembersPageSelected());
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: Colors.white,
+                              ),
+                              Flexible(
+                                  child: Text(
+                                "Find members",
+                                maxLines: 1,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              )),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 );
               }
 
