@@ -9,6 +9,7 @@ import 'package:mentorship_client/screens/home/bloc/home_bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/bold_text.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class RelationPage extends StatefulWidget {
   @override
@@ -60,7 +61,7 @@ class _RelationPageState extends State<RelationPage> {
                       ),
                       Container(
                         height: MediaQuery.of(context).size.height / 17,
-                        width: MediaQuery.of(context).size.width * 0.35,
+                        width: MediaQuery.of(context).size.width * 0.47,
                         child: RaisedButton(
                           color: Theme.of(context).accentColor,
                           onPressed: () {
@@ -70,18 +71,22 @@ class _RelationPageState extends State<RelationPage> {
                             bloc.add(MembersPageSelected());
                           },
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.search,
                                 color: Colors.white,
                               ),
-                              Flexible(
-                                  child: Text(
-                                "Find members",                                
-                                style: TextStyle(
-                                  color: Colors.white,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.32,
+                                child: AutoSizeText(
+                                  "Find members",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              )),
+                              ),
                             ],
                           ),
                         ),
