@@ -179,8 +179,7 @@ class SettingsScreen extends StatelessWidget {
                     } on Failure catch (failure) {
                       topContext.showSnackBar(failure.message);
                     }
-
-                    Navigator.of(context).pop();
+                    Navigator.of(topContext).pop();
                   }
                 },
               ),
