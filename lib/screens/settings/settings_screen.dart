@@ -8,7 +8,6 @@ import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/remote/requests/change_password.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
 import 'package:mentorship_client/screens/settings/about.dart';
-import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -106,7 +105,7 @@ class SettingsScreen extends StatelessWidget {
     }
 
     showDialog(
-      context: context,
+      context: topContext,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) {
           void _togglePasswordVisibility() {
