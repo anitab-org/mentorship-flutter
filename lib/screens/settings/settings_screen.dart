@@ -8,6 +8,7 @@ import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/remote/requests/change_password.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
 import 'package:mentorship_client/screens/settings/about.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -54,31 +55,32 @@ class SettingsScreen extends StatelessWidget {
 
   void _showConfirmLogoutDialog(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Log Out"),
-            content: Text('Are you sure you want to logout?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("Cancel"),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              FlatButton(
-                child: Text("Confirm"),
-                onPressed: () {
-                  BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Log Out'),
+          content: Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            FlatButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
 
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  Future<void> _showChangePasswordDialog(BuildContext context) async {
+  Future<void> _showChangePasswordDialog(BuildContext topContext) async {
     final _currentPassController = TextEditingController();
     final _newPassController = TextEditingController();
     final _newPassConfirmController = TextEditingController();

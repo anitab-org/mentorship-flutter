@@ -6,6 +6,7 @@ part of 'task_service.dart';
 // ChopperGenerator
 // **************************************************************************
 
+// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations
 class _$TaskService extends TaskService {
   _$TaskService([ChopperClient client]) {
     if (client == null) return;
@@ -16,10 +17,11 @@ class _$TaskService extends TaskService {
   final definitionType = TaskService;
 
   @override
-  Future<Response<List>> getAllTasksFromMentorshipRelation(int relationId) {
+  Future<Response<List<dynamic>>> getAllTasksFromMentorshipRelation(
+      int relationId) {
     final $url = 'mentorship_relation/$relationId/tasks';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send<List, List>($request);
+    return client.send<List<dynamic>, List<dynamic>>($request);
   }
 
   @override

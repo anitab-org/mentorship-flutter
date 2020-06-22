@@ -11,19 +11,33 @@ import './bloc.dart';
 
 class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
   final UserRepository userRepository;
-
+  int pageNumber = 1;
   MembersPageBloc({@required this.userRepository}) : assert(userRepository != null);
-
+  //TODO: debounce the Events in order to prevent spamming our API
   @override
   MembersPageState get initialState => MembersPageInitial();
 
   @override
   Stream<MembersPageState> mapEventToState(MembersPageEvent event) async* {
-    if (event is MembersPageShowed) {
-      yield MembersPageLoading();
+    final currentState = state;
+
+    if (event is MembersPageShowed && !_hasReachedMax(currentState)) {
       try {
-        final List<User> users = await userRepository.getVerifiedUsers();
-        yield MembersPageSuccess(users);
+        if (currentState is MembersPageInitial) {
+          yield MembersPageLoading();
+          final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
+          yield MembersPageSuccess(users: users, hasReachedMax: false);
+        }
+        if (currentState is MembersPageSuccess) {
+          final users =
+              await userRepository.getVerifiedUsers((currentState.users.length ~/ 10) + 1);
+          yield users.isEmpty
+              ? currentState.copyWith(hasReachedMax: true)
+              : MembersPageSuccess(
+                  users: currentState.users + users,
+                  hasReachedMax: false,
+                );
+        }
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield MembersPageFailure(failure.message);
@@ -31,3 +45,5 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
     }
   }
 }
+
+bool _hasReachedMax(MembersPageState state) => state is MembersPageSuccess && state.hasReachedMax;
