@@ -8,6 +8,7 @@ import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/remote/requests/change_password.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
 import 'package:mentorship_client/screens/settings/about.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -169,12 +170,14 @@ class SettingsScreen extends StatelessWidget {
                       currentPassword: _currentPassController.text,
                       newPassword: _newPassController.text,
                     );
+                    Navigator.of(context).pop();
+                    showProgressIndicator(context);
                     try {
                       CustomResponse response =
                           await UserRepository.instance.changePassword(changePassword);
-                      context.showSnackBar(response.message);
+                      topContext.showSnackBar(response.message);
                     } on Failure catch (failure) {
-                      context.showSnackBar(failure.message);
+                      topContext.showSnackBar(failure.message);
                     }
 
                     Navigator.of(context).pop();
