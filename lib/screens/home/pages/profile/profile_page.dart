@@ -48,6 +48,8 @@ class _ProfilePageState extends State<ProfilePage> {
             final bloc = BlocProvider.of<ProfilePageBloc>(context);
 
             if (state is ProfilePageEditing) {
+              showProgressIndicator(context);
+
               _formKey.currentState.save();
               user.availableToMentor = _availableToMentor;
               user.needsMentoring = _needsMentoring;
@@ -78,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
         listener: (context, state) {
           if (state.message != null) {
             context.showSnackBar(state.message);
+            Navigator.of(context).pop();
           }
           if (state is ProfilePageEditing) {
             _nameController.text = state.user.name;
@@ -89,7 +92,6 @@ class _ProfilePageState extends State<ProfilePage> {
             _occupationController.text = state.user.occupation;
             _organizationController.text = state.user.organization;
             _skillsController.text = state.user.skills;
-
             _interestsController.text = state.user.interests;
             if (_availableToMentor == null) _availableToMentor = state.user.availableToMentor;
             if (_needsMentoring == null) _needsMentoring = state.user.needsMentoring;
@@ -254,17 +256,17 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
 
-  _buildTextFormField(
-      String text, bool editing, TextEditingController controller, Function(String) onSaved) {
-    return TextFormField(
-      controller: controller,
-      enabled: editing,
-      onSaved: onSaved,
-      decoration: InputDecoration(
-        labelText: text,
-        border: UnderlineInputBorder(),
-      ),
-    );
-  }
+_buildTextFormField(
+    String text, bool editing, TextEditingController controller, Function(String) onSaved) {
+  return TextFormField(
+    controller: controller,
+    enabled: editing,
+    onSaved: onSaved,
+    decoration: InputDecoration(
+      labelText: text,
+      border: UnderlineInputBorder(),
+    ),
+  );
 }
