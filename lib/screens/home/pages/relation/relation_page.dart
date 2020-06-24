@@ -140,43 +140,50 @@ class _RelationPageState extends State<RelationPage> {
               //ignore: close_sinks
               final bloc = BlocProvider.of<RelationPageBloc>(context);
 
-              return InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text("Delete task"),
-                      content: Text("Are you sure you want to delete the task?"),
-                      actions: [
-                        FlatButton(
-                          child: Text("Delete"),
-                          onPressed: () {
-                            bloc.add(TaskDeleted(state.relation, task.id));
-                            Navigator.of(context).pop();
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (!task.isDone) {
+                            bloc.add(TaskCompleted(state.relation, task.id));
                             showProgressIndicator(context);
-                          },
-                        )
-                      ],
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if (!task.isDone) {
-                          bloc.add(TaskCompleted(state.relation, task.id));
-                          showProgressIndicator(context);
-                        } else
-                          context.toast("Task already achieved.");
-                      },
-                      child: Checkbox(
-                        value: task.isDone,
+                          } else
+                            context.toast("Task already achieved.");
+                        },
+                        child: Checkbox(
+                          value: task.isDone,
+                        ),
                       ),
-                    ),
-                    Text(task.description),
-                  ],
-                ),
+                      Text(task.description),
+                    ],
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.grey[700],),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text("Delete task"),
+                          content: Text("Are you sure you want to delete the task?"),
+                          actions: [
+                            FlatButton(
+                              child: Text("Delete"),
+                              onPressed: () {
+                                bloc.add(TaskDeleted(state.relation, task.id));
+                                Navigator.of(context).pop();
+                                showProgressIndicator(context);
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
               );
             },
           );
