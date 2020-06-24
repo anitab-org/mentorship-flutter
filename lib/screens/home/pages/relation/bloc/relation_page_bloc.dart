@@ -39,6 +39,19 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         yield RelationPageFailure(message: failure.message);
       }
     }
+    if (event is RelationPageRefresh) {
+      yield RelationPageLoading();
+      try {
+        Relation relation = await relationRepository.getCurrentRelation();
+        List<Task> tasks;
+        if (relation != null) {
+          tasks = await taskRepository.getAllTasks(relation.id);
+        }
+        yield RelationPageSuccess(relation, tasks);
+      } on Failure catch (_) {
+        yield state;
+      }
+    }
 
     if (event is RelationPageCancelledRelation) {
       yield RelationPageLoading();
@@ -88,6 +101,4 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
       }
     }
   }
-
-  Stream<RelationPageState> mapEventToRelationShowed(RelationPageEvent event) async* {}
 }
