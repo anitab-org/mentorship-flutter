@@ -43,10 +43,6 @@ class _RelationPageState extends State<RelationPage> {
             context.showSnackBar(state.message);
           }
           if (state is RelationPageShowed) {
-            RelationPageBloc(
-              relationRepository: RelationRepository.instance,
-              taskRepository: TaskRepository.instance,
-            )..add(RelationPageRefresh());
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }

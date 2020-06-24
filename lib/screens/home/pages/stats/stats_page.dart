@@ -29,10 +29,6 @@ class _StatsPageState extends State<StatsPage> {
     return BlocConsumer<StatsPageBloc, StatsPageState>(
       listener: (context, state) {
         if (state is StatsPageShowed) {
-          StatsPageBloc(userRepository: UserRepository.instance)
-            ..add(
-              StatsPageRefresh(),
-            );
           _refreshCompleter?.complete();
           _refreshCompleter = Completer();
         }

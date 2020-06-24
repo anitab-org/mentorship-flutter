@@ -99,10 +99,6 @@ class _ProfilePageState extends State<ProfilePage> {
             if (_needsMentoring == null) _needsMentoring = state.user.needsMentoring;
           }
           if (state is ProfilePageShowed) {
-            ProfilePageBloc(userRepository: UserRepository.instance)
-              ..add(
-                ProfilePageRefresh(),
-              );
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
           }
