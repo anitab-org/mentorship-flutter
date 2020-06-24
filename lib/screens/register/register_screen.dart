@@ -228,11 +228,10 @@ class _RegisterFormState extends State<RegisterForm> {
                 RaisedButton(
                   color: Theme.of(context).accentColor,
                   child: Text("Sign up"),
-                  onPressed: signupButtonEnabled
+                  onPressed: _acceptedTermsAndConditions && signupButtonEnabled
                       ? () {
                           setState(() {
                             registering = true;
-
                             signupButtonEnabled = false;
                           });
                           _register(context);
