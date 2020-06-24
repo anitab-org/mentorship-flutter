@@ -162,7 +162,10 @@ class _RelationPageState extends State<RelationPage> {
                     ],
                   ),
                   IconButton(
-                    icon: Icon(Icons.delete, color: Colors.grey[700],),
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.grey[700],
+                    ),
                     onPressed: () {
                       showDialog(
                         context: context,
@@ -171,13 +174,19 @@ class _RelationPageState extends State<RelationPage> {
                           content: Text("Are you sure you want to delete the task?"),
                           actions: [
                             FlatButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("Cancel"),
+                            ),
+                            FlatButton(
                               child: Text("Delete"),
                               onPressed: () {
-                                bloc.add(TaskDeleted(state.relation, task.id));
+                                // bloc.add(TaskDeleted(state.relation, task.id));
                                 Navigator.of(context).pop();
                                 showProgressIndicator(context);
                               },
-                            )
+                            ),
                           ],
                         ),
                       );
