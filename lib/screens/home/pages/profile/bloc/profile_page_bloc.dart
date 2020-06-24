@@ -22,6 +22,16 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   @override
   Stream<ProfilePageState> mapEventToState(ProfilePageEvent event) async* {
     if (event is ProfilePageShowed) {
+      yield* mapEventToProfileShowed(event);
+    } else if (event is ProfilePageRefresh) {
+      yield* mapEventToRefreshRequested(event);
+    } else {
+      yield* mapEventToProfileEditing(event);
+    }
+  }
+
+  Stream<ProfilePageState> mapEventToProfileShowed(ProfilePageEvent event) async* {
+    if (event is ProfilePageShowed) {
       yield ProfilePageLoading();
       try {
         _user = await userRepository.getCurrentUser();
@@ -31,6 +41,21 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         yield ProfilePageFailure(message: failure.message);
       }
     }
+  }
+
+  Stream<ProfilePageState> mapEventToRefreshRequested(ProfilePageEvent event) async* {
+    if (event is ProfilePageRefresh) {
+      yield ProfilePageLoading();
+      try {
+        _user = await userRepository.getCurrentUser();
+        yield ProfilePageSuccess(_user, message: event.message);
+      } on Failure catch (_) {
+        yield state;
+      }
+    }
+  }
+
+  Stream<ProfilePageState> mapEventToProfileEditing(ProfilePageEvent event) async* {
     if (event is ProfilePageEditStarted) {
       yield ProfilePageEditing(_user);
     }
