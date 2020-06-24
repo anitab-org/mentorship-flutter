@@ -78,12 +78,13 @@ class _RelationPageState extends State<RelationPage> {
                                 color: Colors.white,
                               ),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.32,
+                                width: MediaQuery.of(context).size.width * 0.3,
                                 child: AutoSizeText(
                                   "Find members",
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
+                                  textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
