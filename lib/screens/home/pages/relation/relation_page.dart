@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/remote/models/task.dart';
-import 'package:mentorship_client/remote/repositories/relation_repository.dart';
-import 'package:mentorship_client/remote/repositories/task_repository.dart';
 import 'package:mentorship_client/remote/requests/task_request.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/bold_text.dart';
