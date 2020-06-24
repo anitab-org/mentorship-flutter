@@ -49,7 +49,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         }
         yield RelationPageSuccess(relation, tasks);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield state;
       }
     }
@@ -62,7 +62,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
             message: response
                 .message); // Failure, because relation doesn't exist anymore. It's kinda dirty but works
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield RelationPageFailure(message: failure.message);
       }
     }
@@ -74,7 +74,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         var tasks = await taskRepository.getAllTasks(event.relation.id);
         yield RelationPageSuccess(event.relation, tasks, message: response.message);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield RelationPageFailure(message: failure.message);
       }
     }
@@ -86,7 +86,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         var tasks = await taskRepository.getAllTasks(event.relation.id);
         yield RelationPageSuccess(event.relation, tasks, message: response.message);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield RelationPageFailure(message: failure.message);
       }
     }
@@ -97,7 +97,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         var tasks = await taskRepository.getAllTasks(event.relation.id);
         yield RelationPageSuccess(event.relation, tasks, message: response.message);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield RelationPageFailure(message: failure.message);
       }
     }

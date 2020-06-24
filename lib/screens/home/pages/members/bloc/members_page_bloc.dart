@@ -46,7 +46,7 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
                 );
         }
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("MembersPageBloc: Failure catched: $failure.message");
         yield MembersPageFailure(failure.message);
       }
     }
@@ -61,7 +61,7 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
         final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
         yield MembersPageSuccess(users: users, hasReachedMax: false);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("MembersPageBloc: Failure catched: $failure.message");
         yield state;
       }
     }

@@ -37,7 +37,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         _user = await userRepository.getCurrentUser();
         yield ProfilePageSuccess(_user, message: event.message);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("ProfilePageBloc: Failure catched: $failure.message");
         yield ProfilePageFailure(message: failure.message);
       }
     }
@@ -50,7 +50,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         _user = await userRepository.getCurrentUser();
         yield ProfilePageSuccess(_user, message: event.message);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("ProfilePageBloc: Failure catched: $failure.message");
         yield state;
       }
     }
@@ -80,7 +80,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         CustomResponse response = await userRepository.updateUser(updatedUser);
         add(ProfilePageShowed(message: response.message));
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("ProfilePageBloc: Failure catched: $failure.message");
         add(ProfilePageShowed(message: failure.message));
       }
     }

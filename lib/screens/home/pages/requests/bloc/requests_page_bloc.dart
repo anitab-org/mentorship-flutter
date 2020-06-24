@@ -33,7 +33,7 @@ class RequestsPageBloc extends Bloc<RequestsPageEvent, RequestsPageState> {
         List<Relation> relations = await relationRepository.getAllRelationsAndRequests();
         yield RequestsPageSuccess(relations);
       } on Failure catch (failure) {
-        Logger.root.severe("RequestsPageBloc: ${failure.message}");
+        Logger.root.severe("RequestsPageBloc: Failure catched: $failure.message");
         yield RequestsPageFailure(message: failure.message);
       }
     }
@@ -46,7 +46,7 @@ class RequestsPageBloc extends Bloc<RequestsPageEvent, RequestsPageState> {
         List<Relation> relations = await relationRepository.getAllRelationsAndRequests();
         yield RequestsPageSuccess(relations);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RequestsPageBloc: Failure catched: $failure.message");
         yield state;
       }
     }
