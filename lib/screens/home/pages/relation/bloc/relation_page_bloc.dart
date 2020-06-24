@@ -88,4 +88,6 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
       }
     }
   }
+
+  Stream<RelationPageState> mapEventToRelationShowed(RelationPageEvent event) async* {}
 }

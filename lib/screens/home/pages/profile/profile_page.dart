@@ -101,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
           if (state is ProfilePageShowed) {
             ProfilePageBloc(userRepository: UserRepository.instance)
               ..add(
-                ProfilePageShowed(),
+                ProfilePageRefresh(),
               );
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
