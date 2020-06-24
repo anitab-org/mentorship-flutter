@@ -1,27 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/user.dart';
-import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/members/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/members/widgets/member_list_tile.dart';
 import 'package:mentorship_client/screens/member_profile/member_profile.dart';
 
-class MembersPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<MembersPageBloc>(
-        create: (context) =>
-            MembersPageBloc(userRepository: UserRepository.instance)..add(MembersPageShowed()),
-        child: _MembersPage());
-  }
-}
-
-class _MembersPage extends StatefulWidget {
+class MembersPage extends StatefulWidget {
   @override
   _MembersPageState createState() => _MembersPageState();
 }
 
-class _MembersPageState extends State<_MembersPage> {
+class _MembersPageState extends State<MembersPage> {
   final _scrollController = ScrollController();
   // ignore: dart.core.Sink
   MembersPageBloc _membersPageBloc;

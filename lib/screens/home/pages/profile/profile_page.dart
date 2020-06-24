@@ -26,14 +26,14 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _needsMentoring;
   bool editing = false;
 
-  @override
-  void initState() {
-    context.bloc<ProfilePageBloc>()..add(ProfilePageShowed());
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
+
     User user = User();
     return Scaffold(
       floatingActionButton:

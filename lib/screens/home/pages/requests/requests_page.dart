@@ -15,8 +15,6 @@ class RequestsPage extends StatefulWidget {
 class _RequestsPageState extends State<RequestsPage> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<RequestsPageBloc>(context).add(RequestsPageShowed());
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(

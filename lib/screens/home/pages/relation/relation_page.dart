@@ -18,8 +18,6 @@ class RelationPage extends StatefulWidget {
 class _RelationPageState extends State<RelationPage> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<RelationPageBloc>(context).add(RelationPageShowed());
-
     return DefaultTabController(
       length: 2,
       child: Scaffold(
