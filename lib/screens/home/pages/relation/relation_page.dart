@@ -37,8 +37,9 @@ class _RelationPageState extends State<RelationPage> {
           ],
         ),
         body: BlocConsumer<RelationPageBloc, RelationPageState>(listener: (context, state) {
-          if (state.message != null) {
+          if (state.message != null && state is RelationPageSuccess) {
             context.showSnackBar(state.message);
+            Navigator.of(context).pop();
           }
           if (state is RelationPageShowed) {
             _refreshCompleter?.complete();
@@ -175,47 +176,43 @@ class _RelationPageState extends State<RelationPage> {
                   //ignore: close_sinks
                   final bloc = BlocProvider.of<RelationPageBloc>(context);
 
-                  return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text("Delete task"),
-                              content: Text("Are you sure you want to delete the task?"),
-                              actions: [
-                                FlatButton(
-                                  child: Text("Delete"),
-                                  onPressed: () {
-                                    bloc.add(TaskDeleted(state.relation, task.id));
-                                    Navigator.of(context).pop();
-                                  },
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                if (!task.isDone) {
-                                  context.toast("hey");
-                                  bloc.add(TaskCompleted(state.relation, task.id));
-                                } else
-                                  context.toast("Task already achieved.");
+                  return InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text("Delete task"),
+                          content: Text("Are you sure you want to delete the task?"),
+                          actions: [
+                            FlatButton(
+                              child: Text("Delete"),
+                              onPressed: () {
+                                bloc.add(TaskDeleted(state.relation, task.id));
+                                Navigator.of(context).pop();
+                                showProgressIndicator(context);
                               },
-                              child: Checkbox(
-                                value: task.isDone,
-                              ),
-                            ),
-                            Text(task.description),
+                            )
                           ],
                         ),
-                      ),
-                    ],
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            if (!task.isDone) {
+                              bloc.add(TaskCompleted(state.relation, task.id));
+                              showProgressIndicator(context);
+                            } else
+                              context.toast("Task already achieved.");
+                          },
+                          child: Checkbox(
+                            value: task.isDone,
+                          ),
+                        ),
+                        Text(task.description),
+                      ],
+                    ),
                   );
                 },
               ),
@@ -258,6 +255,7 @@ class _RelationPageState extends State<RelationPage> {
                   );
 
                   Navigator.of(context).pop();
+                  showProgressIndicator(context);
                 },
               )
             ],

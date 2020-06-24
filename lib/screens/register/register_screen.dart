@@ -4,6 +4,7 @@ import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 /// This screen will let the user to sign up into the system using name, username,
 /// email and password.
@@ -39,7 +40,6 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
@@ -53,6 +53,9 @@ class _RegisterFormState extends State<RegisterForm> {
   bool _needsMentoring = false;
   bool _acceptedTermsAndConditions = false;
   int _radiovalue;
+  bool registering = false;
+  bool signupButtonEnabled = true;
+
   void _togglePasswordVisibility() {
     setState(() {
       _passwordVisible = !_passwordVisible;
@@ -107,7 +110,6 @@ class _RegisterFormState extends State<RegisterForm> {
   @override
   Widget build(BuildContext context) {
     const spacing = 12.0;
-
     return Form(
       key: _formKey,
       child: Column(
@@ -220,10 +222,24 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           Padding(
             padding: EdgeInsets.all(16),
-            child: RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Text("Sign up"),
-              onPressed: () => _register(context),
+            child: Column(
+              children: [
+                registering ? LoadingIndicator() : Container(),
+                RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  child: Text("Sign up"),
+                  onPressed: signupButtonEnabled
+                      ? () {
+                          setState(() {
+                            registering = true;
+
+                            signupButtonEnabled = false;
+                          });
+                          _register(context);
+                        }
+                      : null,
+                ),
+              ],
             ),
           ),
           Padding(
@@ -262,5 +278,9 @@ class _RegisterFormState extends State<RegisterForm> {
       message = exception.toString();
     }
     context.showSnackBar(message);
+    setState(() {
+      registering = false;
+      signupButtonEnabled = true;
+    });
   }
 }
