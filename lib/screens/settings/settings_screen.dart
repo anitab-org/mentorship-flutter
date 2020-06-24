@@ -8,6 +8,7 @@ import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/remote/requests/change_password.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
 import 'package:mentorship_client/screens/settings/about.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -52,17 +53,18 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _showConfirmLogoutDialog(BuildContext context){
+  void _showConfirmLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder:(context) {
+      builder: (context) {
         return AlertDialog(
-          title : Text('Log Out'),
+          title: Text('Log Out'),
           content: Text('Are you sure you want to logout?'),
           actions: <Widget>[
             FlatButton(
               child: Text('Cancel'),
-              onPressed: ()=> Navigator.of(context).pop(),),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
             FlatButton(
               child: Text('Confirm'),
               onPressed: () {
@@ -74,16 +76,15 @@ class SettingsScreen extends StatelessWidget {
             ),
           ],
         );
-      }
+      },
     );
   }
 
-  Future<void> _showChangePasswordDialog(BuildContext context) async {
+  Future<void> _showChangePasswordDialog(BuildContext topContext) async {
     final _currentPassController = TextEditingController();
     final _newPassController = TextEditingController();
-
     showDialog(
-      context: context,
+      context: topContext,
       builder: (context) => AlertDialog(
         title: Text("Change password"),
         content: Column(
@@ -107,20 +108,20 @@ class SettingsScreen extends StatelessWidget {
                 currentPassword: _currentPassController.text,
                 newPassword: _newPassController.text,
               );
+              Navigator.of(context).pop();
+              showProgressIndicator(context);
               try {
                 CustomResponse response =
                     await UserRepository.instance.changePassword(changePassword);
-                context.showSnackBar(response.message);
+                topContext.showSnackBar(response.message);
               } on Failure catch (failure) {
-                context.showSnackBar(failure.message);
+                topContext.showSnackBar(failure.message);
               }
-
-              Navigator.of(context).pop();
+              Navigator.of(topContext).pop();
             },
           ),
         ],
       ),
-
     );
   }
 }
