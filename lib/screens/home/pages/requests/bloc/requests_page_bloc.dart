@@ -45,7 +45,8 @@ class RequestsPageBloc extends Bloc<RequestsPageEvent, RequestsPageState> {
       try {
         List<Relation> relations = await relationRepository.getAllRelationsAndRequests();
         yield RequestsPageSuccess(relations);
-      } on Failure catch (_) {
+      } on Failure catch (failure) {
+        Logger.root.severe(failure.message);
         yield state;
       }
     }

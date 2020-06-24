@@ -45,7 +45,8 @@ class StatsPageBloc extends Bloc<StatsPageEvent, StatsPageState> {
       try {
         final HomeStats homeStats = await userRepository.getHomeStats();
         yield StatsPageSuccess(homeStats);
-      } on Failure catch (_) {
+      } on Failure catch (failure) {
+        Logger.root.severe(failure.message);
         yield state;
       }
     }

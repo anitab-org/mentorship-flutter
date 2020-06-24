@@ -39,13 +39,13 @@ class _MembersPageState extends State<MembersPage> {
         builder: (context, state) {
           if (state is MembersPageFailure) {
             return Center(
-              child: Text('failed to get users'),
+              child: Text('Failed to get users'),
             );
           }
           if (state is MembersPageSuccess) {
             if (state.users.isEmpty) {
               return Center(
-                child: Text('no users'),
+                child: Text('No users'),
               );
             }
             return RefreshIndicator(

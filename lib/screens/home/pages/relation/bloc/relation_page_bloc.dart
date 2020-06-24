@@ -48,7 +48,8 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
           tasks = await taskRepository.getAllTasks(relation.id);
         }
         yield RelationPageSuccess(relation, tasks);
-      } on Failure catch (_) {
+      } on Failure catch (failure) {
+        Logger.root.severe(failure.message);
         yield state;
       }
     }
