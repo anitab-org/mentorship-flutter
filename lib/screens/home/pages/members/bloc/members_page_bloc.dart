@@ -13,12 +13,19 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
   final UserRepository userRepository;
   int pageNumber = 1;
   MembersPageBloc({@required this.userRepository}) : assert(userRepository != null);
-  //TODO: debounce the Events in order to prevent spamming our API
   @override
   MembersPageState get initialState => MembersPageInitial();
 
   @override
   Stream<MembersPageState> mapEventToState(MembersPageEvent event) async* {
+    if (event is MembersPageShowed) {
+      yield* _mapEventToMembersShowed(event);
+    } else if (event is MembersPageRefresh) {
+      yield* _mapEventToMembersRefresh(event);
+    }
+  }
+
+  Stream<MembersPageState> _mapEventToMembersShowed(MembersPageEvent event) async* {
     final currentState = state;
 
     if (event is MembersPageShowed && !_hasReachedMax(currentState)) {
@@ -41,6 +48,20 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
       } on Failure catch (failure) {
         Logger.root.severe(failure.message);
         yield MembersPageFailure(failure.message);
+      }
+    }
+  }
+
+  Stream<MembersPageState> _mapEventToMembersRefresh(MembersPageEvent event) async* {
+    final currentState = state;
+
+    if (event is MembersPageRefresh && !_hasReachedMax(currentState)) {
+      try {
+        yield MembersPageLoading();
+        final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
+        yield MembersPageSuccess(users: users, hasReachedMax: false);
+      } on Failure catch (_) {
+        yield state;
       }
     }
   }

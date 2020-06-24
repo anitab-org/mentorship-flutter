@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/user.dart';
@@ -15,49 +17,66 @@ class _MembersPageState extends State<MembersPage> {
   // ignore: dart.core.Sink
   MembersPageBloc _membersPageBloc;
   final _scrollThreshold = 10.0;
+  Completer<void> _refreshCompleter;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
     _membersPageBloc = BlocProvider.of<MembersPageBloc>(context);
+    _refreshCompleter = Completer<void>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MembersPageBloc, MembersPageState>(
-      builder: (context, state) {
-        if (state is MembersPageFailure) {
-          return Center(
-            child: Text('failed to get users'),
-          );
-        }
-        if (state is MembersPageSuccess) {
-          if (state.users.isEmpty) {
+    return BlocConsumer<MembersPageBloc, MembersPageState>(listener: (context, state) {
+      if (state is MembersPageShowed) {
+        _refreshCompleter?.complete();
+        _refreshCompleter = Completer();
+      }
+    }, builder: (context, state) {
+      return BlocBuilder<MembersPageBloc, MembersPageState>(
+        builder: (context, state) {
+          if (state is MembersPageFailure) {
             return Center(
-              child: Text('no users'),
+              child: Text('failed to get users'),
             );
           }
-          return ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              bool _reachedEnd = index > state.users.length - 1;
-              User user = (!_reachedEnd) ? state.users[index] : null;
-              return _reachedEnd
-                  ? BottomLoader()
-                  : InkWell(
-                      onTap: () => _openMemberProfileScreen(context, user),
-                      child: MemberListTile(user: user),
-                    );
-            },
-            itemCount: state.hasReachedMax ? (state.users.length) : (state.users.length + 1),
-            controller: _scrollController,
+          if (state is MembersPageSuccess) {
+            if (state.users.isEmpty) {
+              return Center(
+                child: Text('no users'),
+              );
+            }
+            return RefreshIndicator(
+              onRefresh: () {
+                BlocProvider.of<MembersPageBloc>(context).add(
+                  MembersPageRefresh(),
+                );
+                return _refreshCompleter.future;
+              },
+              child: ListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  bool _reachedEnd = index > state.users.length - 1;
+                  User user = (!_reachedEnd) ? state.users[index] : null;
+                  return _reachedEnd
+                      ? BottomLoader()
+                      : InkWell(
+                          onTap: () => _openMemberProfileScreen(context, user),
+                          child: MemberListTile(user: user),
+                        );
+                },
+                itemCount: state.hasReachedMax ? (state.users.length) : (state.users.length + 1),
+                controller: _scrollController,
+              ),
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
           );
-        }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+        },
+      );
+    });
   }
 
   void _openMemberProfileScreen(BuildContext context, User user) {
