@@ -13,3 +13,8 @@ class RelationRequestSent extends SendRequestEvent {
   @override
   List<Object> get props => [request];
 }
+
+class ResetSnackbarMessage extends SendRequestEvent {
+  @override
+  List<Object> get props => null;
+}
