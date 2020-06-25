@@ -32,7 +32,7 @@ We have a dedicated stream for this project [#mentorship-system](https://anitab-
 
 ### Overview
 
-- App _tries_ to follow Clean Architecture guidelines. Logic is separated into 4 layers:****
+- App _tries_ to follow Clean Architecture guidelines. Logic is separated into 4 layers:
   - `UI`
   - `BLoC`
   - `Repository`
