@@ -10,7 +10,7 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _usernameController = TextEditingController(); // not changeable
@@ -25,10 +25,16 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _availableToMentor;
   bool _needsMentoring;
   bool editing = false;
+  AnimationController _animationController;
 
   @override
   void initState() {
     context.bloc<ProfilePageBloc>()..add(ProfilePageShowed());
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+      upperBound: 0.5,
+    );
     super.initState();
   }
 
@@ -48,6 +54,8 @@ class _ProfilePageState extends State<ProfilePage> {
             final bloc = BlocProvider.of<ProfilePageBloc>(context);
 
             if (state is ProfilePageEditing) {
+              showProgressIndicator(context);
+
               _formKey.currentState.save();
               user.availableToMentor = _availableToMentor;
               user.needsMentoring = _needsMentoring;
@@ -64,7 +72,9 @@ class _ProfilePageState extends State<ProfilePage> {
               user.interests = _interestsController.text;
 
               bloc.add(ProfilePageEditSubmitted(user));
+              _animationController.reverse();
             } else if (state is ProfilePageSuccess) {
+              _animationController.forward();
               bloc.add(ProfilePageEditStarted());
             }
           },
@@ -78,6 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
         listener: (context, state) {
           if (state.message != null) {
             context.showSnackBar(state.message);
+            Navigator.of(context).pop();
           }
           if (state is ProfilePageEditing) {
             _nameController.text = state.user.name;
@@ -89,7 +100,6 @@ class _ProfilePageState extends State<ProfilePage> {
             _occupationController.text = state.user.occupation;
             _organizationController.text = state.user.organization;
             _skillsController.text = state.user.skills;
-
             _interestsController.text = state.user.interests;
             if (_availableToMentor == null) _availableToMentor = state.user.availableToMentor;
             if (_needsMentoring == null) _needsMentoring = state.user.needsMentoring;
@@ -134,137 +144,146 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _createPage(BuildContext context, User user, bool editing) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          SizedBox(height: 24),
-          Center(
-            child: ClipOval(
-              child: Container(
-                color: Colors.deepPurple,
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.width / 2,
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return Opacity(
+          opacity: 0.5 + _animationController.value,
+          child: child,
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            SizedBox(height: 24),
+            Center(
+              child: ClipOval(
+                child: Container(
+                  color: Colors.deepPurple,
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: MediaQuery.of(context).size.width / 2,
+                ),
               ),
             ),
-          ),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: TextFormField(
-                    controller: _nameController,
-                    enabled: editing,
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: TextFormField(
+                      controller: _nameController,
+                      enabled: editing,
+                      onSaved: (value) {
+                        user.name = value;
+                      },
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(
+                        border: const UnderlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _usernameController,
+                    enabled: false,
                     onSaved: (value) {
                       user.name = value;
                     },
-                    textAlign: TextAlign.center,
                     decoration: const InputDecoration(
+                      labelText: "Username",
                       border: const UnderlineInputBorder(),
                     ),
                   ),
-                ),
-                TextFormField(
-                  controller: _usernameController,
-                  enabled: false,
-                  onSaved: (value) {
-                    user.name = value;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: "Username",
-                    border: const UnderlineInputBorder(),
-                  ),
-                ),
-                TextFormField(
-                  controller: _emailController,
-                  enabled: false,
-                  onSaved: (value) {
-                    user.email = value;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: "Email",
-                    border: const UnderlineInputBorder(),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Available to mentor"),
-                    Checkbox(
-                      value: _availableToMentor,
-                      onChanged: editing
-                          ? (value) {
-                              setState(() {
-                                _availableToMentor = value;
-                              });
-                            }
-                          : null,
+                  TextFormField(
+                    controller: _emailController,
+                    enabled: false,
+                    onSaved: (value) {
+                      user.email = value;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      border: const UnderlineInputBorder(),
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Needs mentoring"),
-                    Checkbox(
-                      value: _needsMentoring,
-                      onChanged: editing
-                          ? (value) {
-                              setState(() {
-                                _needsMentoring = value;
-                              });
-                            }
-                          : null,
-                    ),
-                  ],
-                ),
-                _buildTextFormField(
-                  "Bio",
-                  editing,
-                  _bioController,
-                  (value) {
-                    user.bio = value;
-                  },
-                ),
-                _buildTextFormField("Slack username", editing, _slackController, (value) {
-                  user.slackUsername = value;
-                }),
-                _buildTextFormField("Location", editing, _locationController, (value) {
-                  user.location = value;
-                }),
-                _buildTextFormField("Occupation", editing, _occupationController, (value) {
-                  user.occupation = value;
-                }),
-                _buildTextFormField("Organization", editing, _organizationController, (value) {
-                  user.organization = value;
-                }),
-                _buildTextFormField("Skills", editing, _skillsController, (value) {
-                  user.skills = value;
-                }),
-                _buildTextFormField("Interests", editing, _interestsController, (value) {
-                  user.interests = value;
-                }),
-              ],
-            ),
-          )
-        ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Available to mentor"),
+                      Checkbox(
+                        value: _availableToMentor,
+                        onChanged: editing
+                            ? (value) {
+                                setState(() {
+                                  _availableToMentor = value;
+                                });
+                              }
+                            : null,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Needs mentoring"),
+                      Checkbox(
+                        value: _needsMentoring,
+                        onChanged: editing
+                            ? (value) {
+                                setState(() {
+                                  _needsMentoring = value;
+                                });
+                              }
+                            : null,
+                      ),
+                    ],
+                  ),
+                  _buildTextFormField(
+                    "Bio",
+                    editing,
+                    _bioController,
+                    (value) {
+                      user.bio = value;
+                    },
+                  ),
+                  _buildTextFormField("Slack username", editing, _slackController, (value) {
+                    user.slackUsername = value;
+                  }),
+                  _buildTextFormField("Location", editing, _locationController, (value) {
+                    user.location = value;
+                  }),
+                  _buildTextFormField("Occupation", editing, _occupationController, (value) {
+                    user.occupation = value;
+                  }),
+                  _buildTextFormField("Organization", editing, _organizationController, (value) {
+                    user.organization = value;
+                  }),
+                  _buildTextFormField("Skills", editing, _skillsController, (value) {
+                    user.skills = value;
+                  }),
+                  _buildTextFormField("Interests", editing, _interestsController, (value) {
+                    user.interests = value;
+                  }),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
+}
 
-  _buildTextFormField(
-      String text, bool editing, TextEditingController controller, Function(String) onSaved) {
-    return TextFormField(
-      controller: controller,
-      enabled: editing,
-      onSaved: onSaved,
-      decoration: InputDecoration(
-        labelText: text,
-        border: UnderlineInputBorder(),
-      ),
-    );
-  }
+_buildTextFormField(
+    String text, bool editing, TextEditingController controller, Function(String) onSaved) {
+  return TextFormField(
+    controller: controller,
+    enabled: editing,
+    onSaved: onSaved,
+    decoration: InputDecoration(
+      labelText: text,
+      border: UnderlineInputBorder(),
+    ),
+  );
 }
