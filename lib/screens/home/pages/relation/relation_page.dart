@@ -182,7 +182,7 @@ class _RelationPageState extends State<RelationPage> {
                             FlatButton(
                               child: Text("Delete"),
                               onPressed: () {
-                                // bloc.add(TaskDeleted(state.relation, task.id));
+                                bloc.add(TaskDeleted(state.relation, task.id));
                                 Navigator.of(context).pop();
                                 showProgressIndicator(context);
                               },
