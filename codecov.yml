@@ -3,3 +3,10 @@ comment:
   behavior: new
   require_changes: false  # if true: only post the comment if coverage changes
 
+coverage:
+  status:
+    project:
+      default:
+        target: auto # will use the coverage from the base commit 
+        threshold: 0%
+        base: auto
