@@ -102,6 +102,10 @@ class SettingsScreen extends StatelessWidget {
         ),
         actions: [
           FlatButton(
+            child: Text('Cancel'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          FlatButton(
             child: Text("Submit"),
             onPressed: () async {
               ChangePassword changePassword = ChangePassword(
