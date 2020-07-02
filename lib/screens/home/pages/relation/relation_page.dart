@@ -6,9 +6,12 @@ import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/remote/models/task.dart';
 import 'package:mentorship_client/remote/requests/task_request.dart';
+import 'package:mentorship_client/screens/home/bloc/bloc.dart';
+import 'package:mentorship_client/screens/home/bloc/home_bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/bold_text.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class RelationPage extends StatefulWidget {
   @override
@@ -59,7 +62,48 @@ class _RelationPageState extends State<RelationPage> {
 
               if (state is RelationPageFailure) {
                 return Center(
-                  child: Text(state.message),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(state.message),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 40,
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 17,
+                        width: MediaQuery.of(context).size.width * 0.47,
+                        child: RaisedButton(
+                          color: Theme.of(context).accentColor,
+                          onPressed: () {
+                            //ignore: close_sinks
+                            final bloc = BlocProvider.of<HomeBloc>(context);
+
+                            bloc.add(MembersPageSelected());
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.3,
+                                child: AutoSizeText(
+                                  "Find members",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 );
               }
 
@@ -159,64 +203,82 @@ class _RelationPageState extends State<RelationPage> {
             );
           }
 
-          return RefreshIndicator(
-            onRefresh: () {
-              BlocProvider.of<RelationPageBloc>(context).add(
-                RelationPageRefresh(),
-              );
-              return _refreshCompleter.future;
-            },
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.tasks.length,
-                itemBuilder: (context, index) {
-                  Task task = state.tasks[index];
-                  //ignore: close_sinks
-                  final bloc = BlocProvider.of<RelationPageBloc>(context);
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.tasks.length,
+            itemBuilder: (context, index) {
+              Task task = state.tasks[index];
+              //ignore: close_sinks
+              final bloc = BlocProvider.of<RelationPageBloc>(context);
 
-                  return InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Delete task"),
-                          content: Text("Are you sure you want to delete the task?"),
-                          actions: [
-                            FlatButton(
-                              child: Text("Delete"),
-                              onPressed: () {
-                                bloc.add(TaskDeleted(state.relation, task.id));
-                                Navigator.of(context).pop();
-                                showProgressIndicator(context);
-                              },
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (!task.isDone) {
-                              bloc.add(TaskCompleted(state.relation, task.id));
-                              showProgressIndicator(context);
-                            } else
-                              context.toast("Task already achieved.");
+              return InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Delete task"),
+                      content: Text("Are you sure you want to delete the task?"),
+                      actions: [
+                        FlatButton(
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
-                          child: Checkbox(
-                            value: task.isDone,
-                          ),
                         ),
-                        Text(task.description),
+                        FlatButton(
+                          child: Text("Delete"),
+                          onPressed: () {
+                            bloc.add(TaskDeleted(state.relation, task.id));
+                            Navigator.of(context).pop();
+                            showProgressIndicator(context);
+                          },
+                        ),
                       ],
                     ),
                   );
                 },
-              ),
-            ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        if (!task.isDone) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Mark task"),
+                                content: Text("Mark task as complete?"),
+                                actions: [
+                                  FlatButton(
+                                    child: Text("No"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text("Yes"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      showProgressIndicator(context);
+                                      bloc.add(TaskCompleted(state.relation, task.id));
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else
+                          context.toast("Task already achieved.");
+                      },
+                      child: Checkbox(
+                        value: task.isDone,
+                      ),
+                    ),
+                    Text(task.description),
+                  ],
+                ),
+              );
+            },
           );
         },
       ),
