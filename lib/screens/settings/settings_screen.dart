@@ -163,24 +163,26 @@ class SettingsScreen extends StatelessWidget {
             ),
             actions: [
               FlatButton(
+                child: Text('Cancel'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              FlatButton(
                 child: Text("Submit"),
                 onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    ChangePassword changePassword = ChangePassword(
-                      currentPassword: _currentPassController.text,
-                      newPassword: _newPassController.text,
-                    );
-                    Navigator.of(context).pop();
-                    showProgressIndicator(context);
-                    try {
-                      CustomResponse response =
-                          await UserRepository.instance.changePassword(changePassword);
-                      topContext.showSnackBar(response.message);
-                    } on Failure catch (failure) {
-                      topContext.showSnackBar(failure.message);
-                    }
-                    Navigator.of(topContext).pop();
+                  ChangePassword changePassword = ChangePassword(
+                    currentPassword: _currentPassController.text,
+                    newPassword: _newPassController.text,
+                  );
+                  Navigator.of(context).pop();
+                  showProgressIndicator(context);
+                  try {
+                    CustomResponse response =
+                        await UserRepository.instance.changePassword(changePassword);
+                    topContext.showSnackBar(response.message);
+                  } on Failure catch (failure) {
+                    topContext.showSnackBar(failure.message);
                   }
+                  Navigator.of(topContext).pop();
                 },
               ),
             ],
