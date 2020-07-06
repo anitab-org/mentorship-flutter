@@ -39,6 +39,20 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         yield RelationPageFailure(message: failure.message);
       }
     }
+    if (event is RelationPageRefresh) {
+      yield RelationPageLoading();
+      try {
+        Relation relation = await relationRepository.getCurrentRelation();
+        List<Task> tasks;
+        if (relation != null) {
+          tasks = await taskRepository.getAllTasks(relation.id);
+        }
+        yield RelationPageSuccess(relation, tasks);
+      } on Failure catch (failure) {
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
+        yield state;
+      }
+    }
 
     if (event is RelationPageCancelledRelation) {
       yield RelationPageLoading();
@@ -48,7 +62,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
             message: response
                 .message); // Failure, because relation doesn't exist anymore. It's kinda dirty but works
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield RelationPageFailure(message: failure.message);
       }
     }
@@ -60,7 +74,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         var tasks = await taskRepository.getAllTasks(event.relation.id);
         yield RelationPageSuccess(event.relation, tasks, message: response.message);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield RelationPageFailure(message: failure.message);
       }
     }
@@ -72,7 +86,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         var tasks = await taskRepository.getAllTasks(event.relation.id);
         yield RelationPageSuccess(event.relation, tasks, message: response.message);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield RelationPageFailure(message: failure.message);
       }
     }
@@ -83,7 +97,7 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         var tasks = await taskRepository.getAllTasks(event.relation.id);
         yield RelationPageSuccess(event.relation, tasks, message: response.message);
       } on Failure catch (failure) {
-        Logger.root.severe(failure.message);
+        Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
         yield RelationPageFailure(message: failure.message);
       }
     }

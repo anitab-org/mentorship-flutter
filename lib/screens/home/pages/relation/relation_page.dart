@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/extensions/context.dart';
@@ -16,13 +18,17 @@ class RelationPage extends StatefulWidget {
   _RelationPageState createState() => _RelationPageState();
 }
 
-// TODO: Use BLOC to make state management more robust
-
 class _RelationPageState extends State<RelationPage> {
+  Completer<void> _refreshCompleter;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshCompleter = Completer<void>();
+  }
+
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<RelationPageBloc>(context).add(RelationPageShowed());
-
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -33,14 +39,17 @@ class _RelationPageState extends State<RelationPage> {
             Tab(text: "Tasks".toUpperCase()),
           ],
         ),
-        body: BlocListener<RelationPageBloc, RelationPageState>(
-          listener: (context, state) {
-            if (state.message != null && state is RelationPageSuccess) {
-              context.showSnackBar(state.message);
-              Navigator.of(context).pop();
-            }
-          },
-          child: BlocBuilder<RelationPageBloc, RelationPageState>(
+        body: BlocConsumer<RelationPageBloc, RelationPageState>(listener: (context, state) {
+          if (state.message != null && state is RelationPageSuccess) {
+            context.showSnackBar(state.message);
+            Navigator.of(context).pop();
+          }
+          if (state is RelationPageShowed) {
+            _refreshCompleter?.complete();
+            _refreshCompleter = Completer();
+          }
+        }, builder: (context, state) {
+          return BlocBuilder<RelationPageBloc, RelationPageState>(
             builder: (context, state) {
               if (state is RelationPageSuccess) {
                 return TabBarView(
@@ -100,66 +109,84 @@ class _RelationPageState extends State<RelationPage> {
 
               return LoadingIndicator();
             },
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
 
   Widget _buildDetailsTab(BuildContext context, RelationPageSuccess state) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BoldText("Mentor: ", state.relation.mentor.name),
-                BoldText("Mentee: ", state.relation.mentee.name),
-                BoldText(
-                    "End date: ", DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()),
-                BoldText("Notes: ", state.relation.notes),
-              ],
-            ),
-          ),
-          RaisedButton(
-            color: Theme.of(context).accentColor,
-            child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
-            onPressed: () {
-              //ignore: close_sinks
-              final bloc = BlocProvider.of<RelationPageBloc>(context);
+    return RefreshIndicator(
+      onRefresh: () {
+        BlocProvider.of<RelationPageBloc>(context).add(
+          RelationPageRefresh(),
+        );
+        return _refreshCompleter.future;
+      },
+      child: ListView(
+        children: <Widget>[
+          Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BoldText("Mentor: ", state.relation.mentor.name),
+                          BoldText("Mentee: ", state.relation.mentee.name),
+                          BoldText("End date: ",
+                              DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()),
+                          BoldText("Notes: ", state.relation.notes),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.55,
+                    ),
+                    RaisedButton(
+                      color: Theme.of(context).accentColor,
+                      child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        //ignore: close_sinks
+                        final bloc = BlocProvider.of<RelationPageBloc>(context);
 
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Cancel Relation"),
-                    content: Text("Are you sure you want to cancel the relation"),
-                    actions: [
-                      FlatButton(
-                        child: Text("Yes"),
-                        onPressed: () {
-                          bloc.add(RelationPageCancelledRelation(state.relation.id));
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      FlatButton(
-                        child: Text("No"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          )
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Cancel Relation"),
+                              content: Text("Are you sure you want to cancel the relation"),
+                              actions: [
+                                FlatButton(
+                                  child: Text("Yes"),
+                                  onPressed: () {
+                                    bloc.add(RelationPageCancelledRelation(state.relation.id));
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text("No"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
