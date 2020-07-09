@@ -14,6 +14,12 @@ class ProfilePageShowed extends ProfilePageEvent {
   ProfilePageShowed({this.message});
 }
 
+class ProfilePageRefresh extends ProfilePageEvent {
+  final String message;
+
+  ProfilePageRefresh({this.message});
+}
+
 class ProfilePageEditStarted extends ProfilePageEvent {}
 
 class ProfilePageEditSubmitted extends ProfilePageEvent {

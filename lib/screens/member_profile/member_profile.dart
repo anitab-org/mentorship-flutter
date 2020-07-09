@@ -3,6 +3,7 @@ import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/member_profile/user_data_list.dart';
 import 'package:mentorship_client/screens/send_request/send_request_screen.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class MemberProfileScreen extends StatelessWidget {
   final User user;
@@ -53,8 +54,9 @@ class MemberProfileScreen extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
+                    showProgressIndicator(context);
                     var currentUser = await UserRepository.instance.getCurrentUser();
-
+                    Navigator.of(context).pop();
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         pageBuilder: (c, anim1, anim2) => SendRequestScreen(
