@@ -169,20 +169,22 @@ class SettingsScreen extends StatelessWidget {
               FlatButton(
                 child: Text("Submit"),
                 onPressed: () async {
-                  ChangePassword changePassword = ChangePassword(
-                    currentPassword: _currentPassController.text,
-                    newPassword: _newPassController.text,
-                  );
-                  Navigator.of(context).pop();
-                  showProgressIndicator(context);
-                  try {
-                    CustomResponse response =
-                        await UserRepository.instance.changePassword(changePassword);
-                    topContext.showSnackBar(response.message);
-                  } on Failure catch (failure) {
-                    topContext.showSnackBar(failure.message);
+                  if (_formKey.currentState.validate()) {
+                    ChangePassword changePassword = ChangePassword(
+                      currentPassword: _currentPassController.text,
+                      newPassword: _newPassController.text,
+                    );
+                    Navigator.of(context).pop();
+                    showProgressIndicator(context);
+                    try {
+                      CustomResponse response =
+                          await UserRepository.instance.changePassword(changePassword);
+                      topContext.showSnackBar(response.message);
+                    } on Failure catch (failure) {
+                      topContext.showSnackBar(failure.message);
+                    }
+                    Navigator.of(topContext).pop();
                   }
-                  Navigator.of(topContext).pop();
                 },
               ),
             ],
