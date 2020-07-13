@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/remote/models/user.dart';
+import 'package:mentorship_client/remote/repositories/user_repository.dart';
 import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
+import 'dart:async';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -27,15 +29,17 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   bool editing = false;
   AnimationController _animationController;
 
+  Completer<void> _refreshCompleter;
+
   @override
   void initState() {
-    context.bloc<ProfilePageBloc>()..add(ProfilePageShowed());
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
       upperBound: 0.5,
     );
     super.initState();
+    _refreshCompleter = Completer<void>();
   }
 
   @override
@@ -84,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           ),
         );
       }),
-      body: BlocListener<ProfilePageBloc, ProfilePageState>(
+      body: BlocConsumer<ProfilePageBloc, ProfilePageState>(
         listener: (context, state) {
           if (state.message != null) {
             context.showSnackBar(state.message);
@@ -104,41 +108,59 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             if (_availableToMentor == null) _availableToMentor = state.user.availableToMentor;
             if (_needsMentoring == null) _needsMentoring = state.user.needsMentoring;
           }
+          if (state is ProfilePageShowed) {
+            _refreshCompleter?.complete();
+            _refreshCompleter = Completer();
+          }
         },
-        child: BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
-          if (state is ProfilePageSuccess) {
-            _nameController.text = state.user.name;
-            _usernameController.text = state.user.username;
-            _emailController.text = state.user.email;
-            _bioController.text = state.user.bio;
-            _slackController.text = state.user.slackUsername;
-            _locationController.text = state.user.location;
-            _occupationController.text = state.user.occupation;
-            _organizationController.text = state.user.organization;
-            _skillsController.text = state.user.skills;
-            _interestsController.text = state.user.interests;
-            if (_availableToMentor == null) _availableToMentor = state.user.availableToMentor;
-            if (_needsMentoring == null) _needsMentoring = state.user.needsMentoring;
+        builder: (context, state) {
+          return BlocBuilder<ProfilePageBloc, ProfilePageState>(builder: (context, state) {
+            if (state is ProfilePageSuccess) {
+              _nameController.text = state.user.name;
+              _usernameController.text = state.user.username;
+              _emailController.text = state.user.email;
+              _bioController.text = state.user.bio;
+              _slackController.text = state.user.slackUsername;
+              _locationController.text = state.user.location;
+              _occupationController.text = state.user.occupation;
+              _organizationController.text = state.user.organization;
+              _skillsController.text = state.user.skills;
+              _interestsController.text = state.user.interests;
+              if (_availableToMentor == null) _availableToMentor = state.user.availableToMentor;
+              if (_needsMentoring == null) _needsMentoring = state.user.needsMentoring;
 
-            return _createPage(context, state.user, false);
-          }
-          if (state is ProfilePageEditing) {
-            print(_interestsController.text);
-            return _createPage(context, state.user, true);
-          }
+              return RefreshIndicator(
+                onRefresh: () {
+                  BlocProvider.of<ProfilePageBloc>(context).add(
+                    ProfilePageRefresh(),
+                  );
+                  return _refreshCompleter.future;
+                },
+                child: _createPage(
+                  context,
+                  state.user,
+                  false,
+                ),
+              );
+            }
+            if (state is ProfilePageEditing) {
+              print(_interestsController.text);
+              return _createPage(context, state.user, true);
+            }
 
-          if (state is ProfilePageFailure) {
-            return Text(state.message);
-          }
-          if (state is ProfilePageLoading) {
-            return LoadingIndicator();
-          }
+            if (state is ProfilePageFailure) {
+              return Text(state.message);
+            }
+            if (state is ProfilePageLoading) {
+              return LoadingIndicator();
+            }
 
-          if (state is ProfilePageInitial) {
-            return LoadingIndicator();
-          } else
-            return Text("Error: Unknown ProfilePageState");
-        }),
+            if (state is ProfilePageInitial) {
+              return LoadingIndicator();
+            } else
+              return Text("Error: Unknown ProfilePageState");
+          });
+        },
       ),
     );
   }

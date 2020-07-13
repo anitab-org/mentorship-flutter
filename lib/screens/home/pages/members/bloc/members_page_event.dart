@@ -8,3 +8,5 @@ abstract class MembersPageEvent extends Equatable {
 }
 
 class MembersPageShowed extends MembersPageEvent {}
+
+class MembersPageRefresh extends MembersPageEvent {}

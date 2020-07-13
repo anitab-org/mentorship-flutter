@@ -8,3 +8,5 @@ abstract class StatsPageEvent extends Equatable {
 }
 
 class StatsPageShowed extends StatsPageEvent {}
+
+class StatsPageRefresh extends StatsPageEvent {}
