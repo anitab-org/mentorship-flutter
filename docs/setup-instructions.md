@@ -34,7 +34,7 @@
 
  ![Flutter SDK](images/flutter_sdk.gif)
 
- 4. In order to run A flutter project either a virtual device needs to be setup or manual device can be used. Remember to `enable Debugging` in **Developer Options** in the manual device.
+ 4. In order to run a flutter project either a virtual device needs to be setup or manual device can be used. Remember to `enable Debugging` in **Developer Options** in the manual device.
  5. Connect your manual device or setup the virtual device before you run the application. Ensure that the device is visible on top menu.
 
  ![Flutter Device](images/flutter_device.gif)    
