@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/responses/auth_token.dart';
 import 'package:mentorship_client/screens/login/bloc/bloc.dart';
@@ -86,19 +87,15 @@ void main() {
       build: () async {
         when(userRepository.login(
           login,
-        )).thenThrow(Exception('login-error'));
+        )).thenThrow(Failure('login-error'));
         return loginBloc;
       },
       act: (bloc) => bloc.add(
-        LoginButtonPressed(
-          login,
-        ),
+        LoginButtonPressed(login),
       ),
       expect: [
         LoginInProgress(),
-        LoginFailure(
-          'login-error',
-        ),
+        LoginFailure('login-error'),
       ],
       verify: (_) async {
         verifyNever(authenticationBloc.add(any));
