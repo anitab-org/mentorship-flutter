@@ -5,7 +5,7 @@
  - JDK
 
 #### Installations
-1. Install Flutter by following instructions from [flutter.dev](https://flutter.dev).To summarise:
+1. Install Flutter by following instructions from [flutter.dev](https://flutter.dev). To summarise:
   - Select the appropriate operating system
   - Download the flutter sdk to a preferred location on your local system.
 2. Fork and clone the [mentorship-flutter](https://github.com/anitab-org/mentorship-flutter) repository to your local machine.
