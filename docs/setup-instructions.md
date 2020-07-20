@@ -48,4 +48,4 @@
 
 
 
-By default the backend of this project is set to the mentorship-backend dev server. You are now set to go.
+By default, the backend of this project is set to the [mentorship-backend](https://github.com/anitab-org/mentorship-backend) dev server. You are now set to go.
