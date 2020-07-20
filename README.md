@@ -42,7 +42,7 @@ We have a dedicated stream for this project [#mentorship-system](https://anitab-
 
 ## Setup Instructions
 
-In order to setup the project locally, setup instructions have been defined here(docs/setup-instructions.md)
+In order to setup the project locally, setup instructions have been defined [here](docs/setup-instructions.md)
 
 ### Web support
 
