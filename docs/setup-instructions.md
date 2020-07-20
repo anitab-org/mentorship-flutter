@@ -21,7 +21,7 @@
 
       ![FlutterDartPlugin](images/flutter_dart_plugin.gif)
 
-#### Developer's locally
+## Local Development Setup
  This section will help you set up the project locally on your system.
  1. Open the project on your IDE. Initially, there would be alot of errors.
  2. Open the terminal and run `flutter channel beta` to switch from stable channel to beta channel of flutter. The beta channel is the one used for the project.
