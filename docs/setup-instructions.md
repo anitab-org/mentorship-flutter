@@ -1,7 +1,7 @@
 ## Setup instructions
 
 #### Prerequisites
- - Android Studio or any IDE to open Flutter project
+ - [Android Studio](https://developer.android.com/studio) or any IDE to open Flutter project
  - JDK
 
 #### Installations
