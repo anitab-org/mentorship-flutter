@@ -40,15 +40,16 @@
  5. Connect your manual device or setup the virtual device before you run the application. Ensure that the device is visible on top menu.
 
  ![Flutter Device](images/flutter_device.gif)    
+ 
  6. Once done, run the project by running `flutter run` in the terminal to run the app in debug mode. To build a release build you can do the following:
 
-   *for Android app*
+    *for Android app*
 
-   In the terminal, run the `flutter build apk` command. To build the apk specific to your device arch you can run `flutter build apk --split-per-abi` or `flutter build   appbundle --target-platform android-arm,android-arm64,android-x64` (remove arguments which are not required) to get only your arch build. You can read more about this [here](https://flutter.dev/docs/deployment/android)
+    In the terminal, run the `flutter build apk` command. To build the apk specific to your device arch you can run `flutter build apk --split-per-abi` or `flutter build   appbundle --target-platform android-arm,android-arm64,android-x64` (remove arguments which are not required) to get only your arch build. You can read more about this [here](https://flutter.dev/docs/deployment/android)
 
-   *for IOS app*
+    *for IOS app*
 
-   To build a release for IOS app, run `flutter build ios` from the terminal. To learn more on creating build archive, release app on TestFlight or to App Store, click  [here](https://flutter.dev/docs/deployment/ios).
+     To build a release for IOS app, run `flutter build ios` from the terminal. To learn more on creating build archive, release app on TestFlight or to App Store, click  [here](https://flutter.dev/docs/deployment/ios).
 
 
 
