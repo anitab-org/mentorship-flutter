@@ -55,7 +55,7 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
   Stream<MembersPageState> _mapEventToMembersRefresh(MembersPageEvent event) async* {
     final currentState = state;
 
-    if (event is MembersPageRefresh && !_hasReachedMax(currentState)) {
+    if (event is MembersPageRefresh) {
       try {
         yield MembersPageLoading();
         final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
