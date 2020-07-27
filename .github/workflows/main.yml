@@ -21,8 +21,9 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
-      - run: git clone https://github.com/flutter/flutter.git -b beta _flutter --depth 1
-      - run: echo "::add-path::$GITHUB_WORKSPACE/_flutter/bin"
+      - run: git clone https://github.com/flutter/flutter.git -b beta
+      - run: echo "::add-path::$GITHUB_WORKSPACE/flutter/bin"
+      - run: flutter pub get
       - run: flutter pub upgrade
         working-directory: ./
       - run: flutter build ios --no-codesign
@@ -34,8 +35,9 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
-      - run: git clone https://github.com/flutter/flutter.git -b beta _flutter --depth 1
-      - run: echo "::add-path::$GITHUB_WORKSPACE/_flutter/bin"
+      - run: git clone https://github.com/flutter/flutter.git -b beta
+      - run: echo "::add-path::$GITHUB_WORKSPACE/flutter/bin"
+      - run: flutter pub get
       - run: flutter pub upgrade
         working-directory: ./
       - run: flutter build appbundle
