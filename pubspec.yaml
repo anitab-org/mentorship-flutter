@@ -33,8 +33,8 @@ dependencies:
   expandable: ^4.1.3
   auto_size_text: ^2.1.0
   # Bloc
-  bloc: ^4.0.0
-  flutter_bloc: ^4.0.0
+  bloc: ^5.0.0
+  flutter_bloc: ^5.0.0
   chopper: ^3.0.2
   
 # plugins not needed in app

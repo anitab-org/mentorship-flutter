@@ -14,10 +14,9 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   final UserRepository userRepository;
   User _user; // User object which will receive possible edits
 
-  ProfilePageBloc({@required this.userRepository}) : assert(userRepository != null);
-
-  @override
-  ProfilePageState get initialState => ProfilePageInitial();
+  ProfilePageBloc({@required this.userRepository})
+      : assert(userRepository != null),
+        super(ProfilePageInitial());
 
   @override
   Stream<ProfilePageState> mapEventToState(ProfilePageEvent event) async* {

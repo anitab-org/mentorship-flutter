@@ -12,10 +12,9 @@ import './bloc.dart';
 class RequestsPageBloc extends Bloc<RequestsPageEvent, RequestsPageState> {
   final RelationRepository relationRepository;
 
-  RequestsPageBloc({@required this.relationRepository}) : assert(relationRepository != null);
-
-  @override
-  RequestsPageState get initialState => RequestsPageLoading();
+  RequestsPageBloc({@required this.relationRepository})
+      : assert(relationRepository != null),
+        super(RequestsPageLoading());
 
   @override
   Stream<RequestsPageState> mapEventToState(RequestsPageEvent event) async* {

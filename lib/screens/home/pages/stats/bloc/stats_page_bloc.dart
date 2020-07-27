@@ -11,10 +11,9 @@ import './bloc.dart';
 class StatsPageBloc extends Bloc<StatsPageEvent, StatsPageState> {
   final UserRepository userRepository;
 
-  StatsPageBloc({this.userRepository}) : assert(userRepository != null);
-
-  @override
-  StatsPageState get initialState => StatsPageInitial();
+  StatsPageBloc({this.userRepository})
+      : assert(userRepository != null),
+        super(StatsPageInitial());
 
   @override
   Stream<StatsPageState> mapEventToState(StatsPageEvent event) async* {
