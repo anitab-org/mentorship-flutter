@@ -12,10 +12,9 @@ import './bloc.dart';
 class RequestDetailBloc extends Bloc<RequestDetailEvent, RequestDetailState> {
   final RelationRepository relationRepository;
 
-  RequestDetailBloc({@required this.relationRepository}) : assert(relationRepository != null);
-
-  @override
-  RequestDetailState get initialState => InitialRequestDetailState();
+  RequestDetailBloc({@required this.relationRepository})
+      : assert(relationRepository != null),
+        super(InitialRequestDetailState());
 
   @override
   Stream<RequestDetailState> mapEventToState(RequestDetailEvent event) async* {
