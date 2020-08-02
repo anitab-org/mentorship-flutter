@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 
 import 'bloc.dart';
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   final AuthRepository userRepository;
 
   AuthBloc(this.userRepository) : super(AuthUninitialized());
@@ -34,5 +36,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await userRepository.deleteToken();
       yield AuthUnauthenticated(justLoggedOut: true);
     }
+  }
+
+  @override
+  AuthState fromJson(Map<String, dynamic> json) {
+    try {
+      return AuthAuthenticated();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(AuthState state) {
+    if (state is AuthAuthenticated) {
+      return state.toJson();
+    }
+    return null;
   }
 }

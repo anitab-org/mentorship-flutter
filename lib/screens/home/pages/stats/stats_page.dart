@@ -56,10 +56,10 @@ class _StatsPageState extends State<StatsPage> {
                     ),
                     Column(
                       children: [
-                        _buildRow("Pending Requests", state.homeStats.pendingRequests),
-                        _buildRow("Accepted Requests", state.homeStats.acceptedRequests),
-                        _buildRow("Rejected Requests", state.homeStats.rejectedRequests),
-                        _buildRow("Completed Relations", state.homeStats.completedRelations),
+                        _buildRow("Pending Requests", state.homeStats.pending_requests),
+                        _buildRow("Accepted Requests", state.homeStats.accepted_requests),
+                        _buildRow("Rejected Requests", state.homeStats.rejected_requests),
+                        _buildRow("Completed Relations", state.homeStats.completed_relations),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 24, 0, 12),
                           child: Align(
@@ -103,7 +103,7 @@ class _StatsPageState extends State<StatsPage> {
         });
       },
     );
-  }
+  } 
 
   Widget _buildRow(String text, int count) {
     return Padding(

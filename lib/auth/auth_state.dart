@@ -1,4 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'auth_state.g.dart';
 
 abstract class AuthState extends Equatable {
   const AuthState();
@@ -9,7 +12,13 @@ abstract class AuthState extends Equatable {
 
 class AuthUninitialized extends AuthState {}
 
-class AuthAuthenticated extends AuthState {}
+@JsonSerializable()
+class AuthAuthenticated extends AuthState {
+  AuthAuthenticated();
+  factory AuthAuthenticated.fromJson(Map<String, dynamic> json) =>
+      _$AuthAuthenticatedFromJson(json);
+  Map<String, dynamic> toJson() => _$AuthAuthenticatedToJson(this);
+}
 
 /// Represents app state when the user is not signed in.
 /// [justLoggedOut] signifies that a logout happened
