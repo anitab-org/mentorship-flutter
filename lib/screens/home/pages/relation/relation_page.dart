@@ -20,6 +20,7 @@ class RelationPage extends StatefulWidget {
 
 class _RelationPageState extends State<RelationPage> {
   Completer<void> _refreshCompleter;
+  bool _isAppbarVisible = true;
 
   @override
   void initState() {
@@ -32,13 +33,13 @@ class _RelationPageState extends State<RelationPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: TabBar(
+        appBar: _isAppbarVisible ? TabBar(
           labelColor: Theme.of(context).accentColor,
           tabs: [
             Tab(text: "Details".toUpperCase()),
             Tab(text: "Tasks".toUpperCase()),
-          ],
-        ),
+          ]
+        ) : null,
         body: BlocConsumer<RelationPageBloc, RelationPageState>(listener: (context, state) {
           if (state.message != null && state is RelationPageSuccess) {
             context.showSnackBar(state.message);
@@ -47,6 +48,11 @@ class _RelationPageState extends State<RelationPage> {
           if (state is RelationPageShowed) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
+          }
+          if (state is RelationPageFailure) {
+            setState(() {
+              _isAppbarVisible = false;
+            });
           }
         }, builder: (context, state) {
           return BlocBuilder<RelationPageBloc, RelationPageState>(
