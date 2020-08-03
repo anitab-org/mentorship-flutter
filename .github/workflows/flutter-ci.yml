@@ -30,9 +30,6 @@ jobs:
     # Get flutter dependencies.
     - run: flutter pub get
     
-    # Statically analyze the Dart code for any errors.
-    - run: flutter analyze .
-    
     # Run tests for our flutter project once we add unit tests.
     # - run: flutter test
     
