@@ -14,13 +14,13 @@ import 'package:mentorship_client/widgets/loading_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class RelationPage extends StatefulWidget {
+  bool _isAppbarVisible = true;
   @override
   _RelationPageState createState() => _RelationPageState();
 }
 
 class _RelationPageState extends State<RelationPage> {
   Completer<void> _refreshCompleter;
-  bool _isAppbarVisible = true;
 
   @override
   void initState() {
@@ -33,26 +33,20 @@ class _RelationPageState extends State<RelationPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: _isAppbarVisible ? TabBar(
-          labelColor: Theme.of(context).accentColor,
-          tabs: [
-            Tab(text: "Details".toUpperCase()),
-            Tab(text: "Tasks".toUpperCase()),
-          ]
-        ) : null,
+        appBar: _buildAppBar(null),
         body: BlocConsumer<RelationPageBloc, RelationPageState>(listener: (context, state) {
           if (state.message != null && state is RelationPageSuccess) {
             context.showSnackBar(state.message);
             Navigator.of(context).pop();
+            _buildAppBar(state);
           }
           if (state is RelationPageShowed) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
+            _buildAppBar(state);
           }
           if (state is RelationPageFailure) {
-            setState(() {
-              _isAppbarVisible = false;
-            });
+            _buildAppBar(state);
           }
         }, builder: (context, state) {
           return BlocBuilder<RelationPageBloc, RelationPageState>(
@@ -119,6 +113,18 @@ class _RelationPageState extends State<RelationPage> {
         }),
       ),
     );
+  }
+
+  // build the tab bar
+  Widget _buildAppBar(RelationPageState state) {
+    return state is RelationPageSuccess || state is RelationPageShowed ?
+    TabBar(
+        labelColor: Theme.of(context).accentColor,
+        tabs: [
+          Tab(text: "Details".toUpperCase()),
+          Tab(text: "Tasks".toUpperCase()),
+        ]
+    ) : null;
   }
 
   Widget _buildDetailsTab(BuildContext context, RelationPageSuccess state) {
