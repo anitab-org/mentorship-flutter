@@ -118,7 +118,6 @@ class _SendRequestScreenState extends State<SendRequestScreen> {
                   Text(_endDate.toDateString()),
                   IconButton(
                     onPressed: () async {
-                      Toast.show("juhu", context);
                       var initialDate = DateTime.now();
 
                       DateTime newlySelectedDate = await showDatePicker(
