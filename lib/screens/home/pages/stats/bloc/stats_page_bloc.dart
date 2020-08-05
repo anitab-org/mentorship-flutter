@@ -42,7 +42,7 @@ class StatsPageBloc extends HydratedBloc<StatsPageEvent, StatsPageState> {
   }
 
   Stream<StatsPageState> _mapStatsRequested(StatsPageEvent event) async* {
-    if (event is StatsPageShowed) {
+    if (event is StatsPageShowed && state is! StatsPageSuccess) {
       yield StatsPageLoading();
       try {
         final HomeStats homeStats = await userRepository.getHomeStats();
@@ -62,7 +62,7 @@ class StatsPageBloc extends HydratedBloc<StatsPageEvent, StatsPageState> {
         yield StatsPageSuccess(homeStats);
       } on Failure catch (failure) {
         Logger.root.severe("StatsPageBloc: Failure catched: $failure.message");
-        yield state;
+        yield StatsPageBloc(userRepository: userRepository).state;
       }
     }
   }

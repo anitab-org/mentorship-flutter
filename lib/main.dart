@@ -18,13 +18,13 @@ void main() async {
   _setupLogging();
   WidgetsFlutterBinding.ensureInitialized();
   HydratedBloc.storage = await HydratedStorage.build(
-   // storageDirectory: await getApplicationDocumentsDirectory(),
+    storageDirectory: await getApplicationDocumentsDirectory(),
   );
   // Providing app-wide auth bloc, so that app state changes immediately when
   // auth state changes.
   runApp(
     BlocProvider<AuthBloc>(
-      create: (context) => AuthBloc(AuthRepository.instance)..add(AppStarted()),
+      create: (context) => AuthBloc(AuthRepository.instance),
       child: MentorshipApp(),
     ),
   );

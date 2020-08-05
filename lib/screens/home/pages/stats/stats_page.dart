@@ -33,77 +33,83 @@ class _StatsPageState extends State<StatsPage> {
         }
       },
       builder: (context, state) {
-        return BlocBuilder<StatsPageBloc, StatsPageState>(builder: (context, state) {
-          if (state is StatsPageSuccess) {
-            return RefreshIndicator(
-              onRefresh: () {
-                BlocProvider.of<StatsPageBloc>(context).add(
-                  StatsPageRefresh(),
-                );
-                return _refreshCompleter.future;
-              },
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: ListView(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24),
-                      child: Text(
-                        "Welcome, ${state.homeStats.name}!",
-                        textScaleFactor: 2,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        _buildRow("Pending Requests", state.homeStats.pending_requests),
-                        _buildRow("Accepted Requests", state.homeStats.accepted_requests),
-                        _buildRow("Rejected Requests", state.homeStats.rejected_requests),
-                        _buildRow("Completed Relations", state.homeStats.completed_relations),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 24, 0, 12),
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Recent Achievements",
-                                style: Theme.of(context).textTheme.headline6,
-                              )),
+        return BlocBuilder<StatsPageBloc, StatsPageState>(
+          builder: (context, state) {
+            if (state is StatsPageSuccess) {
+              return RefreshIndicator(
+                onRefresh: () {
+                  BlocProvider.of<StatsPageBloc>(context).add(
+                    StatsPageRefresh(),
+                  );
+                  return _refreshCompleter.future;
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        child: Text(
+                          "Welcome, ${state.homeStats.name}!",
+                          textScaleFactor: 2,
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        for (Task achievement in state.homeStats.achievements)
-                          Column(
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: true,
-                                    onChanged: (status) => null,
-                                    hoverColor: Theme.of(context).accentColor,
-                                  ),
-                                  Text(achievement.description),
-                                ],
-                              ),
-                              Divider(),
-                            ],
+                      ),
+                      Column(
+                        children: [
+                          _buildRow("Pending Requests", state.homeStats.pending_requests),
+                          _buildRow("Accepted Requests", state.homeStats.accepted_requests),
+                          _buildRow("Rejected Requests", state.homeStats.rejected_requests),
+                          _buildRow("Completed Relations", state.homeStats.completed_relations),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 24, 0, 12),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Recent Achievements",
+                                  style: Theme.of(context).textTheme.headline6,
+                                )),
                           ),
-                      ],
-                    )
-                  ],
+                          for (Task achievement in state.homeStats.achievements)
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: true,
+                                      onChanged: (status) => null,
+                                      hoverColor: Theme.of(context).accentColor,
+                                    ),
+                                    Text(achievement.description),
+                                  ],
+                                ),
+                                Divider(),
+                              ],
+                            ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-          if (state is StatsPageFailure) {
-            return Text(state.message);
-          }
+              );
+            }
+            if (state is StatsPageFailure) {
+              return Text(state.message);
+            }
 
-          if (state is StatsPageLoading) {
-            return LoadingIndicator();
-          } else
-            return Text("an error occurred");
-        });
+            if (state is StatsPageLoading) {
+              return LoadingIndicator();
+            } else {
+              return Center(
+                child: Text("An error occurred, try restarting the app"),
+              );
+            }
+          },
+        );
       },
     );
-  } 
+  }
 
   Widget _buildRow(String text, int count) {
     return Padding(
