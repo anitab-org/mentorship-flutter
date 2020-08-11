@@ -2,7 +2,7 @@
 
 - You can join us on [AnitaB.org Open Source Zulip](https://anitab-org.zulipchat.com/). Each active repo has its own stream to direct questions to (for example #powerup or #portal). Mentorship System stream is [#mentorship-system](https://anitab-org.zulipchat.com/#narrow/stream/222534-mentorship-system).
 - Remember that this is an inclusive community, committed to creating a safe, positive environment. See the full [Code of Conduct](code_of_conduct.md).
-- Follow our [Commit Message Style Guide](https://github.com/anitab-org/mentorship-android/wiki/Commit-Message-Style-Guide) when you commit your changes.
+- Follow our [Commit Message Style Guide](https://github.com/anitab-org/mentorship-flutter/wiki/Commit-Message-Style-Guide) when you commit your changes.
 - Please consider raising an issue before submitting a pull request (PR) to solve a problem that is not present in our [issue tracker](https://github.com/anitab-org/mentorship-flutter/issues). This allows maintainers to first validate the issue you are trying to solve and also reference the PR to a specific issue.
 - When developing a new feature, include at least one test when applicable.
 - When submitting a PR, please follow [this template](.github/PULL_REQUEST_TEMPLATE.md) (which will probably be already filled up once you create the PR).
@@ -34,3 +34,40 @@ Apart from [formatting your code using `dartfmt`](https://flutter.dev/docs/devel
 
   **Visual Studio Code**:
   <img width="964" alt="VSCode format" src="https://user-images.githubusercontent.com/40357511/80772789-21e10780-8b58-11ea-9e22-7ebdf0b61977.png">
+
+
+- When you want to print something to the console, *do not* use `print()`; use `Logger.root` instead. You should also use appropriate log leve. Example:
+    ```
+    if (token != null) {
+          Logger.root.info("Found a token.");
+        } else {
+          Logger.root.severe("Error: no token!");
+        }
+    ```
+
+- To create reusable pieces of UI, create a new class extending `StatelessWidget`. Do not create functions returning `Widget`.
+  [Why?](https://stackoverflow.com/questions/53234825/what-is-the-difference-between-functions-and-classes-to-create-reusable-widgets)
+
+  Example of **bad code**
+
+  ```
+  Widget _buildSomeWidgets(BuildContext context) {
+    return Center(
+      child: Text("Hi!"),
+    );
+  }
+  ```
+
+  Example of **good code**
+
+  ```
+  class _SomeWidgets extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return Center(
+        child: Text("Hi!"),
+      );
+    }
+  }
+  ```
+

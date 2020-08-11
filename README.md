@@ -1,8 +1,9 @@
 # Cross-platform client for Mentorship System
 
-| Branch | [Travis](https://travis-ci.org/)
-| :---: | :---: |
-| [develop](https://github.com/anitab-org/mentorship-flutter/tree/develop) | [![Build Status](https://travis-ci.com/anitab-org/mentorship-flutter.svg?branch=develop)](https://travis-ci.com/anitab-org/mentorship-flutter)
+|                                  Branch                                  |                                                        [Travis](https://travis-ci.org/)                                                        |
+| :----------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: |
+| [develop](https://github.com/anitab-org/mentorship-flutter/tree/develop) | [![Build Status](https://travis-ci.com/anitab-org/mentorship-flutter.svg?branch=develop)](https://travis-ci.com/anitab-org/mentorship-flutter) |
+
 
 Mentorship System is an application that allows women in tech to mentor each other, on career development topics, through 1:1 relations for a certain period of time.
 
@@ -62,15 +63,7 @@ To use web version of this app with your local server:
 
 1. Make [these small changes](https://github.com/bartekpacia/mentorship-backend/commit/5c4336fa615b0a480af196954b715410e1a41ac3) to your local webserver
    to enable CORS
-2. Run local devserver
-
-### Future?
-
-I'd love Systers to accept this project as one of theirs. I do realize it requires
-better documentation and has to be polished a bit, but I really believe these problems
-are easy to solve.
-My dream? I'll be incredibly happy, for example, if students in next year's Google Code-in will continue its development,
-improve it and polish the codebase.
+2. [Run local server](https://github.com/anitab-org/mentorship-backend#setup-and-run)
 
 ### Contact us
 

@@ -9,3 +9,11 @@ class LoadingIndicator extends StatelessWidget {
     );
   }
 }
+
+Future<void> showProgressIndicator(BuildContext context) {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    child: LoadingIndicator(),
+  );
+}

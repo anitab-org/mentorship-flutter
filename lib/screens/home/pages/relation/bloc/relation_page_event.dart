@@ -11,6 +11,11 @@ class RelationPageShowed extends RelationPageEvent {
   List<Object> get props => null;
 }
 
+class RelationPageRefresh extends RelationPageEvent {
+  @override
+  List<Object> get props => null;
+}
+
 class RelationPageCancelledRelation extends RelationPageEvent {
   final int relationId;
 
@@ -39,7 +44,6 @@ class TaskCompleted extends RelationPageEvent {
   @override
   List<Object> get props => [relation, taskId];
 }
-
 
 class TaskDeleted extends RelationPageEvent {
   final Relation relation;

@@ -16,20 +16,33 @@ import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
 import 'package:toast/toast.dart';
 
+import 'pages/members/bloc/members_page_bloc.dart';
+import 'pages/members/bloc/members_page_event.dart';
+import 'pages/stats/bloc/stats_page_bloc.dart';
+import 'pages/stats/bloc/stats_page_event.dart';
+
 /// [HomeScreen] is the main screen in the app. It's what user sees after successfully logging in.
 /// HomeScreen's main task is to have scaffold with AppBar and BottomNavBar. Content (i.e body)
 /// is provided by one of 5 Pages - [StatsPage], [ProfilePage], [RelationPage], [MembersPage] and [RequestsPage].
 /// HomeScreen manages displaying of these pages using BottomNavBar and PageView.
-class HomeScreen extends StatelessWidget {
-  final pageController = PageController();
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  final pageController = PageController();
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         // I think its too high in the widget tree, but I couldn't find a better solution
+
         BlocProvider<ProfilePageBloc>(
-          create: (context) => ProfilePageBloc(userRepository: UserRepository.instance),
+          create: (context) =>
+              ProfilePageBloc(userRepository: UserRepository.instance)..add(ProfilePageShowed()),
+          child: ProfilePage(),
         ),
         BlocProvider<HomeBloc>(
           create: (context) => HomeBloc(),
@@ -38,12 +51,26 @@ class HomeScreen extends StatelessWidget {
           create: (context) => RelationPageBloc(
             relationRepository: RelationRepository.instance,
             taskRepository: TaskRepository.instance,
-          ),
+          )..add(RelationPageShowed()),
+          child: RelationPage(),
         ),
         BlocProvider<RequestsPageBloc>(
           create: (context) => RequestsPageBloc(
             relationRepository: RelationRepository.instance,
-          ),
+          )..add(RequestsPageShowed()),
+          child: RequestsPage(),
+        ),
+
+        BlocProvider<StatsPageBloc>(
+          create: (context) => StatsPageBloc(userRepository: UserRepository.instance)
+            ..add(
+              StatsPageShowed(),
+            ),
+        ),
+        BlocProvider<MembersPageBloc>(
+          create: (context) =>
+              MembersPageBloc(userRepository: UserRepository.instance)..add(MembersPageShowed()),
+          child: MembersPage(),
         ),
       ],
       child: BlocListener<HomeBloc, HomeState>(
@@ -84,11 +111,11 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               bottomNavigationBar: BottomNavyBar(
-                showElevation: false,
-                onItemSelected:
-                    (index) => // This triggers when the user clicks item on BottomNavyBar
-                        BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index)),
-                selectedIndex: state.index,
+                selectedIndex: _currentIndex,
+                onItemSelected: (index) {
+                  setState(() => _currentIndex = index);
+                  pageController.jumpToPage(index);
+                },
                 items: [
                   BottomNavyBarItem(
                     icon: Icon(Icons.home),

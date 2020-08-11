@@ -1,9 +1,12 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
+import 'package:mentorship_client/widgets/loading_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// This screen will let the user to sign up into the system using name, username,
 /// email and password.
@@ -51,6 +54,9 @@ class _RegisterFormState extends State<RegisterForm> {
   bool _availableToMentor = false;
   bool _needsMentoring = false;
   bool _acceptedTermsAndConditions = false;
+  int _radiovalue;
+  bool registering = false;
+  bool signupButtonEnabled = true;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -79,15 +85,21 @@ class _RegisterFormState extends State<RegisterForm> {
     return null;
   }
 
-  void _toggleAvailableToMentor(bool value) {
+  void _handleRadioValueChange(int value) {
     setState(() {
-      _availableToMentor = !_availableToMentor;
-    });
-  }
-
-  void _toggleNeedsMentoring(bool value) {
-    setState(() {
-      _needsMentoring = !_needsMentoring;
+      _radiovalue = value;
+      switch (_radiovalue) {
+        case 0:
+          _availableToMentor = !_availableToMentor;
+          break;
+        case 1:
+          _needsMentoring = !_needsMentoring;
+          break;
+        case 2:
+          _needsMentoring = !_needsMentoring;
+          _availableToMentor = !_availableToMentor;
+          break;
+      }
     });
   }
 
@@ -100,7 +112,6 @@ class _RegisterFormState extends State<RegisterForm> {
   @override
   Widget build(BuildContext context) {
     const spacing = 12.0;
-
     return Form(
       key: _formKey,
       child: Column(
@@ -168,20 +179,32 @@ class _RegisterFormState extends State<RegisterForm> {
             children: [
               Row(
                 children: [
-                  Checkbox(
-                    value: _availableToMentor,
-                    onChanged: _toggleAvailableToMentor,
+                  Radio(
+                    value: 0,
+                    groupValue: _radiovalue,
+                    onChanged: _handleRadioValueChange,
                   ),
                   Text("Mentor"),
                 ],
               ),
               Row(
                 children: [
-                  Checkbox(
-                    value: _needsMentoring,
-                    onChanged: _toggleNeedsMentoring,
+                  Radio(
+                    value: 1,
+                    groupValue: _radiovalue,
+                    onChanged: _handleRadioValueChange,
                   ),
                   Text("Mentee"),
+                ],
+              ),
+              Row(
+                children: [
+                  Radio(
+                    value: 2,
+                    groupValue: _radiovalue,
+                    onChanged: _handleRadioValueChange,
+                  ),
+                  Text("Both"),
                 ],
               ),
             ],
@@ -193,18 +216,29 @@ class _RegisterFormState extends State<RegisterForm> {
                 onChanged: _toggleTermsAndConditions,
               ),
               Flexible(
-                child: Text("I affirm that I have read and accept to be bound by the "
-                    "AnitaB.org Code of Conduct, Terms and Privacy Policy. Further, "
-                    "I consent to use of my information for the stated purpose."),
+                child: ConditionsText(),
               ),
             ],
           ),
           Padding(
             padding: EdgeInsets.all(16),
-            child: RaisedButton(
-              color: Theme.of(context).accentColor,
-              child: Text("Sign up"),
-              onPressed: () => _register(context),
+            child: Column(
+              children: [
+                registering ? LoadingIndicator() : Container(),
+                RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  child: Text("Sign up"),
+                  onPressed: _acceptedTermsAndConditions && signupButtonEnabled
+                      ? () {
+                          setState(() {
+                            registering = true;
+                            signupButtonEnabled = false;
+                          });
+                          _register(context);
+                        }
+                      : null,
+                ),
+              ],
             ),
           ),
           Padding(
@@ -243,5 +277,79 @@ class _RegisterFormState extends State<RegisterForm> {
       message = exception.toString();
     }
     context.showSnackBar(message);
+    setState(() {
+      registering = false;
+      signupButtonEnabled = true;
+    });
+  }
+}
+
+class ConditionsText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            text: "By checking this box, I affirm that I have read and accept to be bound by the "
+                "AnitaB.org ",
+          ),
+          TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch("https://ghc.anitab.org/code-of-conduct/");
+              },
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            text: "Code of Conduct",
+          ),
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            text: ", ",
+          ),
+          TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch("https://anitab.org/terms-of-use/");
+              },
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            text: "Terms",
+          ),
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            text: ", and ",
+          ),
+          TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launch("https://anitab.org/privacy-policy/");
+              },
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            text: "Privacy Policy",
+          ),
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            text: ". Further, I consent to the use of my information for the stated purpose.",
+          ),
+        ],
+      ),
+    );
   }
 }

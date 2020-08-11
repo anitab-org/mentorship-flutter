@@ -6,6 +6,7 @@ part of 'user_service.dart';
 // ChopperGenerator
 // **************************************************************************
 
+// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations
 class _$UserService extends UserService {
   _$UserService([ChopperClient client]) {
     if (client == null) return;
@@ -23,10 +24,12 @@ class _$UserService extends UserService {
   }
 
   @override
-  Future<Response<List>> getVerifiedUsers() {
+  Future<Response<List<dynamic>>> getVerifiedUsers(
+      {int page, int perPage = 20}) {
     final $url = 'users/verified';
-    final $request = Request('GET', $url, client.baseUrl);
-    return client.send<List, List>($request);
+    final $params = <String, dynamic>{'page': page, 'per_page': perPage};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<List<dynamic>, List<dynamic>>($request);
   }
 
   @override
@@ -34,6 +37,14 @@ class _$UserService extends UserService {
     final $url = 'user';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
+
+  @override
+  Future<Response<List<dynamic>>> getSearchNames({String search}) {
+    final $url = 'users/verified';
+    final $params = <String, dynamic>{'search': search};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<List<dynamic>, List<dynamic>>($request);
   }
 
   @override
