@@ -40,7 +40,8 @@ class _RelationPageState extends State<RelationPage> {
             Tab(text: "Tasks".toUpperCase()),
           ],
         ),
-        body: BlocConsumer<RelationPageBloc, RelationPageState>(listener: (context, state) {
+        body: BlocConsumer<RelationPageBloc, RelationPageState>(
+            listener: (context, state) {
           if (state.message != null && state is RelationPageSuccess) {
             context.showSnackBar(state.message);
             Navigator.of(context).pop();
@@ -141,8 +142,10 @@ class _RelationPageState extends State<RelationPage> {
                         children: [
                           BoldText("Mentor: ", state.relation.mentor.name),
                           BoldText("Mentee: ", state.relation.mentee.name),
-                          BoldText("End date: ",
-                              DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()),
+                          BoldText(
+                              "End date: ",
+                              DateTimeX.fromTimestamp(state.relation.endsOn)
+                                  .toDateString()),
                           BoldText("Notes: ", state.relation.notes),
                         ],
                       ),
@@ -152,7 +155,8 @@ class _RelationPageState extends State<RelationPage> {
                     ),
                     RaisedButton(
                       color: Theme.of(context).accentColor,
-                      child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
+                      child: Text("Cancel".toUpperCase(),
+                          style: TextStyle(color: Colors.white)),
                       onPressed: () {
                         //ignore: close_sinks
                         final bloc = BlocProvider.of<RelationPageBloc>(context);
@@ -162,12 +166,14 @@ class _RelationPageState extends State<RelationPage> {
                           builder: (context) {
                             return AlertDialog(
                               title: Text("Cancel Relation"),
-                              content: Text("Are you sure you want to cancel the relation"),
+                              content: Text(
+                                  "Are you sure you want to cancel the relation"),
                               actions: [
                                 FlatButton(
                                   child: Text("Yes"),
                                   onPressed: () {
-                                    bloc.add(RelationPageCancelledRelation(state.relation.id));
+                                    bloc.add(RelationPageCancelledRelation(
+                                        state.relation.id));
                                     Navigator.of(context).pop();
                                   },
                                 ),
@@ -215,7 +221,7 @@ class _RelationPageState extends State<RelationPage> {
             }
           }
 
-          return Column(
+          return ListView(
             children: [
               SizedBox(height: 10.0),
               ExpandablePanel(
@@ -230,6 +236,7 @@ class _RelationPageState extends State<RelationPage> {
                   ),
                 ),
                 expanded: _buildListView(
+                  
                   context: context,
                   state: state,
                   tasksList: _toDoTasks,
@@ -260,8 +267,10 @@ class _RelationPageState extends State<RelationPage> {
     );
   }
 
-  Widget _buildListView({BuildContext context, List<Task> tasksList, RelationPageSuccess state}) {
+  Widget _buildListView(
+      {BuildContext context, List<Task> tasksList, RelationPageSuccess state}) {
     return ListView.builder(
+      physics: ClampingScrollPhysics(),
       shrinkWrap: true,
       itemCount: tasksList.length,
       itemBuilder: (context, index) {
