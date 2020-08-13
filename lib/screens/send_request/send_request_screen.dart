@@ -7,7 +7,6 @@ import 'package:mentorship_client/remote/repositories/relation_repository.dart';
 import 'package:mentorship_client/remote/requests/relation_requests.dart';
 import 'package:mentorship_client/screens/send_request/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
-import 'package:toast/toast.dart';
 
 class SendRequestScreen extends StatefulWidget {
   final User otherUser;

@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';

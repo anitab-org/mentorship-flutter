@@ -12,30 +12,30 @@ part 'home_stats.g.dart';
 /// [rejected_requests] number of rejected requests
 /// [achievements] a list of up-to 3 completed tasks
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class HomeStats {
   final String name;
-  final int pending_requests;
-  final int accepted_requests;
-  final int completed_relations;
-  final int cancelled_relations;
-  final int rejected_requests;
+  final int pendingRequests;
+  final int acceptedRequests;
+  final int completedRelations;
+  final int cancelledRelations;
+  final int rejectedRequests;
   final List<Task> achievements;
 
   HomeStats({
     this.name,
-    this.pending_requests,
-    this.accepted_requests,
-    this.completed_relations,
-    this.cancelled_relations,
-    this.rejected_requests,
+    this.pendingRequests,
+    this.acceptedRequests,
+    this.completedRelations,
+    this.cancelledRelations,
+    this.rejectedRequests,
     this.achievements,
   })  : assert(name != null),
-        assert(pending_requests != null),
-        assert(accepted_requests != null),
-        assert(completed_relations != null),
-        assert(cancelled_relations != null),
-        assert(rejected_requests != null);
+        assert(pendingRequests != null),
+        assert(acceptedRequests != null),
+        assert(completedRelations != null),
+        assert(cancelledRelations != null),
+        assert(rejectedRequests != null);
 
   // factory HomeStats.fromJson(Map<String, dynamic> json) => HomeStats(
   //       name: json["name"],

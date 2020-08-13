@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -72,17 +73,26 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   String _validateEmail(String value) {
-    if (value.isEmpty) {
-      return "Email cannot be empty"; // TODO: Add regex based validation
+    if (!EmailValidator.validate(value)) {
+      return "Enter valid email";
+    } else if (value.isEmpty) {
+      return "Email cannot be empty";
     }
     return null;
   }
 
   String _validatePassword(String value) {
+    Pattern pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regex = new RegExp(pattern);
+    print(value);
     if (value.isEmpty) {
-      return "Password cannot be empty"; // TODO: Add regex based validation
+      return "Password cannot be empty";
+    } else {
+      if (!regex.hasMatch(value))
+        return "Enter valid password";
+      else
+        return null;
     }
-    return null;
   }
 
   void _handleRadioValueChange(int value) {

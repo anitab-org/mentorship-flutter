@@ -89,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       }),
       body: BlocConsumer<ProfilePageBloc, ProfilePageState>(
         listener: (context, state) {
-          if (state.message != null) {
+          if (state.message != null && state.message != "No internet connection") {
             context.showSnackBar(state.message);
             Navigator.of(context).pop();
           }
@@ -144,11 +144,23 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             }
             if (state is ProfilePageEditing) {
               print(_interestsController.text);
-              return _createPage(context, state.user, true);
+              return _createPage(
+                context,
+                state.user,
+                true,
+              );
             }
 
             if (state is ProfilePageFailure) {
-              return Text(state.message);
+              return RefreshIndicator(
+                onRefresh: () {
+                  BlocProvider.of<ProfilePageBloc>(context).add(
+                    ProfilePageRefresh(),
+                  );
+                  return _refreshCompleter.future;
+                },
+                child: Center(child: Text(state.message)),
+              );
             }
             if (state is ProfilePageLoading) {
               return LoadingIndicator();

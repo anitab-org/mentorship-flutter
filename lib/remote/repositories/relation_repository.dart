@@ -61,8 +61,6 @@ class RelationRepository {
   Future<Relation> getCurrentRelation() async {
     final body =
         await ApiManager.callSafely(() => ApiManager.instance.relationService.getCurrentRelation());
-
-    // TODO: Make it cleanier and prettier
     try {
       return Relation.fromJson(body);
     } on NoSuchMethodError catch (error) {

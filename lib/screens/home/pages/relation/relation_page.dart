@@ -219,14 +219,15 @@ class _RelationPageState extends State<RelationPage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          if (!task.is_done) {
+                          if (!task.isDone) {
                             bloc.add(TaskCompleted(state.relation, task.id));
                             showProgressIndicator(context);
                           } else
                             context.toast("Task already achieved.");
                         },
                         child: Checkbox(
-                          value: task.is_done,
+                          onChanged: (value) {},
+                          value: task.isDone,
                         ),
                       ),
                       Text(task.description),

@@ -9,23 +9,23 @@ part 'task.g.dart';
 /// [isDone] Represents whether this task has been completed
 /// [createdAt] Unix timestamp of when this task was created
 /// [completedAt] Unix timestamp of when this task was completed
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Task {
   final int id;
   final String description;
-  final bool is_done;
-  final double created_at;
-  final double completed_at;
+  final bool isDone;
+  final double createdAt;
+  final double completedAt;
 
   Task({
     this.id,
     this.description,
-    this.is_done,
-    this.created_at,
-    this.completed_at,
+    this.isDone,
+    this.createdAt,
+    this.completedAt,
   })  : assert(id != null),
         assert(description != null),
-        assert(is_done != null);
+        assert(isDone != null);
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
   Map<String, dynamic> toJson() => _$TaskToJson(this);
