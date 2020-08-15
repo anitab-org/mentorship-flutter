@@ -37,11 +37,19 @@ class Task {
   //       completedAt: json["completed_at"],
   //     );
 
-  static List<Task> fromAchievements(List<dynamic> taskList) {
-    List<Task> achievements = [];
+  // static List<Task> fromAchievements(List<dynamic> taskList) {
+  //   List<Task> achievements = [];
+  //   for (dynamic taskJson in taskList) {
+  //     achievements.add(Task.fromJson(taskJson));
+  //   }
+  //   return achievements;
+  // }
+
+  static List<Task> tasks(List<dynamic> taskList) {
+    List<Task> tasks = [];
     for (dynamic taskJson in taskList) {
-      achievements.add(Task.fromJson(taskJson));
+      tasks.add(Task.fromJson(taskJson));
     }
-    return achievements;
+    return tasks;
   }
 }
