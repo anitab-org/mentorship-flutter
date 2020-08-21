@@ -62,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
           )..add(RequestsPageShowed()),
           child: RequestsPage(),
         ),
-
         BlocProvider<StatsPageBloc>(
           create: (context) => StatsPageBloc(userRepository: UserRepository.instance)
             ..add(
@@ -85,11 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
             return Scaffold(
               appBar: AppBar(
                 actions: [
-                  if (state is HomeScreenMembers)
-                    IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () => Toast.show("Not implemented yet", context),
-                    ),
                   IconButton(
                     icon: Icon(Icons.settings),
                     onPressed: () => Navigator.of(context).push(

@@ -34,9 +34,6 @@ class RelationPageBloc extends HydratedBloc<RelationPageEvent, RelationPageState
   @override
   Map<String, dynamic> toJson(RelationPageState state) {
     if (state is RelationPageSuccess) {
-      print("====================");
-      print(state.tasks.map((item) => item.toJson()));
-      print(state.relation.toJson());
       return {
         "relation": state.relation.toJson(),
         "tasks": state.tasks.map((item) => item.toJson()).toList()

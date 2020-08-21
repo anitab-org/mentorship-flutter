@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/extensions/datetime.dart';
 import 'package:mentorship_client/remote/models/task.dart';
@@ -12,6 +13,7 @@ import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/bold_text.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:toast/toast.dart';
 
 class RelationPage extends StatefulWidget {
   @override
@@ -152,34 +154,38 @@ class _RelationPageState extends State<RelationPage> {
                     RaisedButton(
                       color: Theme.of(context).accentColor,
                       child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        //ignore: close_sinks
-                        final bloc = BlocProvider.of<RelationPageBloc>(context);
-
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text("Cancel Relation"),
-                              content: Text("Are you sure you want to cancel the relation"),
-                              actions: [
-                                FlatButton(
-                                  child: Text("Yes"),
-                                  onPressed: () {
-                                    bloc.add(RelationPageCancelledRelation(state.relation.id));
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                FlatButton(
-                                  child: Text("No"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                      onPressed: () async {
+                        if (await DataConnectionChecker().hasConnection) {
+                          // ignore: close_sinks
+                          final bloc = BlocProvider.of<RelationPageBloc>(context);
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Cancel Relation"),
+                                content: Text("Are you sure you want to cancel the relation"),
+                                actions: [
+                                  FlatButton(
+                                    child: Text("Yes"),
+                                    onPressed: () {
+                                      bloc.add(RelationPageCancelledRelation(state.relation.id));
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text("No"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          Toast.show("You are offline", context,
+                              duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                        }
                       },
                     )
                   ],
@@ -218,12 +224,17 @@ class _RelationPageState extends State<RelationPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          if (!task.isDone) {
-                            bloc.add(TaskCompleted(state.relation, task.id));
-                            showProgressIndicator(context);
-                          } else
-                            context.toast("Task already achieved.");
+                        onTap: () async {
+                          if (await DataConnectionChecker().hasConnection) {
+                            if (!task.isDone) {
+                              bloc.add(TaskCompleted(state.relation, task.id));
+                              showProgressIndicator(context);
+                            } else
+                              context.toast("Task already achieved.");
+                          } else {
+                            Toast.show("You are offline", context,
+                                duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                          }
                         },
                         child: Checkbox(
                           onChanged: (value) {},
@@ -238,30 +249,35 @@ class _RelationPageState extends State<RelationPage> {
                       Icons.delete,
                       color: Colors.grey[700],
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Delete task"),
-                          content: Text("Are you sure you want to delete the task?"),
-                          actions: [
-                            FlatButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Cancel"),
-                            ),
-                            FlatButton(
-                              child: Text("Delete"),
-                              onPressed: () {
-                                bloc.add(TaskDeleted(state.relation, task.id));
-                                Navigator.of(context).pop();
-                                showProgressIndicator(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
+                    onPressed: () async {
+                      if (await DataConnectionChecker().hasConnection) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Delete task"),
+                            content: Text("Are you sure you want to delete the task?"),
+                            actions: [
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Cancel"),
+                              ),
+                              FlatButton(
+                                child: Text("Delete"),
+                                onPressed: () {
+                                  bloc.add(TaskDeleted(state.relation, task.id));
+                                  Navigator.of(context).pop();
+                                  showProgressIndicator(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        Toast.show("You are offline", context,
+                            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                      }
                     },
                   ),
                 ],
@@ -284,33 +300,38 @@ class _RelationPageState extends State<RelationPage> {
         Icons.add,
         color: Colors.white,
       ),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("Create task"),
-            content: TextField(
-              controller: _taskInputController,
-              decoration: InputDecoration(hintText: "Task description"),
-            ),
-            actions: [
-              FlatButton(
-                child: Text("Create"),
-                onPressed: () {
-                  bloc.add(
-                    TaskCreated(
-                      state.relation,
-                      TaskRequest(description: _taskInputController.text),
-                    ),
-                  );
+      onPressed: () async {
+        if (await DataConnectionChecker().hasConnection) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Create task"),
+              content: TextField(
+                controller: _taskInputController,
+                decoration: InputDecoration(hintText: "Task description"),
+              ),
+              actions: [
+                FlatButton(
+                  child: Text("Create"),
+                  onPressed: () {
+                    bloc.add(
+                      TaskCreated(
+                        state.relation,
+                        TaskRequest(description: _taskInputController.text),
+                      ),
+                    );
 
-                  Navigator.of(context).pop();
-                  showProgressIndicator(context);
-                },
-              )
-            ],
-          ),
-        );
+                    Navigator.of(context).pop();
+                    showProgressIndicator(context);
+                  },
+                )
+              ],
+            ),
+          );
+        } else {
+          Toast.show("You are offline", context,
+              duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+        }
       },
     );
   }

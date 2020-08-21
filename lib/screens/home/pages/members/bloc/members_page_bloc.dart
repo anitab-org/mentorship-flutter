@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/user.dart';
@@ -9,19 +9,42 @@ import 'package:mentorship_client/remote/repositories/user_repository.dart';
 
 import './bloc.dart';
 
-class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
+class MembersPageBloc extends HydratedBloc<MembersPageEvent, MembersPageState> {
   final UserRepository userRepository;
   int pageNumber = 1;
   MembersPageBloc({@required this.userRepository})
       : assert(userRepository != null),
         super(MembersPageInitial());
+  @override
+  MembersPageState fromJson(Map<String, dynamic> json) {
+    try {
+      List<User> users = User.users(json["users"]);
+      bool hasReachedMax = json["hasReachedMax"];
+      return MembersPageSuccess(users: users, hasReachedMax: hasReachedMax);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(MembersPageState state) {
+    if (state is MembersPageSuccess) {
+      return {
+        "users": state.users.map((item) => item.toJson()).toList(),
+        "hasReachedMax": state.hasReachedMax
+      };
+    }
+    return null;
+  }
 
   @override
   Stream<MembersPageState> mapEventToState(MembersPageEvent event) async* {
-    if (event is MembersPageShowed) {
+    if (event is MembersPageShowed && state is! MembersPageSuccess) {
       yield* _mapEventToMembersShowed(event);
     } else if (event is MembersPageRefresh) {
       yield* _mapEventToMembersRefresh(event);
+    } else if (event is MoreMembers) {
+      yield* _mapEventToMembersSuccess(event);
     }
   }
 
@@ -35,16 +58,6 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
           final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
           yield MembersPageSuccess(users: users, hasReachedMax: false);
         }
-        if (currentState is MembersPageSuccess) {
-          final users =
-              await userRepository.getVerifiedUsers((currentState.users.length ~/ 10) + 1);
-          yield users.isEmpty
-              ? currentState.copyWith(hasReachedMax: true)
-              : MembersPageSuccess(
-                  users: currentState.users + users,
-                  hasReachedMax: false,
-                );
-        }
       } on Failure catch (failure) {
         Logger.root.severe("MembersPageBloc: Failure catched: $failure.message");
         yield MembersPageFailure(failure.message);
@@ -52,16 +65,33 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
     }
   }
 
-  Stream<MembersPageState> _mapEventToMembersRefresh(MembersPageEvent event) async* {
+  Stream<MembersPageState> _mapEventToMembersSuccess(MembersPageEvent event) async* {
+    final currentState = state;
+    try {
+      if (currentState is MembersPageSuccess) {
+        final users = await userRepository.getVerifiedUsers((currentState.users.length ~/ 10) + 1);
+        yield users.isEmpty
+            ? currentState.copyWith(hasReachedMax: true)
+            : MembersPageSuccess(
+                users: currentState.users + users,
+                hasReachedMax: false,
+              );
+      }
+    } on Failure catch (failure) {
+      Logger.root.severe("MembersPageBloc: Failure catched: $failure.message");
+      yield MembersPageFailure(failure.message);
+    }
+  }
 
-    if (event is MembersPageRefresh) {
+  Stream<MembersPageState> _mapEventToMembersRefresh(MembersPageEvent event) async* {
+    if (event is MembersPageRefresh && state is MembersPageSuccess) {
       try {
         yield MembersPageLoading();
         final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
         yield MembersPageSuccess(users: users, hasReachedMax: false);
       } on Failure catch (failure) {
         Logger.root.severe("MembersPageBloc: Failure catched: $failure.message");
-        yield state;
+        yield MembersPageBloc(userRepository: userRepository).state;
       }
     }
   }

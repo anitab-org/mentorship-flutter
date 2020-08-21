@@ -14,7 +14,7 @@ description: Cross-platform client for Systers&#x27; mentorship system.
 version: 1.0.0
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -37,7 +37,8 @@ dependencies:
   flutter_offline: ^0.3.0
   flappy_search_bar: ^1.7.2
   email_validator: ^1.0.5
-  # Bloc
+  data_connection_checker: ^0.3.4
+# Bloc
   bloc: ^6.0.1
   flutter_bloc: ^6.0.1
   chopper: ^3.0.2

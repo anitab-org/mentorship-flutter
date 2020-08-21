@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/remote/models/user.dart';
@@ -7,6 +8,7 @@ import 'package:mentorship_client/screens/home/pages/members/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/members/widgets/member_list_tile.dart';
 import 'package:mentorship_client/screens/home/pages/search/search_page.dart';
 import 'package:mentorship_client/screens/member_profile/member_profile.dart';
+import 'package:toast/toast.dart';
 
 class MembersPage extends StatefulWidget {
   @override
@@ -38,11 +40,18 @@ class _MembersPageState extends State<MembersPage> {
     }, builder: (context, state) {
       return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => SearchPage(),
-            ),
-          ),
+          onPressed: () async {
+            if (await DataConnectionChecker().hasConnection) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SearchPage(),
+                ),
+              );
+            } else {
+              Toast.show("You are offline", context,
+                  duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+            }
+          },
           child: Icon(
             Icons.search,
             color: Colors.white,
@@ -107,11 +116,15 @@ class _MembersPageState extends State<MembersPage> {
     super.dispose();
   }
 
-  void _onScroll() {
+  void _onScroll() async {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      _membersPageBloc.add(MembersPageShowed());
+      if (await DataConnectionChecker().hasConnection) {
+        _membersPageBloc.add(MoreMembers());
+      } else {
+        Toast.show("You are offline", context, duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      }
     }
   }
 }

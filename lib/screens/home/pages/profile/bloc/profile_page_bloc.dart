@@ -20,9 +20,9 @@ class ProfilePageBloc extends HydratedBloc<ProfilePageEvent, ProfilePageState> {
   @override
   ProfilePageState fromJson(Map<String, dynamic> json) {
     try {
-      final _user = User.fromJson(json);
+      _user = User.fromJson(json);
       return ProfilePageSuccess(_user);
-    } catch (e) {   
+    } catch (e) {
       return null;
     }
   }

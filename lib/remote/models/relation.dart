@@ -55,6 +55,14 @@ class Relation {
     data['notes'] = this.notes;
     return data;
   }
+
+  static List<Relation> relations(List<dynamic> relationList) {
+    List<Relation> relations = [];
+    for (dynamic relationsJson in relationList) {
+      relations.add(Relation.fromJson(relationsJson));
+    }
+    return relations;
+  }
 }
 
 /// This data class represents partial information of user of the system.
