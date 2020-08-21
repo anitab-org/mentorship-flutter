@@ -29,21 +29,7 @@ class Task {
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
   Map<String, dynamic> toJson() => _$TaskToJson(this);
-  // factory Task.fromJson(Map<String, dynamic> json) => Task(
-  //       id: json["id"],
-  //       description: json["description"],
-  //       isDone: json["is_done"],
-  //       createdAt: json["created_at"],
-  //       completedAt: json["completed_at"],
-  //     );
 
-  // static List<Task> fromAchievements(List<dynamic> taskList) {
-  //   List<Task> achievements = [];
-  //   for (dynamic taskJson in taskList) {
-  //     achievements.add(Task.fromJson(taskJson));
-  //   }
-  //   return achievements;
-  // }
 
   static List<Task> tasks(List<dynamic> taskList) {
     List<Task> tasks = [];

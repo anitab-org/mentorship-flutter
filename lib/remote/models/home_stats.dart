@@ -37,16 +37,6 @@ class HomeStats {
         assert(cancelledRelations != null),
         assert(rejectedRequests != null);
 
-  // factory HomeStats.fromJson(Map<String, dynamic> json) => HomeStats(
-  //       name: json["name"],
-  //       pending_requests: json["pending_requests"],
-  //       accepted_requests: json["accepted_requests"],
-  //       completed_relations: json["completed_relations"],
-  //       cancelled_relations: json["cancelled_relations"],
-  //       rejected_requests: json["rejected_requests"],
-  //       achievements: Task.fromAchievements(json["achievements"]),
-  //     );
-
   factory HomeStats.fromJson(Map<String, dynamic> json) => _$HomeStatsFromJson(json);
   Map<String, dynamic> toJson() => _$HomeStatsToJson(this);
 }
