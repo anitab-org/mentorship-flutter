@@ -34,9 +34,10 @@ dependencies:
   auto_size_text: ^2.1.0
   flappy_search_bar: ^1.7.2
   # Bloc
-  bloc: ^4.0.0
-  flutter_bloc: ^4.0.1
+  bloc: ^6.0.1
+  flutter_bloc: ^6.0.1
   chopper: ^3.0.3
+
   
 # plugins not needed in app
 dev_dependencies:
