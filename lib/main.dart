@@ -11,7 +11,7 @@ import 'package:mentorship_client/screens/home/home_screen.dart';
 import 'package:mentorship_client/screens/login/login_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toast/toast.dart';
-//TODO: ADD OFFLINE CHECKERS ON BUTTONS WHICH DO API RELATED STUFF 
+
 void main() async {
   // Logs all BLoC transitions
   Bloc.observer = SimpleBlocDelegate();
