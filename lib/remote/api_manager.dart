@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/services/auth_service.dart';
+import 'package:mentorship_client/remote/services/comment_service.dart';
 import 'package:mentorship_client/remote/services/relation_service.dart';
 import 'package:mentorship_client/remote/services/task_service.dart';
 import 'package:mentorship_client/remote/services/user_service.dart';
@@ -16,6 +17,7 @@ class ApiManager {
   final UserService userService = UserService.create();
   final RelationService relationService = RelationService.create();
   final TaskService taskService = TaskService.create();
+  final CommentService commentService = CommentService.create();
 
   ApiManager._internal();
 
