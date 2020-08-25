@@ -259,20 +259,22 @@ _showDialog(context, String comment, Relation relation, int taskId, int commentI
               Navigator.pop(context);
             }),
         FlatButton(
-            child: Text('Edit'),
-            onPressed: () {
-              bloc.add(
-                CommentEditing(
-                  relation,
-                  taskId,
-                  commentId,
-                  CommentRequest(
-                    comment: editingController.text,
-                  ),
+          child: Text('Edit'),
+          onPressed: () {
+            bloc.add(
+              CommentEditing(
+                relation,
+                taskId,
+                commentId,
+                CommentRequest(
+                  comment: editingController.text,
                 ),
-              );
-              Navigator.pop(context);
-            })
+              ),
+            );
+            Navigator.pop(context);
+            Toast.show("Editing...", context, duration: 1);
+          },
+        )
       ],
     ),
   );
