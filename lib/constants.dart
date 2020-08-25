@@ -1,4 +1,4 @@
-const String API_URL = "https://mentorship-backend-temp.herokuapp.com/";
+const String API_URL = "http://f8f090446eef.ngrok.io/";
 
 const String STATS_PAGE_TITLE = "Home";
 const String PROFILE_PAGE_TITLE = "My Profile";

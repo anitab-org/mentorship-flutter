@@ -33,11 +33,12 @@ class _$CommentService extends CommentService {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> editComment(
-      int relationId, int taskId, int commentId) {
+  Future<Response<Map<String, dynamic>>> editComment(int relationId, int taskId,
+      int commentId, CommentRequest commentRequest) {
     final $url =
         'mentorship_relation/$relationId/task/$taskId/comment/$commentId';
-    final $request = Request('PUT', $url, client.baseUrl);
+    final $body = commentRequest;
+    final $request = Request('PUT', $url, client.baseUrl, body: $body);
     return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
   }
 

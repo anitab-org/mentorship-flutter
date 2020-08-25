@@ -25,6 +25,7 @@ abstract class CommentService extends ChopperService {
     @Path("relation_id") int relationId,
     @Path("task_id") int taskId,
     @Path("comment_id") int commentId,
+    @Body() CommentRequest commentRequest,
   );
 
   @Delete(path: "mentorship_relation/{relation_id}/task/{task_id}/comment/{comment_id}")

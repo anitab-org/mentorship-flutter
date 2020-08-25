@@ -20,7 +20,7 @@ class CommentPageBloc extends Bloc<CommentPageEvent, CommentPageState> {
   @override
   Stream<CommentPageState> mapEventToState(CommentPageEvent event) async* {
     if (event is CommentPageShowed) {
-      yield CommentPageInitial();
+      yield CommentPageLoading();
       try {
         List<Comment> comments =
             await commentRepository.getAllComments(event.relation.id, event.taskId);
@@ -34,6 +34,17 @@ class CommentPageBloc extends Bloc<CommentPageEvent, CommentPageState> {
       try {
         CustomResponse response = await commentRepository.newComment(
             event.relation.id, event.taskId, event.commentRequest);
+        var comments = await commentRepository.getAllComments(event.relation.id, event.taskId);
+        yield CommentPageSuccess(comments, message: response.message);
+      } on Failure catch (failure) {
+        Logger.root.severe("CommentPageBloc: ${failure.message}");
+        yield CommentPageFailure(message: failure.message);
+      }
+    }
+    if (event is CommentEditing) {
+      try {
+        CustomResponse response = await commentRepository.editComment(
+            event.relation.id, event.taskId, event.commentId, event.commentRequest);
         var comments = await commentRepository.getAllComments(event.relation.id, event.taskId);
         yield CommentPageSuccess(comments, message: response.message);
       } on Failure catch (failure) {

@@ -31,11 +31,13 @@ class CommentRepository {
     return CustomResponse.fromJson(body);
   }
 
-  Future<CustomResponse> editComment(int relationId, int taskId, int commentId) async {
+  Future<CustomResponse> editComment(
+      int relationId, int taskId, int commentId, CommentRequest commentRequest) async {
     final body = await ApiManager.callSafely(() => ApiManager.instance.commentService.editComment(
           relationId,
           taskId,
           commentId,
+          commentRequest,
         ));
 
     return CustomResponse.fromJson(body);

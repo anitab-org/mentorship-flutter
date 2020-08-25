@@ -19,7 +19,7 @@ class RelationRequest {
       );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['mentor_id'] = this.mentorId;
     data['mentee_id'] = this.menteeId;
     data['notes'] = this.notes;

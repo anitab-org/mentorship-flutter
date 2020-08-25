@@ -31,6 +31,18 @@ class CommentCreated extends CommentPageEvent {
   List<Object> get props => [relation, taskId, commentRequest];
 }
 
+class CommentEditing extends CommentPageEvent {
+  final Relation relation;
+  final int taskId;
+  final int commentId;
+  final CommentRequest commentRequest;
+
+  CommentEditing(this.relation, this.taskId, this.commentId, this.commentRequest);
+
+  @override
+  List<Object> get props => [relation, taskId];
+}
+
 class CommentDeleted extends CommentPageEvent {
   final Relation relation;
   final int taskId;
