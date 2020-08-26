@@ -14,11 +14,13 @@ class MembersPageLoading extends MembersPageState {}
 
 class MembersPageSuccess extends MembersPageState {
   final List<User> users;
+  final User currentUser;
   final bool hasReachedMax;
 
   MembersPageSuccess({
     this.users,
     this.hasReachedMax,
+    this.currentUser,
   });
 
   // We implemented copyWith so that we can copy an instance of MembersPageSuccess
