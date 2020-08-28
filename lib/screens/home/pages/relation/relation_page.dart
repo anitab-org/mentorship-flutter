@@ -14,7 +14,6 @@ import 'package:mentorship_client/widgets/loading_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class RelationPage extends StatefulWidget {
-  bool _isAppbarVisible = true;
   @override
   _RelationPageState createState() => _RelationPageState();
 }
