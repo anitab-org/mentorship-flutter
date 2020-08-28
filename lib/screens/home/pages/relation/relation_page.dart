@@ -32,21 +32,20 @@ class _RelationPageState extends State<RelationPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: TabBar(
-          labelColor: Theme.of(context).accentColor,
-          tabs: [
-            Tab(text: "Details".toUpperCase()),
-            Tab(text: "Tasks".toUpperCase()),
-          ],
-        ),
+        appBar: _buildAppBar(null),
         body: BlocConsumer<RelationPageBloc, RelationPageState>(listener: (context, state) {
           if (state.message != null && state is RelationPageSuccess) {
             context.showSnackBar(state.message);
             Navigator.of(context).pop();
+            _buildAppBar(state);
           }
           if (state is RelationPageShowed) {
             _refreshCompleter?.complete();
             _refreshCompleter = Completer();
+            _buildAppBar(state);
+          }
+          if (state is RelationPageFailure) {
+            _buildAppBar(state);
           }
         }, builder: (context, state) {
           return BlocBuilder<RelationPageBloc, RelationPageState>(
@@ -113,6 +112,18 @@ class _RelationPageState extends State<RelationPage> {
         }),
       ),
     );
+  }
+
+  // build the tab bar
+  Widget _buildAppBar(RelationPageState state) {
+    return state is RelationPageSuccess || state is RelationPageShowed ?
+    TabBar(
+        labelColor: Theme.of(context).accentColor,
+        tabs: [
+          Tab(text: "Details".toUpperCase()),
+          Tab(text: "Tasks".toUpperCase()),
+        ]
+    ) : null;
   }
 
   Widget _buildDetailsTab(BuildContext context, RelationPageSuccess state) {
