@@ -12,8 +12,7 @@ import './bloc.dart';
 class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
   final UserRepository userRepository;
   int pageNumber = 1;
-  MembersPageBloc({@required this.userRepository})
-      : assert(userRepository != null);
+  MembersPageBloc({@required this.userRepository}) : assert(userRepository != null);
   @override
   MembersPageState get initialState => MembersPageInitial();
 
@@ -26,16 +25,14 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
     }
   }
 
-  Stream<MembersPageState> _mapEventToMembersShowed(
-      MembersPageEvent event) async* {
+  Stream<MembersPageState> _mapEventToMembersShowed(MembersPageEvent event) async* {
     final currentState = state;
 
     if (event is MembersPageShowed && !_hasReachedMax(currentState)) {
       try {
         if (currentState is MembersPageInitial) {
           yield MembersPageLoading();
-          final List<User> users =
-              await userRepository.getVerifiedUsers(pageNumber);
+          final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
           final User currentUser = await userRepository.getCurrentUser();
           yield MembersPageSuccess(
             users: users,
@@ -44,8 +41,8 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
           );
         }
         if (currentState is MembersPageSuccess) {
-          final users = await userRepository
-              .getVerifiedUsers((currentState.users.length ~/ 10) + 1);
+          final users =
+              await userRepository.getVerifiedUsers((currentState.users.length ~/ 10) + 1);
           yield users.isEmpty
               ? currentState.copyWith(hasReachedMax: true)
               : MembersPageSuccess(
@@ -55,38 +52,31 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
                 );
         }
       } on Failure catch (failure) {
-        Logger.root
-            .severe("MembersPageBloc: Failure catched: $failure.message");
+        Logger.root.severe("MembersPageBloc: Failure catched: $failure.message");
         yield MembersPageFailure(failure.message);
       }
     }
   }
 
-  Stream<MembersPageState> _mapEventToMembersRefresh(
-      MembersPageEvent event) async* {
+  Stream<MembersPageState> _mapEventToMembersRefresh(MembersPageEvent event) async* {
     final currentState = state;
 
     if (event is MembersPageRefresh) {
       try {
         yield MembersPageLoading();
-        final List<User> users =
-            await userRepository.getVerifiedUsers(pageNumber);
-        final User currentUser = (currentState is MembersPageSuccess)
-            ? currentState.currentUser
-            : await userRepository.getCurrentUser();
+        final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
+        final User currentUser = (currentState as MembersPageSuccess).currentUser;
         yield MembersPageSuccess(
           users: users,
           hasReachedMax: false,
           currentUser: currentUser,
         );
       } on Failure catch (failure) {
-        Logger.root
-            .severe("MembersPageBloc: Failure catched: $failure.message");
+        Logger.root.severe("MembersPageBloc: Failure catched: $failure.message");
         yield state;
       }
     }
   }
 }
 
-bool _hasReachedMax(MembersPageState state) =>
-    state is MembersPageSuccess && state.hasReachedMax;
+bool _hasReachedMax(MembersPageState state) => state is MembersPageSuccess && state.hasReachedMax;
