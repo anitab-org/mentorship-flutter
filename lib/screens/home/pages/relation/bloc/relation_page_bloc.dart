@@ -18,10 +18,8 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
 
   RelationPageBloc({@required this.relationRepository, @required this.taskRepository})
       : assert(relationRepository != null),
-        assert(taskRepository != null);
-
-  @override
-  RelationPageState get initialState => RelationPageLoading();
+        assert(taskRepository != null),
+        super(RelationPageLoading());
 
   @override
   Stream<RelationPageState> mapEventToState(RelationPageEvent event) async* {

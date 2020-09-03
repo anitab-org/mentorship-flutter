@@ -12,10 +12,9 @@ import './bloc.dart';
 class SendRequestBloc extends Bloc<SendRequestEvent, SendRequestState> {
   final RelationRepository relationRepository;
 
-  SendRequestBloc({@required this.relationRepository}) : assert(relationRepository != null);
-
-  @override
-  SendRequestState get initialState => InitialSendRequestState();
+  SendRequestBloc({@required this.relationRepository})
+      : assert(relationRepository != null),
+        super(InitialSendRequestState());
 
   @override
   Stream<SendRequestState> mapEventToState(SendRequestEvent event) async* {
