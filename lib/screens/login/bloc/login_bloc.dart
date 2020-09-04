@@ -10,10 +10,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthRepository authRepository;
   final AuthBloc authBloc;
 
-  LoginBloc(this.authRepository, this.authBloc);
-
-  @override
-  get initialState => LoginInitial();
+  LoginBloc(this.authRepository, this.authBloc) : super(LoginInitial());
 
   @override
   Stream<LoginState> mapEventToState(event) async* {

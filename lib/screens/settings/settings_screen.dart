@@ -40,13 +40,6 @@ class SettingsScreen extends StatelessWidget {
               title: Text("Change password"),
               onTap: () => _showChangePasswordDialog(context),
             ),
-            ListTile(
-              leading: Icon(Icons.delete_outline),
-              title: Text(
-                "Delete account",
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
           ],
         ),
       ),

@@ -12,9 +12,9 @@ import './bloc.dart';
 class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
   final UserRepository userRepository;
   int pageNumber = 1;
-  MembersPageBloc({@required this.userRepository}) : assert(userRepository != null);
-  @override
-  MembersPageState get initialState => MembersPageInitial();
+  MembersPageBloc({@required this.userRepository})
+      : assert(userRepository != null),
+        super(MembersPageInitial());
 
   @override
   Stream<MembersPageState> mapEventToState(MembersPageEvent event) async* {
@@ -53,7 +53,6 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
   }
 
   Stream<MembersPageState> _mapEventToMembersRefresh(MembersPageEvent event) async* {
-    final currentState = state;
 
     if (event is MembersPageRefresh) {
       try {

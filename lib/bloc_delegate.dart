@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
 
 /// BlocDelegate which logs all BLOC events, errors and transitions.
-class SimpleBlocDelegate extends BlocDelegate {
+class SimpleBlocDelegate extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
@@ -10,8 +10,8 @@ class SimpleBlocDelegate extends BlocDelegate {
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    super.onError(bloc, error, stacktrace);
+  void onError(Cubit cubit, Object error, StackTrace stacktrace) {
+    super.onError(cubit, error, stacktrace);
     Logger.root.severe(error);
   }
 
