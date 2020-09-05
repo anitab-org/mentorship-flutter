@@ -15,7 +15,6 @@ import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
-import 'package:toast/toast.dart';
 
 import 'pages/members/bloc/members_page_bloc.dart';
 import 'pages/members/bloc/members_page_event.dart';
