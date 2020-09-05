@@ -49,13 +49,6 @@ class SettingsScreen extends StatelessWidget {
                 }
               },
             ),
-            ListTile(
-              leading: Icon(Icons.delete_outline),
-              title: Text(
-                "Delete account",
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
           ],
         ),
       ),

@@ -65,6 +65,7 @@ class MembersPageBloc extends HydratedBloc<MembersPageEvent, MembersPageState> {
     }
   }
 
+<<<<<<< HEAD
   Stream<MembersPageState> _mapEventToMembersSuccess(MembersPageEvent event) async* {
     final currentState = state;
     try {
@@ -82,6 +83,9 @@ class MembersPageBloc extends HydratedBloc<MembersPageEvent, MembersPageState> {
       yield MembersPageFailure(failure.message);
     }
   }
+=======
+  Stream<MembersPageState> _mapEventToMembersRefresh(MembersPageEvent event) async* {
+>>>>>>> a4d58f2b9eb7cd440728fcfa97cca4eff99d345d
 
   Stream<MembersPageState> _mapEventToMembersRefresh(MembersPageEvent event) async* {
     if (event is MembersPageRefresh && state is MembersPageSuccess) {

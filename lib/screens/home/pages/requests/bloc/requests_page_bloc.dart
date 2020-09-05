@@ -5,7 +5,6 @@ import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
 import 'package:mentorship_client/remote/repositories/relation_repository.dart';
-import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
 
 import './bloc.dart';
 
