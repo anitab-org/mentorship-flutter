@@ -74,4 +74,12 @@ class User {
     data['available_to_mentor'] = this.availableToMentor;
     return data;
   }
+
+  static List<User> users(List<dynamic> userList) {
+    List<User> users = [];
+    for (dynamic usersJson in userList) {
+      users.add(User.fromJson(usersJson));
+    }
+    return users;
+  }
 }

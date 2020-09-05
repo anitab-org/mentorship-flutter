@@ -1,3 +1,6 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'task.g.dart';
+
 /// This data class represents a task related to a mentorship
 /// relation.
 ///
@@ -6,6 +9,7 @@
 /// [isDone] Represents whether this task has been completed
 /// [createdAt] Unix timestamp of when this task was created
 /// [completedAt] Unix timestamp of when this task was completed
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Task {
   final int id;
   final String description;
@@ -23,19 +27,15 @@ class Task {
         assert(description != null),
         assert(isDone != null);
 
-  factory Task.fromJson(Map<String, dynamic> json) => Task(
-        id: json["id"],
-        description: json["description"],
-        isDone: json["is_done"],
-        createdAt: json["created_at"],
-        completedAt: json["completed_at"],
-      );
+  factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+  Map<String, dynamic> toJson() => _$TaskToJson(this);
 
-  static List<Task> fromAchievements(List<dynamic> taskList) {
-    List<Task> achievements = [];
+
+  static List<Task> tasks(List<dynamic> taskList) {
+    List<Task> tasks = [];
     for (dynamic taskJson in taskList) {
-      achievements.add(Task.fromJson(taskJson));
+      tasks.add(Task.fromJson(taskJson));
     }
-    return achievements;
+    return tasks;
   }
 }

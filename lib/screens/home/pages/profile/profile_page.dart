@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/remote/models/user.dart';
 import 'package:mentorship_client/screens/home/pages/profile/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 import 'dart:async';
+
+import 'package:toast/toast.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -29,7 +32,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   AnimationController _animationController;
 
   Completer<void> _refreshCompleter;
-
   @override
   void initState() {
     _animationController = AnimationController(
@@ -37,6 +39,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       duration: Duration(milliseconds: 500),
       upperBound: 0.5,
     );
+
     super.initState();
     _refreshCompleter = Completer<void>();
   }
@@ -52,17 +55,13 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           editing = true;
         }
         return FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
             //ignore: close_sinks
             final bloc = BlocProvider.of<ProfilePageBloc>(context);
 
             if (state is ProfilePageEditing) {
               showProgressIndicator(context);
-
               _formKey.currentState.save();
-              user.availableToMentor = _availableToMentor;
-              user.needsMentoring = _needsMentoring;
-
               user.name = _nameController.text;
               user.username = _usernameController.text;
               user.email = _emailController.text;
@@ -73,12 +72,18 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
               user.organization = _organizationController.text;
               user.skills = _skillsController.text;
               user.interests = _interestsController.text;
-
+              user.availableToMentor = _availableToMentor;
+              user.needsMentoring = _needsMentoring;
               bloc.add(ProfilePageEditSubmitted(user));
               _animationController.reverse();
             } else if (state is ProfilePageSuccess) {
-              _animationController.forward();
-              bloc.add(ProfilePageEditStarted());
+              if (await DataConnectionChecker().hasConnection) {
+                _animationController.forward();
+                bloc.add(ProfilePageEditStarted());
+              } else {
+                Toast.show("You are offline", context,
+                    duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+              }
             }
           },
           child: Icon(
@@ -89,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
       }),
       body: BlocConsumer<ProfilePageBloc, ProfilePageState>(
         listener: (context, state) {
-          if (state.message != null) {
+          if (state.message != null && state.message != "No internet connection") {
             context.showSnackBar(state.message);
             Navigator.of(context).pop();
           }
@@ -144,11 +149,23 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             }
             if (state is ProfilePageEditing) {
               print(_interestsController.text);
-              return _createPage(context, state.user, true);
+              return _createPage(
+                context,
+                state.user,
+                true,
+              );
             }
 
             if (state is ProfilePageFailure) {
-              return Text(state.message);
+              return RefreshIndicator(
+                onRefresh: () {
+                  BlocProvider.of<ProfilePageBloc>(context).add(
+                    ProfilePageRefresh(),
+                  );
+                  return _refreshCompleter.future;
+                },
+                child: Center(child: Text(state.message)),
+              );
             }
             if (state is ProfilePageLoading) {
               return LoadingIndicator();

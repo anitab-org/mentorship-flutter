@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/relation.dart';
@@ -12,7 +12,7 @@ import 'package:mentorship_client/remote/responses/custom_response.dart';
 
 import 'bloc.dart';
 
-class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
+class RelationPageBloc extends HydratedBloc<RelationPageEvent, RelationPageState> {
   final RelationRepository relationRepository;
   final TaskRepository taskRepository;
 
@@ -20,10 +20,31 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
       : assert(relationRepository != null),
         assert(taskRepository != null),
         super(RelationPageLoading());
+  @override
+  RelationPageState fromJson(Map<String, dynamic> json) {
+    try {
+      Relation relation = Relation.fromJson(json["relation"]);
+      List<Task> tasks = Task.tasks(json["tasks"]);
+      return RelationPageSuccess(relation, tasks);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(RelationPageState state) {
+    if (state is RelationPageSuccess) {
+      return {
+        "relation": state.relation.toJson(),
+        "tasks": state.tasks.map((item) => item.toJson()).toList()
+      };
+    }
+    return null;
+  }
 
   @override
   Stream<RelationPageState> mapEventToState(RelationPageEvent event) async* {
-    if (event is RelationPageShowed) {
+    if (event is RelationPageShowed && state is! RelationPageSuccess) {
       yield RelationPageLoading();
       try {
         Relation relation = await relationRepository.getCurrentRelation();
@@ -48,7 +69,9 @@ class RelationPageBloc extends Bloc<RelationPageEvent, RelationPageState> {
         yield RelationPageSuccess(relation, tasks);
       } on Failure catch (failure) {
         Logger.root.severe("RelationPageBloc: Failure catched: $failure.message");
-        yield state;
+        yield RelationPageBloc(
+                relationRepository: relationRepository, taskRepository: taskRepository)
+            .state;
       }
     }
 

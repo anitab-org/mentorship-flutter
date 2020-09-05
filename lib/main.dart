@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/auth/bloc.dart';
@@ -8,18 +9,22 @@ import 'package:mentorship_client/bloc_delegate.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
 import 'package:mentorship_client/screens/home/home_screen.dart';
 import 'package:mentorship_client/screens/login/login_screen.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:toast/toast.dart';
 
-void main() {
+void main() async {
   // Logs all BLoC transitions
   Bloc.observer = SimpleBlocDelegate();
   _setupLogging();
-
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
   // Providing app-wide auth bloc, so that app state changes immediately when
   // auth state changes.
   runApp(
     BlocProvider<AuthBloc>(
-      create: (context) => AuthBloc(AuthRepository.instance)..add(AppStarted()),
+      create: (context) => AuthBloc(AuthRepository.instance),
       child: MentorshipApp(),
     ),
   );

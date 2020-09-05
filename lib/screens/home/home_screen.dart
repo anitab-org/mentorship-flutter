@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:mentorship_client/remote/repositories/relation_repository.dart';
 import 'package:mentorship_client/remote/repositories/task_repository.dart';
 import 'package:mentorship_client/remote/repositories/user_repository.dart';
@@ -14,7 +15,6 @@ import 'package:mentorship_client/screens/home/pages/requests/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/pages/requests/requests_page.dart';
 import 'package:mentorship_client/screens/home/pages/stats/stats_page.dart';
 import 'package:mentorship_client/screens/settings/settings_screen.dart';
-import 'package:toast/toast.dart';
 
 import 'pages/members/bloc/members_page_bloc.dart';
 import 'pages/members/bloc/members_page_event.dart';
@@ -32,7 +32,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final pageController = PageController();
-  int _currentIndex = 0;
+  bool _isContainerVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -60,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
           )..add(RequestsPageShowed()),
           child: RequestsPage(),
         ),
-
         BlocProvider<StatsPageBloc>(
           create: (context) => StatsPageBloc(userRepository: UserRepository.instance)
             ..add(
@@ -83,11 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
             return Scaffold(
               appBar: AppBar(
                 actions: [
-                  if (state is HomeScreenMembers)
-                    IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () => Toast.show("Not implemented yet", context),
-                    ),
                   IconButton(
                     icon: Icon(Icons.settings),
                     onPressed: () => Navigator.of(context).push(
@@ -98,6 +93,65 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
                 title: Text(state.title),
+                bottom: PreferredSize(
+                  preferredSize: Size(
+                    double.infinity,
+                    MediaQuery.of(context).size.height * 0.008,
+                  ),
+                  child: OfflineBuilder(
+                    connectivityBuilder: (
+                      BuildContext context,
+                      ConnectivityResult connectivity,
+                      Widget child,
+                    ) {
+                      final bool connected = connectivity != ConnectivityResult.none;
+                      if (connected) {
+                        Future.delayed(Duration(seconds: 2)).then((v) {
+                          if (this.mounted)
+                            setState(() {
+                              _isContainerVisible = false;
+                            });
+                        });
+                      }
+                      return ListView(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        padding: const EdgeInsets.all(0.0),
+                        children: [
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 350),
+                            child: connected
+                                ? _isContainerVisible ? Container() : Container()
+                                : Container(
+                                    color: Colors.red,
+                                    height: 25,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          'You are offline',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        SizedBox(width: 8.0),
+                                        SizedBox(
+                                          width: 12.0,
+                                          height: 12.0,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2.0,
+                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                          ),
+                          child,
+                        ],
+                      );
+                    },
+                    child: Container(),
+                  ),
+                ),
               ),
               body: PageView(
                 physics: NeverScrollableScrollPhysics(),
@@ -111,11 +165,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               bottomNavigationBar: BottomNavyBar(
-                selectedIndex: _currentIndex,
-                onItemSelected: (index) {
-                  setState(() => _currentIndex = index);
-                  pageController.jumpToPage(index);
-                },
+                onItemSelected:
+                    (index) => // This triggers when the user clicks item on BottomNavyBar
+                        BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index)),
+                selectedIndex: state.index,
                 items: [
                   BottomNavyBarItem(
                     icon: Icon(Icons.home),

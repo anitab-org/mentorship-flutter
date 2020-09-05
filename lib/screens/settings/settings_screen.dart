@@ -1,3 +1,4 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:mentorship_client/remote/requests/change_password.dart';
 import 'package:mentorship_client/remote/responses/custom_response.dart';
 import 'package:mentorship_client/screens/settings/about.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
+import 'package:toast/toast.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -38,7 +40,14 @@ class SettingsScreen extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.lock_outline),
               title: Text("Change password"),
-              onTap: () => _showChangePasswordDialog(context),
+              onTap: () async {
+                if (await DataConnectionChecker().hasConnection) {
+                  _showChangePasswordDialog(context);
+                } else {
+                  Toast.show("You are offline", context,
+                      duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                }
+              },
             ),
           ],
         ),

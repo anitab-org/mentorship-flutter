@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/failure.dart';
 import 'package:mentorship_client/remote/models/user.dart';
@@ -10,17 +10,34 @@ import 'package:mentorship_client/remote/responses/custom_response.dart';
 
 import './bloc.dart';
 
-class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
+class ProfilePageBloc extends HydratedBloc<ProfilePageEvent, ProfilePageState> {
   final UserRepository userRepository;
   User _user; // User object which will receive possible edits
 
   ProfilePageBloc({@required this.userRepository})
       : assert(userRepository != null),
         super(ProfilePageInitial());
+  @override
+  ProfilePageState fromJson(Map<String, dynamic> json) {
+    try {
+      _user = User.fromJson(json);
+      return ProfilePageSuccess(_user);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(ProfilePageState state) {
+    if (state is ProfilePageSuccess) {
+      return state.user.toJson();
+    }
+    return null;
+  }
 
   @override
   Stream<ProfilePageState> mapEventToState(ProfilePageEvent event) async* {
-    if (event is ProfilePageShowed) {
+    if (event is ProfilePageShowed && state is! ProfilePageSuccess) {
       yield* mapEventToProfileShowed(event);
     } else if (event is ProfilePageRefresh) {
       yield* mapEventToRefreshRequested(event);
@@ -50,7 +67,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         yield ProfilePageSuccess(_user, message: event.message);
       } on Failure catch (failure) {
         Logger.root.severe("ProfilePageBloc: Failure catched: $failure.message");
-        yield state;
+        yield ProfilePageBloc(userRepository: userRepository).state;
       }
     }
   }
