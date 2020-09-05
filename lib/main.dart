@@ -12,7 +12,7 @@ import 'package:toast/toast.dart';
 
 void main() {
   // Logs all BLoC transitions
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocDelegate();
   _setupLogging();
 
   // Providing app-wide auth bloc, so that app state changes immediately when

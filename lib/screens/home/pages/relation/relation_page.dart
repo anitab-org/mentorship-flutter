@@ -210,7 +210,7 @@ class _RelationPageState extends State<RelationPage> {
               Task task = state.tasks[index];
               //ignore: close_sinks
               final bloc = BlocProvider.of<RelationPageBloc>(context);
-              
+
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

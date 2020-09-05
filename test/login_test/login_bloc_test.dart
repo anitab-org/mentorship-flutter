@@ -44,21 +44,21 @@ void main() {
   });
 
   test('initial state is correct', () {
-    expect(LoginInitial(), loginBloc.initialState);
+    expect(loginBloc.state, LoginInitial());
   });
 
   test('close does not emit new states', () {
     expectLater(
       loginBloc,
-      emitsInOrder([LoginInitial(), emitsDone]),
+      emitsInOrder([emitsDone]),
     );
     loginBloc.close();
   });
 
   group('LoginButtonPressed', () {
-    blocTest(
+    blocTest<LoginBloc, LoginState>(
       'emits [LoginLoading, LoginSuccess] and token on success',
-      build: () async {
+      build: () {
         when(userRepository.login(
           login,
         )).thenAnswer((_) => Future.value(
@@ -82,9 +82,9 @@ void main() {
       },
     );
 
-    blocTest(
+    blocTest<LoginBloc, LoginState>(
       'emits [LoginLoading, LoginFailure] on failure',
-      build: () async {
+      build: () {
         when(userRepository.login(
           login,
         )).thenThrow(Failure('login-error'));

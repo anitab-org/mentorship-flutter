@@ -20,21 +20,20 @@ void main() {
   });
 
   test('initial state is correct', () {
-    expect(authenticationBloc.initialState, AuthUninitialized());
+    expect(authenticationBloc.state, AuthUninitialized());
   });
 
   test('close does not emit new states', () {
     expectLater(
       authenticationBloc,
-      emitsInOrder([AuthUninitialized(), emitsDone]),
+      emitsInOrder([emitsDone]),
     );
     authenticationBloc.close();
   });
 
   group('AppStarted', () {
-    test('emits [uninitialized, unauthenticated] for invalid token', () {
+    test('emits [unauthenticated] for invalid token', () {
       final expectedResponse = [
-        AuthUninitialized(),
         AuthUnauthenticated(),
       ];
 
@@ -49,9 +48,8 @@ void main() {
     });
   });
   group('LoggedIn', () {
-    test('emits [uninitialized, loading, authenticated] when token is persisted', () {
+    test('emits [loading, authenticated] when token is persisted', () {
       final expectedResponse = [
-        AuthUninitialized(),
         AuthInProgress(),
         AuthAuthenticated(),
       ];
@@ -67,9 +65,8 @@ void main() {
     });
   });
   group('LoggedOut', () {
-    test('emits [uninitialized, loading, unauthenticated] when token is deleted', () {
+    test('emits [loading, unauthenticated] when token is deleted', () {
       final expectedResponse = [
-        AuthUninitialized(),
         AuthInProgress(),
         AuthUnauthenticated(
           justLoggedOut: true,
