@@ -139,7 +139,7 @@ void _showTokenExpiredDialog(BuildContext context) {
     builder: (context) {
       return AlertDialog(
         title: Text("Token expired"),
-        content: Text("Relogin to refresh the jwt token"),
+        content: Text("Your session has expired! Please login again to access the Mentorship System features."),
         actions: <Widget>[
           FlatButton(
             child: Text('Relogin'),
