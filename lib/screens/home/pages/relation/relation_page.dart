@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mentorship_client/extensions/context.dart';
@@ -204,96 +205,150 @@ class _RelationPageState extends State<RelationPage> {
             );
           }
 
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: state.tasks.length,
-            itemBuilder: (context, index) {
-              Task task = state.tasks[index];
-              //ignore: close_sinks
-              final bloc = BlocProvider.of<RelationPageBloc>(context);
+          final _taskList = state.tasks;
+          List<Task> _doneTasks = [];
+          List<Task> _toDoTasks = [];
+          for (var _task in _taskList) {
+            if (_task.isDone) {
+              _doneTasks.add(_task);
+            } else {
+              _toDoTasks.add(_task);
+            }
+          }
 
-              return ListTile(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => CommentsPage(
-                        relation: state.relation,
-                        task: task,
-                      ),
-                    ),
-                  );
-                },
-                title: Text(
-                  task.description,
-                  maxLines: 2,
-                ),
-                leading: Checkbox(
-                  value: task.isDone,
-                  onChanged: (value) {
-                    if (!task.isDone) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text("Complete Task"),
-                          content: Text("Mark task as completed?"),
-                          actions: [
-                            FlatButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Cancel"),
-                            ),
-                            FlatButton(
-                              child: Text("Yes"),
-                              onPressed: () {
-                                bloc.add(TaskCompleted(state.relation, task.id));
-                                Navigator.of(context).pop();
-                                showProgressIndicator(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    } else
-                      context.toast("Task already achieved.");
-                  },
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.grey[700],
+          return ListView(
+            children: [
+              SizedBox(height: 10.0),
+              ExpandablePanel(
+                header: Container(
+                  padding: EdgeInsets.only(
+                    left: 15,
+                    top: 10.0,
                   ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text("Delete task"),
-                        content: Text("Are you sure you want to delete the task?"),
-                        actions: [
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text("Cancel"),
-                          ),
-                          FlatButton(
-                            child: Text("Delete"),
-                            onPressed: () {
-                              bloc.add(TaskDeleted(state.relation, task.id));
-                              Navigator.of(context).pop();
-                              showProgressIndicator(context);
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                  child: Text(
+                    "To Do",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
                 ),
-              );
-            },
+                expanded: _buildListView(
+                  context: context,
+                  state: state,
+                  tasksList: _toDoTasks,
+                ),
+              ),
+              SizedBox(height: 20.0),
+              ExpandablePanel(
+                header: Container(
+                  padding: EdgeInsets.only(
+                    left: 15,
+                    top: 10.0,
+                  ),
+                  child: Text(
+                    "Achivements",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+                expanded: _buildListView(
+                  context: context,
+                  state: state,
+                  tasksList: _doneTasks,
+                ),
+              ),
+            ],
           );
         },
       ),
+    );
+  }
+
+  Widget _buildListView({BuildContext context, List<Task> tasksList, RelationPageSuccess state}) {
+    return ListView.builder(
+      physics: ClampingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: tasksList.length,
+      itemBuilder: (context, index) {
+        Task task = tasksList[index];
+        //ignore: close_sinks
+        final bloc = BlocProvider.of<RelationPageBloc>(context);
+        return ListTile(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CommentsPage(
+                  relation: state.relation,
+                  task: task,
+                ),
+              ),
+            );
+          },
+          title: Text(
+            task.description,
+            maxLines: 2,
+          ),
+          leading: Checkbox(
+            value: task.isDone,
+            onChanged: (value) {
+              if (!task.isDone) {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text("Complete Task"),
+                    content: Text("Mark task as completed?"),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      FlatButton(
+                        child: Text("Yes"),
+                        onPressed: () {
+                          bloc.add(TaskCompleted(state.relation, task.id));
+                          Navigator.of(context).pop();
+                          showProgressIndicator(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              } else
+                context.toast("Task already achieved.");
+            },
+          ),
+          trailing: IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.grey[700],
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Delete task"),
+                  content: Text("Are you sure you want to delete the task?"),
+                  actions: [
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Cancel"),
+                    ),
+                    FlatButton(
+                      child: Text("Delete"),
+                      onPressed: () {
+                        bloc.add(TaskDeleted(state.relation, task.id));
+                        Navigator.of(context).pop();
+                        showProgressIndicator(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
