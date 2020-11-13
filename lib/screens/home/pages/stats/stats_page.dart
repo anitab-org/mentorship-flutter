@@ -5,6 +5,8 @@ import 'package:mentorship_client/screens/home/pages/stats/bloc/bloc.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 import 'dart:async';
 
+import 'package:mentorship_client/auth/bloc.dart';
+
 /// First page from the left on the HomeScreen. Displays welcome message to the user
 /// and provides some information on latest achievements.
 ///
@@ -93,7 +95,12 @@ class _StatsPageState extends State<StatsPage> {
             );
           }
           if (state is StatsPageFailure) {
-            return Text(state.message);
+            if (state.message == "The token has expired! Please, login again or refresh it.") {
+              Future.delayed(Duration.zero, () => _showTokenExpiredDialog(context));
+              return Text(state.message);
+            } else {
+              return Text(state.message);
+            }
           }
 
           if (state is StatsPageLoading) {
@@ -123,4 +130,27 @@ class _StatsPageState extends State<StatsPage> {
       ),
     );
   }
+}
+
+void _showTokenExpiredDialog(BuildContext context) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text("Token expired"),
+        content: Text("Your session has expired! Please login again to access the Mentorship System features."),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Relogin'),
+            onPressed: () {
+              BlocProvider.of<AuthBloc>(context).add(JustLoggedOut());
+
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

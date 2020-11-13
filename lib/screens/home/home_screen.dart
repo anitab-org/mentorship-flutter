@@ -111,11 +111,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               bottomNavigationBar: BottomNavyBar(
-                selectedIndex: _currentIndex,
-                onItemSelected: (index) {
-                  setState(() => _currentIndex = index);
-                  pageController.jumpToPage(index);
-                },
+                onItemSelected:
+                    (index) => // This triggers when the user clicks item on BottomNavyBar
+                        BlocProvider.of<HomeBloc>(context).add(HomeEvent.fromIndex(index)),
+                selectedIndex: state.index,
                 items: [
                   BottomNavyBarItem(
                     icon: Icon(Icons.home),
