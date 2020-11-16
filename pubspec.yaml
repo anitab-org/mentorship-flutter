@@ -33,8 +33,9 @@ dependencies:
   expandable: ^4.1.4
   auto_size_text: ^2.1.0
   flappy_search_bar: ^1.7.2
+  json_serializable: ^3.4.0
   # Bloc
-  bloc: ^6.0.1
+  bloc: ^6.0.2
   flutter_bloc: ^6.0.1
   chopper: ^3.0.3
 

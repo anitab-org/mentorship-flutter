@@ -10,6 +10,7 @@ import 'package:mentorship_client/remote/requests/task_request.dart';
 import 'package:mentorship_client/screens/home/bloc/bloc.dart';
 import 'package:mentorship_client/screens/home/bloc/home_bloc.dart';
 import 'package:mentorship_client/screens/home/pages/relation/bloc/bloc.dart';
+import 'package:mentorship_client/screens/comment/comments_page.dart';
 import 'package:mentorship_client/widgets/bold_text.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -40,8 +41,7 @@ class _RelationPageState extends State<RelationPage> {
             Tab(text: "Tasks".toUpperCase()),
           ],
         ),
-        body: BlocConsumer<RelationPageBloc, RelationPageState>(
-            listener: (context, state) {
+        body: BlocConsumer<RelationPageBloc, RelationPageState>(listener: (context, state) {
           if (state.message != null && state is RelationPageSuccess) {
             context.showSnackBar(state.message);
             Navigator.of(context).pop();
@@ -142,10 +142,8 @@ class _RelationPageState extends State<RelationPage> {
                         children: [
                           BoldText("Mentor: ", state.relation.mentor.name),
                           BoldText("Mentee: ", state.relation.mentee.name),
-                          BoldText(
-                              "End date: ",
-                              DateTimeX.fromTimestamp(state.relation.endsOn)
-                                  .toDateString()),
+                          BoldText("End date: ",
+                              DateTimeX.fromTimestamp(state.relation.endsOn).toDateString()),
                           BoldText("Notes: ", state.relation.notes),
                         ],
                       ),
@@ -155,8 +153,7 @@ class _RelationPageState extends State<RelationPage> {
                     ),
                     RaisedButton(
                       color: Theme.of(context).accentColor,
-                      child: Text("Cancel".toUpperCase(),
-                          style: TextStyle(color: Colors.white)),
+                      child: Text("Cancel".toUpperCase(), style: TextStyle(color: Colors.white)),
                       onPressed: () {
                         //ignore: close_sinks
                         final bloc = BlocProvider.of<RelationPageBloc>(context);
@@ -166,14 +163,12 @@ class _RelationPageState extends State<RelationPage> {
                           builder: (context) {
                             return AlertDialog(
                               title: Text("Cancel Relation"),
-                              content: Text(
-                                  "Are you sure you want to cancel the relation"),
+                              content: Text("Are you sure you want to cancel the relation"),
                               actions: [
                                 FlatButton(
                                   child: Text("Yes"),
                                   onPressed: () {
-                                    bloc.add(RelationPageCancelledRelation(
-                                        state.relation.id));
+                                    bloc.add(RelationPageCancelledRelation(state.relation.id));
                                     Navigator.of(context).pop();
                                   },
                                 ),
@@ -236,7 +231,6 @@ class _RelationPageState extends State<RelationPage> {
                   ),
                 ),
                 expanded: _buildListView(
-                  
                   context: context,
                   state: state,
                   tasksList: _toDoTasks,
@@ -267,8 +261,7 @@ class _RelationPageState extends State<RelationPage> {
     );
   }
 
-  Widget _buildListView(
-      {BuildContext context, List<Task> tasksList, RelationPageSuccess state}) {
+  Widget _buildListView({BuildContext context, List<Task> tasksList, RelationPageSuccess state}) {
     return ListView.builder(
       physics: ClampingScrollPhysics(),
       shrinkWrap: true,
@@ -277,38 +270,30 @@ class _RelationPageState extends State<RelationPage> {
         Task task = tasksList[index];
         //ignore: close_sinks
         final bloc = BlocProvider.of<RelationPageBloc>(context);
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    if (!task.isDone) {
-                      bloc.add(TaskCompleted(state.relation, task.id));
-                      showProgressIndicator(context);
-                    } else
-                      context.toast("Task already achieved.");
-                  },
-                  child: Checkbox(
-                    value: task.isDone,
-                  ),
+        return ListTile(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CommentsPage(
+                  relation: state.relation,
+                  task: task,
                 ),
-                Text(task.description),
-              ],
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.delete,
-                color: Colors.grey[700],
               ),
-              onPressed: () {
+            );
+          },
+          title: Text(
+            task.description,
+            maxLines: 2,
+          ),
+          leading: Checkbox(
+            value: task.isDone,
+            onChanged: (value) {
+              if (!task.isDone) {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: Text("Delete task"),
-                    content: Text("Are you sure you want to delete the task?"),
+                    title: Text("Complete Task"),
+                    content: Text("Mark task as completed?"),
                     actions: [
                       FlatButton(
                         onPressed: () {
@@ -317,9 +302,9 @@ class _RelationPageState extends State<RelationPage> {
                         child: Text("Cancel"),
                       ),
                       FlatButton(
-                        child: Text("Delete"),
+                        child: Text("Yes"),
                         onPressed: () {
-                          bloc.add(TaskDeleted(state.relation, task.id));
+                          bloc.add(TaskCompleted(state.relation, task.id));
                           Navigator.of(context).pop();
                           showProgressIndicator(context);
                         },
@@ -327,9 +312,41 @@ class _RelationPageState extends State<RelationPage> {
                     ],
                   ),
                 );
-              },
+              } else
+                context.toast("Task already achieved.");
+            },
+          ),
+          trailing: IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.grey[700],
             ),
-          ],
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Delete task"),
+                  content: Text("Are you sure you want to delete the task?"),
+                  actions: [
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Cancel"),
+                    ),
+                    FlatButton(
+                      child: Text("Delete"),
+                      onPressed: () {
+                        bloc.add(TaskDeleted(state.relation, task.id));
+                        Navigator.of(context).pop();
+                        showProgressIndicator(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         );
       },
     );
