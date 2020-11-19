@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mentorship_client/remote/models/user.dart';
-import 'package:mentorship_client/remote/repositories/user_repository.dart';
+import 'package:mentorship_client/screens/home/pages/members/bloc/bloc.dart';
 import 'package:mentorship_client/screens/member_profile/user_data_list.dart';
 import 'package:mentorship_client/screens/send_request/send_request_screen.dart';
 import 'package:mentorship_client/widgets/loading_indicator.dart';
 
 class MemberProfileScreen extends StatelessWidget {
   final User user;
+  final MembersPageBloc membersPageBloc;
 
-  const MemberProfileScreen({Key key, @required this.user})
-      : assert(user != null),
+  const MemberProfileScreen({
+    Key key,
+    @required this.user,
+    @required this.membersPageBloc,
+  })  : assert(user != null),
         super(key: key);
 
   @override
@@ -55,7 +59,9 @@ class MemberProfileScreen extends StatelessWidget {
                   ),
                   onPressed: () async {
                     showProgressIndicator(context);
-                    var currentUser = await UserRepository.instance.getCurrentUser();
+                    final User currentUser =
+                        (membersPageBloc.state as MembersPageSuccess)
+                            .currentUser;
                     Navigator.of(context).pop();
                     Navigator.of(context).push(
                       PageRouteBuilder(
@@ -69,7 +75,7 @@ class MemberProfileScreen extends StatelessWidget {
                       ),
                     );
                   }),
-            )
+            ),
           ],
         ),
       ),

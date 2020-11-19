@@ -30,7 +30,8 @@ class _MembersPageState extends State<MembersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<MembersPageBloc, MembersPageState>(listener: (context, state) {
+    return BlocConsumer<MembersPageBloc, MembersPageState>(
+        listener: (context, state) {
       if (state is MembersPageShowed) {
         _refreshCompleter?.complete();
         _refreshCompleter = Completer();
@@ -75,11 +76,14 @@ class _MembersPageState extends State<MembersPage> {
                     return _reachedEnd
                         ? BottomLoader()
                         : InkWell(
-                            onTap: () => _openMemberProfileScreen(context, user),
+                            onTap: () =>
+                                _openMemberProfileScreen(context, user),
                             child: MemberListTile(user: user),
                           );
                   },
-                  itemCount: state.hasReachedMax ? (state.users.length) : (state.users.length + 1),
+                  itemCount: state.hasReachedMax
+                      ? (state.users.length)
+                      : (state.users.length + 1),
                   controller: _scrollController,
                 ),
               );
@@ -96,7 +100,10 @@ class _MembersPageState extends State<MembersPage> {
   void _openMemberProfileScreen(BuildContext context, User user) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => MemberProfileScreen(user: user),
+        builder: (context) => MemberProfileScreen(
+          user: user,
+          membersPageBloc: _membersPageBloc,
+        ),
       ),
     );
   }

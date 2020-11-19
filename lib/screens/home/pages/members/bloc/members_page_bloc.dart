@@ -33,7 +33,12 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
         if (currentState is MembersPageInitial) {
           yield MembersPageLoading();
           final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
-          yield MembersPageSuccess(users: users, hasReachedMax: false);
+          final User currentUser = await userRepository.getCurrentUser();
+          yield MembersPageSuccess(
+            users: users,
+            hasReachedMax: false,
+            currentUser: currentUser,
+          );
         }
         if (currentState is MembersPageSuccess) {
           final users =
@@ -43,6 +48,7 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
               : MembersPageSuccess(
                   users: currentState.users + users,
                   hasReachedMax: false,
+                  currentUser: currentState.currentUser,
                 );
         }
       } on Failure catch (failure) {
@@ -58,7 +64,12 @@ class MembersPageBloc extends Bloc<MembersPageEvent, MembersPageState> {
       try {
         yield MembersPageLoading();
         final List<User> users = await userRepository.getVerifiedUsers(pageNumber);
-        yield MembersPageSuccess(users: users, hasReachedMax: false);
+        final User currentUser = (currentState as MembersPageSuccess).currentUser;
+        yield MembersPageSuccess(
+          users: users,
+          hasReachedMax: false,
+          currentUser: currentUser,
+        );
       } on Failure catch (failure) {
         Logger.root.severe("MembersPageBloc: Failure catched: $failure.message");
         yield state;
