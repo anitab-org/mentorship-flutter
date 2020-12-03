@@ -14,6 +14,6 @@ Future<void> showProgressIndicator(BuildContext context) {
   return showDialog(
     context: context,
     barrierDismissible: false,
-    child: LoadingIndicator(),
+    builder: (context) => LoadingIndicator(),
   );
 }
