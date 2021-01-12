@@ -104,10 +104,6 @@ class _LoginFormState extends State<LoginForm> {
           key: _formKey,
           child: Column(
             children: [
-              SignInButton(
-                Buttons.Google,
-                onPressed:  _onGoogleSignInButtonPressed,
-              ),
               TextFormField(
                 controller: _usernameController,
                 validator: _validateUsername,
@@ -151,7 +147,12 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () => Navigator.push(
                       context, MaterialPageRoute(builder: (context) => RegisterScreen())),
                 ),
-              )
+              ),
+              SignInButton(
+                Buttons.Google,
+                onPressed:  _onGoogleSignInButtonPressed,
+                elevation: 5,
+              ),
             ],
           ),
         );
