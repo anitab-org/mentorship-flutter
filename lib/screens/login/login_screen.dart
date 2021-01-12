@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
+import 'package:mentorship_client/remote/requests/google_signin.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/screens/login/bloc/bloc.dart';
 import 'package:mentorship_client/screens/register/register_screen.dart';
@@ -42,6 +45,18 @@ class _LoginFormState extends State<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email'
+    ],
+  );
+
+  Future<void> _onGoogleSignInButtonPressed() async {
+    BlocProvider.of<LoginBloc>(context).add(
+         GoogleSignInButtonPressed()
+      );
+  }
 
   void _onLoginButtonPressed() {
     if (!_formKey.currentState.validate()) return;
@@ -89,6 +104,10 @@ class _LoginFormState extends State<LoginForm> {
           key: _formKey,
           child: Column(
             children: [
+              SignInButton(
+                Buttons.Google,
+                onPressed:  _onGoogleSignInButtonPressed,
+              ),
               TextFormField(
                 controller: _usernameController,
                 validator: _validateUsername,
