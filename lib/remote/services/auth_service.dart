@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:mentorship_client/constants.dart';
+import 'package:mentorship_client/remote/requests/google_signin.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
 
@@ -12,6 +13,9 @@ abstract class AuthService extends ChopperService {
 
   @Post(path: "register")
   Future<Response<Object>> register(@Body() Register register);
+
+  @Post(path: "google/auth/callback")
+  Future<Response<Map<String, dynamic>>> googleSignIn(@Body() GoogleSignInModel googleSignIn);
 
   static AuthService create() {
     final client = ChopperClient(

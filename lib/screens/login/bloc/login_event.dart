@@ -13,3 +13,21 @@ class LoginButtonPressed extends LoginEvent {
   @override
   List<Object> get props => [login];
 }
+
+class GoogleSignInButtonPressed extends LoginEvent{
+
+
+  const GoogleSignInButtonPressed();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GoogleSignInFailed extends LoginEvent{
+  final String message;
+
+  const GoogleSignInFailed(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

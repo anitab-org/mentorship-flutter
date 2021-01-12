@@ -31,4 +31,13 @@ class _$AuthService extends AuthService {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<Object, Object>($request);
   }
+
+  @override
+  Future<Response<Map<String, dynamic>>> googleSignIn(
+      GoogleSignInModel googleSignIn) {
+    final $url = 'google/auth/callback';
+    final $body = googleSignIn;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<Map<String, dynamic>, Map<String, dynamic>>($request);
+  }
 }

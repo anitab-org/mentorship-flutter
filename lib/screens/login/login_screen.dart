@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:mentorship_client/auth/auth_bloc.dart';
 import 'package:mentorship_client/extensions/context.dart';
 import 'package:mentorship_client/remote/repositories/auth_repository.dart';
@@ -42,6 +43,13 @@ class _LoginFormState extends State<LoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+
+  Future<void> _onGoogleSignInButtonPressed() async {
+    BlocProvider.of<LoginBloc>(context).add(
+         GoogleSignInButtonPressed()
+      );
+  }
 
   void _onLoginButtonPressed() {
     if (!_formKey.currentState.validate()) return;
@@ -132,7 +140,12 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () => Navigator.push(
                       context, MaterialPageRoute(builder: (context) => RegisterScreen())),
                 ),
-              )
+              ),
+              SignInButton(
+                Buttons.Google,
+                onPressed:  _onGoogleSignInButtonPressed,
+                elevation: 5,
+              ),
             ],
           ),
         );

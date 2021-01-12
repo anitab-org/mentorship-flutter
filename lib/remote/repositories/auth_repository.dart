@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:mentorship_client/remote/api_manager.dart';
+import 'package:mentorship_client/remote/requests/google_signin.dart';
 import 'package:mentorship_client/remote/requests/login.dart';
 import 'package:mentorship_client/remote/requests/register.dart';
 import 'package:mentorship_client/remote/responses/auth_token.dart';
@@ -25,6 +26,11 @@ class AuthRepository {
 
   Future<void> register(Register register) async {
     await ApiManager.callSafely(() => ApiManager.instance.authService.register(register));
+  }
+
+  Future<AuthToken> googleSignIn(GoogleSignInModel googleSignIn) async {
+    final body = await ApiManager.callSafely(() => ApiManager.instance.authService.googleSignIn(googleSignIn));
+    return AuthToken.fromJson(body);
   }
 
   Future<void> deleteToken() async {
