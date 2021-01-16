@@ -72,8 +72,12 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   String _validateEmail(String value) {
+    Pattern emailPattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     if (value.isEmpty) {
-      return "Email cannot be empty"; // TODO: Add regex based validation
+      return "Email cannot be empty";
+    } else if (!RegExp(emailPattern).hasMatch(value)) {
+      return "Email is not valid";
     }
     return null;
   }
@@ -148,7 +152,8 @@ class _RegisterFormState extends State<RegisterForm> {
             validator: _validatePassword,
             decoration: InputDecoration(
               suffixIcon: IconButton(
-                icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off),
                 onPressed: _togglePasswordVisibility,
               ),
               labelText: "Enter password",
@@ -162,7 +167,8 @@ class _RegisterFormState extends State<RegisterForm> {
             validator: _validatePassword,
             decoration: InputDecoration(
               suffixIcon: IconButton(
-                icon: Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off),
                 onPressed: _togglePasswordVisibility,
               ),
               labelText: "Confirm password",
@@ -294,7 +300,8 @@ class ConditionsText extends StatelessWidget {
             style: TextStyle(
               color: Colors.black,
             ),
-            text: "By checking this box, I affirm that I have read and accept to be bound by the "
+            text:
+                "By checking this box, I affirm that I have read and accept to be bound by the "
                 "AnitaB.org ",
           ),
           TextSpan(
@@ -346,7 +353,8 @@ class ConditionsText extends StatelessWidget {
             style: TextStyle(
               color: Colors.black,
             ),
-            text: ". Further, I consent to the use of my information for the stated purpose.",
+            text:
+                ". Further, I consent to the use of my information for the stated purpose.",
           ),
         ],
       ),
