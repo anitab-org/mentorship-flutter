@@ -37,6 +37,7 @@ dependencies:
   bloc: ^6.0.1
   flutter_bloc: ^6.0.1
   chopper: ^3.0.3
+  email_validator: ^1.0.6
 
   
 # plugins not needed in app

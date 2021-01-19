@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -43,6 +44,11 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
+  final _nameFormKey = GlobalKey<FormState>();
+  final _usernameFormKey = GlobalKey<FormState>();
+  final _emailFormKey = GlobalKey<FormState>();
+  final _passwordFormKey = GlobalKey<FormState>();
+  final _confirmPasswordFormKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -71,20 +77,34 @@ class _RegisterFormState extends State<RegisterForm> {
     return null;
   }
 
+  String _validateUserName(String value) {
+    if (value.length < 4) {
+      return "Username cannot be less than 4 characters";
+    } else if (value.length > 26) {
+      return "Username cannot be more 26 characters";
+    }
+    return null;
+  }
+
   String _validateEmail(String value) {
-    Pattern emailPattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    if (value.isEmpty) {
-      return "Email cannot be empty";
-    } else if (!RegExp(emailPattern).hasMatch(value)) {
+    if (!EmailValidator.validate(value)) {
       return "Email is not valid";
     }
     return null;
   }
 
   String _validatePassword(String value) {
-    if (value.isEmpty) {
-      return "Password cannot be empty"; // TODO: Add regex based validation
+    if (value.length < 8) {
+      return "Password should be longer than 8 characters"; // TODO: Add regex based validation
+    } else if (value.length > 64) {
+      return "Password should be no longer than 64 characters"; // TODO: Add regex based validation
+    }
+    return null;
+  }
+
+  String _validateConfirmPassword(String value) {
+    if (value.toString() != _passwordController.text) {
+      return "Confirm password doesn't match password"; // TODO: Add regex based validation
     }
     return null;
   }
@@ -120,61 +140,84 @@ class _RegisterFormState extends State<RegisterForm> {
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
-            controller: _nameController,
-            validator: _validateName,
-            decoration: InputDecoration(
-              labelText: "Name",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: spacing),
-          TextFormField(
-            controller: _usernameController,
-            validator: _validateName,
-            decoration: InputDecoration(
-              labelText: "Username",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: spacing),
-          TextFormField(
-            controller: _emailController,
-            validator: _validateEmail,
-            decoration: InputDecoration(
-              labelText: "Email",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: spacing),
-          TextFormField(
-            controller: _passwordController,
-            validator: _validatePassword,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: Icon(
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off),
-                onPressed: _togglePasswordVisibility,
+          Form(
+            key: _nameFormKey,
+            child: TextFormField(
+              onChanged: (val) => _nameFormKey.currentState.validate(),
+              controller: _nameController,
+              validator: _validateName,
+              decoration: InputDecoration(
+                labelText: "Name",
+                border: OutlineInputBorder(),
               ),
-              labelText: "Enter password",
-              border: OutlineInputBorder(),
             ),
-            obscureText: !_passwordVisible,
           ),
           SizedBox(height: spacing),
-          TextFormField(
-            controller: _confirmPasswordController,
-            validator: _validatePassword,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: Icon(
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off),
-                onPressed: _togglePasswordVisibility,
+          Form(
+            key: _usernameFormKey,
+            child: TextFormField(
+              onChanged: (val) => _usernameFormKey.currentState.validate(),
+              controller: _usernameController,
+              validator: _validateUserName,
+              decoration: InputDecoration(
+                labelText: "Username",
+                border: OutlineInputBorder(),
               ),
-              labelText: "Confirm password",
-              border: OutlineInputBorder(),
             ),
-            obscureText: !_passwordVisible,
+          ),
+          SizedBox(height: spacing),
+          Form(
+            key: _emailFormKey,
+            child: TextFormField(
+              onChanged: (val) => _emailFormKey.currentState.validate(),
+              controller: _emailController,
+              validator: _validateEmail,
+              decoration: InputDecoration(
+                labelText: "Email",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          SizedBox(height: spacing),
+          Form(
+            key: _passwordFormKey,
+            child: TextFormField(
+              onChanged: (val) => _passwordFormKey.currentState.validate(),
+              controller: _passwordController,
+              validator: _validatePassword,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(_passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  onPressed: _togglePasswordVisibility,
+                ),
+                labelText: "Enter password",
+                border: OutlineInputBorder(),
+              ),
+              obscureText: !_passwordVisible,
+            ),
+          ),
+          SizedBox(height: spacing),
+          Form(
+            key: _confirmPasswordFormKey,
+            child: TextFormField(
+              onChanged: (val) =>
+                  _confirmPasswordFormKey.currentState.validate(),
+              controller: _confirmPasswordController,
+              validator: _validateConfirmPassword,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(_passwordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  onPressed: _togglePasswordVisibility,
+                ),
+                labelText: "Confirm password",
+                border: OutlineInputBorder(),
+              ),
+              obscureText: !_passwordVisible,
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(8),
