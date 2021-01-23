@@ -102,13 +102,6 @@ class _RegisterFormState extends State<RegisterForm> {
     return null;
   }
 
-  String _validateConfirmPassword(String value) {
-    if (value.toString() != _passwordController.text) {
-      return "Confirm password doesn't match password"; // TODO: Add regex based validation
-    }
-    return null;
-  }
-
   void _handleRadioValueChange(int value) {
     setState(() {
       _radiovalue = value;
@@ -205,7 +198,7 @@ class _RegisterFormState extends State<RegisterForm> {
               onChanged: (val) =>
                   _confirmPasswordFormKey.currentState.validate(),
               controller: _confirmPasswordController,
-              validator: _validateConfirmPassword,
+              validator: _validatePassword,
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   icon: Icon(_passwordVisible
